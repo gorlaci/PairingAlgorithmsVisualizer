@@ -1,0 +1,590 @@
+package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds
+
+import androidx.compose.ui.graphics.Color
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.BLUE
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.DARK_GREEN
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.PINK
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.YELLOW
+import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalEdge
+import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalGraph
+import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalVertex
+import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.HighlightType
+
+class EdmondsGraph(
+    override val vertices: MutableSet<EdmondsVertex> = mutableSetOf(),
+    override val edges: MutableSet<EdmondsEdge> = mutableSetOf(),
+    val idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf(),
+    name: String = "",
+    private var activeEdge: EdmondsEdge? = null,
+    private val augmentingPathEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
+    private val blossomEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
+): Graph( name, vertices, edges ) {
+
+    fun copy(): EdmondsGraph {
+        val vertexMap = mutableMapOf<EdmondsVertex, EdmondsVertex>()
+        val newVertices =
+            vertices
+                .map { vertex ->
+                    val newVertex = vertex.copy()
+                    vertexMap[vertex] = newVertex
+                    newVertex
+                }.toMutableSet()
+
+        vertices.forEach { vertex ->
+            val newVertex = vertexMap[vertex]!!
+            newVertex.pair = vertex.pair?.let { vertexMap[it] }
+            newVertex.parent = vertex.parent?.let { vertexMap[it] }
+        }
+
+        var newActiveEdge: EdmondsEdge? = null
+        val newAugmentingPathEdges = mutableSetOf<EdmondsEdge>()
+        val newBlossomEdges = mutableSetOf<EdmondsEdge>()
+
+        val newEdges =
+            edges
+                .map { edge ->
+                    val newFromVertex = vertexMap[edge.fromVertex]!!
+                    val newToVertex = vertexMap[edge.toVertex]!!
+                    val newEdge = EdmondsEdge(newFromVertex, newToVertex).also { it.visited = edge.visited }
+                    if (edge == activeEdge) {
+                        newActiveEdge = newEdge
+                    }
+                    if (augmentingPathEdges.contains(edge)) {
+                        newAugmentingPathEdges.add(newEdge)
+                    }
+                    if (blossomEdges.contains(edge)) {
+                        newBlossomEdges.add(newEdge)
+                    }
+                    newEdge
+                }.toMutableSet()
+        return EdmondsGraph(
+            vertices = newVertices,
+            edges = newEdges,
+            idCoordinatesMap = idCoordinatesMap,
+            name = name,
+            activeEdge = newActiveEdge,
+            augmentingPathEdges = newAugmentingPathEdges,
+            blossomEdges = newBlossomEdges,
+        )
+    }
+
+    val steps = mutableListOf<Pair<EdmondsGraph, EdmondsStepType>>()
+
+    private fun saveStep(stepType: EdmondsStepType = EdmondsStepType.Nothing("")) {
+        steps.add(copy() to stepType)
+    }
+
+    fun addEdge(
+        fromId: String,
+        toId: String,
+    ) {
+        val fromVertex = vertices.find { it.id == fromId }
+        val toVertex = vertices.find { it.id == toId }
+        if (fromVertex != null && toVertex != null) {
+            val newEdge = EdmondsEdge(fromVertex, toVertex)
+            edges.add(newEdge)
+        }
+    }
+
+    private var edgesLeft = true
+
+    fun runEdmondsAlgorithm() { // O(m^3*n^2)
+        saveStep()
+        saveStep(EdmondsStepType.Nothing("Kiindulunk az üres párosításból"))
+        while (edgesLeft) { // O(m^3*n^2)
+            buildForest() // O(m^2*n^2)
+            saveStep()
+        }
+        reset() // O(m+n)
+        saveStep(EdmondsStepType.Nothing("Bontsuk ki a kelyheket!"))
+        val verticesCopy = vertices.toList()
+        verticesCopy.forEach { vertex ->
+            // O(m*n)
+            if (vertex is BlossomVertex) {
+                deconstructBlossom(vertex)
+            }
+        }
+        reset() // O(m+n)
+        saveStep(EdmondsStepType.Nothing("A megtalált párosításunk maximális"))
+    }
+
+    private fun reset() { // O(n+m)
+        for (vertex in vertices) {
+            vertex.type = VertexType.NONE
+            vertex.parent = null
+        }
+        for (edge in edges) {
+            edge.visited = false
+        }
+    }
+
+    private fun buildForest() { // O(m^2*n^2)
+        reset() // O(m+n)
+        for (vertex in vertices) { // O(n)
+            vertex.type = if (vertex.pair == null) VertexType.ROOT else VertexType.CLEARING
+        }
+        saveStep(EdmondsStepType.Nothing("Megépítjük a 0 élű alternáló erdőt"))
+
+        var edge = edges.find { !it.visited } // O(m)
+        while (edge != null) { // O(m^2*n^2)
+            edge.visited = true
+            activeEdge = edge
+            saveStep(
+                EdmondsStepType.SelectedEdge(
+                    "Vizsgáljuk a ${edge.fromVertex.id}-${edge.toVertex.id} élt",
+                    edge,
+                    edge.getType(),
+                ),
+            )
+            if (edge.fromVertex.type.isOuter() && edge.toVertex.type.isOuter()) { // O(m*n^2)
+                saveStep(EdmondsStepType.Nothing("Külső-külső"))
+                val commonRoot = findCommonRoot(edge.fromVertex, edge.toVertex) // O(n^2)
+                // O(m*n^2)
+                if (commonRoot != null) { // O(m+n)
+                    markBlossomEdges(edge.fromVertex, edge.toVertex, commonRoot)
+                    saveStep(
+                        EdmondsStepType.MarkBlossom(
+                            "Kelyhet találtunk.\nHúzzuk össze a kelyhet!",
+                            edge,
+                            blossomEdges.toSet(),
+                        ),
+                    )
+                    saveStep(
+                        EdmondsStepType.BlossomInAnimation(
+                            "Kelyhet találtunk.\nHúzzuk össze a kelyhet!",
+                            getBlossomVertices(edge.fromVertex, edge.toVertex, commonRoot).toSet(),
+                        ),
+                    )
+                    blossomEdges.clear()
+                    makeBlossom(edge.fromVertex, edge.toVertex, commonRoot) // O(m+n)
+                    edge = edges.find { !it.visited } // O(m)
+                    activeEdge = null
+                    continue
+                } else { // O( m*n^2)
+                    markAugmentingPathEdges(edge.fromVertex, edge.toVertex)
+                    saveStep(
+                        EdmondsStepType.MarkAugmentingPath(
+                            "Javítóutat találtunk.\nJavítsunk az út mentén!",
+                            edge,
+                            augmentingPathEdges.toSet(),
+                        ),
+                    )
+                    augmentingPathEdges.clear()
+                    augmentAlongAlternatingPath(edge.fromVertex, edge.toVertex) // O(m*n^2)
+                    reset() // O(m+n)
+                    saveStep(EdmondsStepType.Nothing("Bővítettük a párosítást"))
+                    activeEdge = null
+                    return
+                }
+            }
+            if (edge.fromVertex.type.isOuter() && edge.toVertex.type == VertexType.CLEARING) { // O(m)
+                extendForest(edge.fromVertex, edge.toVertex) // O(1)
+                edge = edges.find { !it.visited } // O(m)
+                activeEdge = null
+                continue
+            }
+            if (edge.fromVertex.type == VertexType.CLEARING && edge.toVertex.type.isOuter()) { // O(m)
+                extendForest(edge.toVertex, edge.fromVertex) // O(1)
+                edge = edges.find { !it.visited } // O(m)
+                activeEdge = null
+                continue
+            }
+            edge = edges.find { !it.visited } // O(m)
+            activeEdge = null
+        }
+        edgesLeft = false
+    }
+
+    private fun augmentAlongAlternatingPath(
+        vertexA: EdmondsVertex,
+        vertexB: EdmondsVertex,
+    ) { // O(m*n)
+        augmentAlongBranch(vertexA) // O(m*n)
+        augmentAlongBranch(vertexB) // O(m*n)
+
+        makePair(vertexA, vertexB) // O(m*n)
+    }
+
+    private fun augmentAlongBranch(vertex: EdmondsVertex) { // O(m*n)
+        var currentVertex = vertex.parent
+        while (currentVertex != null && currentVertex.parent != null) {
+            val parent = currentVertex.parent!!
+            val grandParent = parent.parent
+
+            makePair(currentVertex, parent) // O(m*n)
+
+            currentVertex = grandParent
+        }
+    }
+
+    private fun makePair(
+        vertexA: EdmondsVertex,
+        vertexB: EdmondsVertex,
+    ) { // O(m*n)
+        vertexA.pair = vertexB
+        vertexB.pair = vertexA
+        if (vertexA is BlossomVertex) {
+            deconstructBlossom(vertexA) // O(m*n)
+        }
+        if (vertexB is BlossomVertex) {
+            deconstructBlossom(vertexB) // O(m*n)
+        }
+    }
+
+    private fun makeBlossom(
+        vertexA: EdmondsVertex,
+        vertexB: EdmondsVertex,
+        commonRoot: EdmondsVertex,
+    ) { // O(m+n)
+
+        val blossomVertices = getBlossomVertices(vertexA, vertexB, commonRoot) // O(n)
+        val blossomVerticesSet = blossomVertices.toSet() // O(n)
+
+        val blossomId = blossomVertices.map { it.id }.sorted().joinToString("") // O(n)
+        val blossomEdges =
+            edges.filter { it.fromVertex in blossomVerticesSet || it.toVertex in blossomVerticesSet }.toSet() // O(m)
+
+        val blossomVertex =
+            BlossomVertex(
+                id = blossomId,
+                type = commonRoot.type,
+                pair = commonRoot.pair,
+                parent = commonRoot.parent,
+                previousStructureVertices = blossomVertices,
+                previousStructureEdges = blossomEdges,
+            )
+
+        val edgesCopy = edges.toList()
+
+        for (edge in edgesCopy) { // O(m)
+            if (edge.fromVertex in blossomVerticesSet && edge.toVertex !in blossomVerticesSet) { // O(1)
+                edges.add(EdmondsEdge(blossomVertex, edge.toVertex))
+            }
+            if (edge.fromVertex !in blossomVerticesSet && edge.toVertex in blossomVerticesSet) { // O(1)
+                edges.add(EdmondsEdge(edge.fromVertex, blossomVertex))
+            }
+        }
+        edges.removeAll(blossomEdges) // O(m)
+
+        vertices.removeAll(blossomVerticesSet) // O(n)
+        vertices.add(blossomVertex) // O(1)
+
+        commonRoot.pair?.pair = blossomVertex
+        for (vertex in vertices) { // O(n)
+            if (vertex.parent in blossomVerticesSet) {
+                vertex.parent = blossomVertex
+            }
+        }
+    }
+
+    private fun getBlossomVertices(
+        vertexA: EdmondsVertex,
+        vertexB: EdmondsVertex,
+        commonRoot: EdmondsVertex,
+    ): MutableList<EdmondsVertex> { // O(n)
+        val blossomVertices = mutableListOf(commonRoot)
+        var currentVertex: EdmondsVertex = vertexA
+        val sideAVertices = mutableListOf<EdmondsVertex>()
+        while (currentVertex != commonRoot) {
+            sideAVertices.add(currentVertex)
+            currentVertex = currentVertex.parent!!
+        }
+        currentVertex = vertexB
+        val sideBVertices = mutableListOf<EdmondsVertex>()
+        while (currentVertex != commonRoot) {
+            sideBVertices.add(currentVertex)
+            currentVertex = currentVertex.parent!!
+        }
+
+        blossomVertices.addAll(sideAVertices)
+        blossomVertices.addAll(sideBVertices.reversed())
+        return blossomVertices
+    }
+
+    private fun deconstructBlossom(blossomVertex: BlossomVertex) { // O(m*n' + m'*n) = O(m*n)
+        saveStep(EdmondsStepType.DeconstructBlossom("Bontsuk ki a ${blossomVertex.id} kelyhet!", blossomVertex))
+
+        val blossomVertices = blossomVertex.previousStructureVertices
+
+        vertices.remove(blossomVertex) // O(1)
+        vertices.addAll(blossomVertices) // O(n')
+        edges.removeAll { it.fromVertex == blossomVertex || it.toVertex == blossomVertex }
+        for (edge in blossomVertex.previousStructureEdges) { // O(m'*n)
+            val fromVertex =
+                if (edge.fromVertex in vertices) {
+                    edge.fromVertex
+                } else {
+                    vertices.find { it.id.contains(edge.fromVertex.id) }!! // O(n)
+                }
+            val toVertex =
+                if (edge.toVertex in vertices) {
+                    edge.toVertex
+                } else {
+                    vertices.find { it.id.contains(edge.toVertex.id) }!! // O(n)
+                }
+            edges.add(EdmondsEdge(fromVertex, toVertex)) // O(1)
+        }
+
+        if (blossomVertex.pair != null) { // O(m*n')
+            val unpairedVertex = blossomVertices.find { it.pair !in blossomVertices }!! // O(n')
+            val edge =
+                edges.find {
+                    // O(m)
+                    it.fromVertex == unpairedVertex && it.toVertex == blossomVertex.pair ||
+                        it.fromVertex == blossomVertex.pair && it.toVertex == unpairedVertex.pair
+                }
+            if (edge != null) {
+                edge.fromVertex.pair = edge.toVertex
+                edge.toVertex.pair = edge.fromVertex
+            } else { // O(m*n')
+                val incomingEdge =
+                    edges.first {
+                        // O(m*n')
+                        it.fromVertex == blossomVertex.pair && it.toVertex in blossomVertices ||
+                            it.toVertex == blossomVertex.pair && it.fromVertex in blossomVertices
+                    }
+                incomingEdge.fromVertex.pair = incomingEdge.toVertex
+                incomingEdge.toVertex.pair = incomingEdge.fromVertex
+                val pairedVertex =
+                    if (incomingEdge.fromVertex in blossomVertices) incomingEdge.fromVertex else incomingEdge.toVertex // O(n')
+                val indexOfPairedVertex = blossomVertices.indexOf(pairedVertex) + 1
+                for (i in 0..<blossomVertices.size / 2) { // O(n')
+                    val vertexA = blossomVertices[(indexOfPairedVertex + i * 2) % blossomVertices.size]
+                    val vertexB = blossomVertices[(indexOfPairedVertex + i * 2 + 1) % blossomVertices.size]
+                    vertexA.pair = vertexB
+                    vertexB.pair = vertexA
+                }
+            }
+        }
+
+        reset() // O(n+m)
+
+        saveStep(
+            EdmondsStepType.BlossomOutAnimation(
+                "Bontsuk ki a ${blossomVertex.id} kelyhet!",
+                blossomVertices.toSet(),
+            ),
+        )
+
+        for (vertex in blossomVertex.previousStructureVertices) {
+            if (vertex is BlossomVertex) {
+                deconstructBlossom(vertex)
+            }
+        }
+    }
+
+    private fun findCommonRoot(
+        vertexA: EdmondsVertex,
+        vertexB: EdmondsVertex,
+    ): EdmondsVertex? { // O(n^2)
+        val pathA = mutableSetOf<EdmondsVertex>()
+        var currentVertex: EdmondsVertex? = vertexA
+        while (currentVertex != null) {
+            pathA.add(currentVertex)
+            currentVertex = currentVertex.parent
+        }
+        currentVertex = vertexB
+        while (currentVertex != null) {
+            if (pathA.contains(currentVertex)) {
+                return currentVertex
+            }
+            currentVertex = currentVertex.parent
+        }
+        return null
+    }
+
+    private fun extendForest(
+        outerVertex: EdmondsVertex,
+        clearingVertex: EdmondsVertex,
+    ) { // O(1)
+        saveStep(EdmondsStepType.Nothing("Külső-tisztás\nBővítsük az erdőt!"))
+
+        clearingVertex.type = VertexType.INNER
+        clearingVertex.parent = outerVertex
+        clearingVertex.pair?.let {
+            it.type = VertexType.OUTER
+            it.parent = clearingVertex
+        }
+
+        saveStep()
+    }
+
+    private fun markAugmentingPathEdges(
+        vertexA: EdmondsVertex,
+        vertexB: EdmondsVertex,
+    ) {
+        markBranchEdges(vertexA)
+        markBranchEdges(vertexB)
+        val edge =
+            edges.find { (it.fromVertex == vertexA && it.toVertex == vertexB) || (it.fromVertex == vertexB && it.toVertex == vertexA) }
+        if (edge != null) {
+            augmentingPathEdges.add(edge)
+        }
+    }
+
+    private fun markBranchEdges(vertex: EdmondsVertex) {
+        var currentVertex = vertex
+        while (currentVertex.parent != null) {
+            val parent = currentVertex.parent!!
+            val edge =
+                edges.find {
+                    (it.fromVertex == currentVertex && it.toVertex == parent) ||
+                        (it.fromVertex == parent && it.toVertex == currentVertex)
+                }
+            if (edge != null) {
+                augmentingPathEdges.add(edge)
+            }
+            currentVertex = parent
+        }
+    }
+
+    private fun markBlossomEdges(
+        vertexA: EdmondsVertex,
+        vertexB: EdmondsVertex,
+        commonRoot: EdmondsVertex,
+    ) {
+        val blossomVertices = getBlossomVertices(vertexA, vertexB, commonRoot)
+        for (i in blossomVertices.indices) {
+            val vertex = blossomVertices[i]
+            val nextVertex = blossomVertices[(i + 1) % blossomVertices.size]
+            edges
+                .filter { (it.fromVertex == vertex && it.toVertex == nextVertex) || (it.fromVertex == nextVertex && it.toVertex == vertex) }
+                .forEach { edge ->
+                    blossomEdges.add(edge)
+                }
+        }
+    }
+
+    fun toGraphicalGraph(stepType: EdmondsStepType = EdmondsStepType.Nothing()): GraphicalGraph {
+        val graphicalVertices = mutableListOf<GraphicalVertex>()
+
+        for (vertex in vertices) {
+            val coordinates = getVertexCoordinates(vertex)
+
+            when (vertex.type) {
+                VertexType.ROOT -> {
+                    graphicalVertices.add(
+                        GraphicalVertex(
+                            coordinates.first,
+                            coordinates.second,
+                            vertex.id,
+                            highlightType = HighlightType.DOUBLE_CIRCLE,
+                            highlight = DARK_GREEN,
+                            vertexType = VertexType.ROOT,
+                        ),
+                    )
+                }
+
+                VertexType.INNER -> {
+                    graphicalVertices.add(
+                        GraphicalVertex(
+                            coordinates.first,
+                            coordinates.second,
+                            vertex.id,
+                            highlightType = HighlightType.SQUARE,
+                            highlight = DARK_GREEN,
+                            vertexType = VertexType.INNER,
+                        ),
+                    )
+                }
+
+                VertexType.OUTER -> {
+                    graphicalVertices.add(
+                        GraphicalVertex(
+                            coordinates.first,
+                            coordinates.second,
+                            vertex.id,
+                            highlightType = HighlightType.CIRCLE,
+                            highlight = DARK_GREEN,
+                            vertexType = VertexType.OUTER,
+                        ),
+                    )
+                }
+
+                VertexType.CLEARING, VertexType.NONE -> {
+                    graphicalVertices.add(
+                        GraphicalVertex(
+                            coordinates.first,
+                            coordinates.second,
+                            vertex.id,
+                        ),
+                    )
+                }
+            }
+        }
+
+        val graphicalEdges = mutableListOf<GraphicalEdge>()
+
+        for (edge in edges) {
+            val startGraphicalVertex = graphicalVertices.find { it.label == edge.fromVertex.id }
+            if (startGraphicalVertex == null) {
+                throw IllegalStateException("Vertex with id ${edge.fromVertex.id} not found")
+            }
+            val endGraphicalVertex = graphicalVertices.find { it.label == edge.toVertex.id }
+            if (endGraphicalVertex == null) {
+                throw IllegalStateException("Vertex with id ${edge.toVertex.id} not found")
+            }
+            graphicalEdges.add(
+                GraphicalEdge(
+                    startGraphicalVertex,
+                    endGraphicalVertex,
+                    selected = edge.fromVertex.pair == edge.toVertex,
+                    highlight = edgeHighlightColor(edge),
+                    color =
+                        if (edge.fromVertex.parent == edge.toVertex ||
+                            edge.toVertex.parent == edge.fromVertex
+                        ) {
+                            DARK_GREEN
+                        } else {
+                            Color.Black
+                        },
+                ),
+            )
+        }
+
+        return GraphicalGraph(graphicalVertices, graphicalEdges, stepType)
+    }
+
+    private fun edgeHighlightColor(edge: EdmondsEdge): Color {
+        if (edge in augmentingPathEdges) {
+            return BLUE
+        }
+        if (edge in blossomEdges) {
+            return PINK
+        }
+        if (edge == activeEdge) {
+            return YELLOW
+        }
+        if (edge.visited) {
+            return Color.LightGray
+        }
+        return Color.Transparent
+    }
+
+    fun getVertexCoordinates(vertex: EdmondsVertex): Pair<Double, Double> {
+        var coordinatesSum = Pair(0.0, 0.0)
+        for (char in vertex.id) {
+            val coord = idCoordinatesMap[char] ?: Pair(0.0, 0.0)
+            coordinatesSum = Pair(coordinatesSum.first + coord.first, coordinatesSum.second + coord.second)
+        }
+        return Pair(coordinatesSum.first / vertex.id.length, coordinatesSum.second / vertex.id.length)
+    }
+
+    fun getVertexByCoordinates(
+        x: Double,
+        y: Double,
+    ): EdmondsVertex? {
+        try {
+            return vertices.last { vertex ->
+                val coordinates = getVertexCoordinates(vertex)
+                val dx = coordinates.first - x
+                val dy = coordinates.second - y
+                return@last dx * dx + dy * dy <= 400.0
+            }
+        } catch (_: NoSuchElementException) {
+            return null
+        }
+    }
+}

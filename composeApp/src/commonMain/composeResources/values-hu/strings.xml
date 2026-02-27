@@ -1,0 +1,14 @@
+<resources>
+    <string name="draw_custom_screen">Saját gráf rajzolása</string>
+    <string name="run_algorithm_screen">Algoritmus futtatása</string>
+    <string name="quiz_screen">Kikérdező</string>
+    <string name="run_button">Futtatás</string>
+    <string name="next_button">Következő</string>
+    <string name="back_button">Vissza</string>
+    <string name="done_button">Kész</string>
+    <string name="restart_button">Újraindítás</string>
+    <string name="add_vertex_button">Csúcs hozzáadása</string>
+    <string name="add_edge_button">Él hozzáadása</string>
+    <string name="save_button">Mentés</string>
+    <string name="custom_graph_default_name">Saját gráf</string>
+</resources>

@@ -1,0 +1,116 @@
+@file:Suppress("ktlint:standard:no-wildcard-imports")
+
+package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.drawgraph
+
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.layout.*
+import androidx.compose.material3.Button
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphCanvas
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.SimpleTopAppbar
+import org.jetbrains.compose.resources.stringResource
+import pairingalgorithmsvisualizer.composeapp.generated.resources.*
+
+@Composable
+fun GraphDrawingScreen(
+    graphStorage: GraphStorage,
+    onBack: () -> Unit,
+) {
+    val viewModel = viewModel { GraphDrawingScreenViewmodel(graphStorage) }
+
+    val graph by viewModel.graphicalGraph
+    val drawMode by viewModel.drawMode
+    val name by viewModel.graphName
+
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            SimpleTopAppbar(
+                title = stringResource(Res.string.draw_custom_screen),
+                onBack = onBack,
+            )
+        },
+    ) { paddingValues ->
+        Row(
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
+        ) {
+            Column(
+                modifier =
+                    Modifier
+                        .fillMaxHeight()
+                        .fillMaxWidth(0.8f),
+            ) {
+                TextField(
+                    value = name,
+                    onValueChange = { viewModel.onNameChange(it) },
+                    modifier = Modifier.padding(10.dp),
+                )
+
+                GraphCanvas(
+                    graphicalGraph = graph,
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .pointerInput(Unit) {
+                                detectTapGestures { offset ->
+                                    val modelX = offset.x.toDouble() - size.width / 2.0
+                                    val modelY = size.height / 2.0 - offset.y.toDouble()
+
+                                    viewModel.onLeftClick(modelX, modelY)
+                                }
+                            }.pointerInput(Unit) {
+                                detectDragGestures(
+                                    onDragStart = { offset ->
+                                        val modelX = offset.x.toDouble() - size.width / 2.0
+                                        val modelY = size.height / 2.0 - offset.y.toDouble()
+
+                                        viewModel.onDragStart(modelX, modelY)
+                                    },
+                                    onDrag = { _, offset ->
+                                        val modelX = offset.x.toDouble()
+                                        val modelY = -offset.y.toDouble()
+
+                                        viewModel.onDrag(modelX, modelY)
+                                    },
+                                    onDragEnd = {
+                                        viewModel.onDragEnd()
+                                    },
+                                )
+                            },
+                )
+            }
+
+            Column {
+                Button(
+                    onClick = { viewModel.changeDrawMode(DrawMode.VERTEX) },
+                    enabled = drawMode != DrawMode.VERTEX,
+                ) {
+                    Text(stringResource(Res.string.add_vertex_button))
+                }
+                Button(
+                    onClick = { viewModel.changeDrawMode(DrawMode.EDGE) },
+                    enabled = drawMode != DrawMode.EDGE,
+                ) {
+                    Text(stringResource(Res.string.add_edge_button))
+                }
+                Button(
+                    onClick = {
+                        viewModel.saveGraph()
+                    },
+                ) {
+                    Text(stringResource(Res.string.save_button))
+                }
+            }
+        }
+    }
+}

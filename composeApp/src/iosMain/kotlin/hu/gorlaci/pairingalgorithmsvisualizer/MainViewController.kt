@@ -1,0 +1,5 @@
+package hu.gorlaci.pairingalgorithmsvisualizer
+
+import androidx.compose.ui.window.ComposeUIViewController
+
+fun MainViewController() = ComposeUIViewController { App() }

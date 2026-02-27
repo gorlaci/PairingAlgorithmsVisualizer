@@ -1,0 +1,119 @@
+package hu.gorlaci.pairingalgorithmsvisualizer.data
+
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.asAugmentingPathGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
+
+class InMemoryGraphStorage : GraphStorage {
+    private val graphs: MutableList<Graph> = mutableListOf()
+
+    init {
+        addExampleGraphs()
+    }
+
+    override fun addGraph(graph: Graph) {
+        graphs.add(graph)
+    }
+
+    override fun getAllGraphs(): List<Graph> = graphs
+    override fun getAllEdmondsGraphs(): List<EdmondsGraph> {
+        return graphs.filterIsInstance<EdmondsGraph>()
+    }
+
+    override fun getAllAugmentingPathGraphs(): List<AugmentingPathGraph> =
+        graphs.filter { it.isBipartite }.map { it.asAugmentingPathGraph() }
+
+    private fun addExampleGraphs() {
+        addExampleGraph1()
+        addExampleGraph2()
+    }
+
+    private fun addExampleGraph1() {
+        val graph =
+            EdmondsGraph(
+                vertices =
+                    mutableSetOf(
+                        EdmondsVertex(id = "A"),
+                        EdmondsVertex(id = "B"),
+                        EdmondsVertex(id = "C"),
+                        EdmondsVertex(id = "D"),
+                        EdmondsVertex(id = "E"),
+                        EdmondsVertex(id = "F"),
+                        EdmondsVertex(id = "G"),
+                        EdmondsVertex(id = "H"),
+                        EdmondsVertex(id = "I"),
+                    ),
+                idCoordinatesMap =
+                    mutableMapOf(
+                        'A' to Pair(-100.0, 200.0),
+                        'B' to Pair(0.0, 200.0),
+                        'C' to Pair(100.0, 200.0),
+                        'D' to Pair(-200.0, 0.0),
+                        'E' to Pair(0.0, 0.0),
+                        'F' to Pair(200.0, 0.0),
+                        'G' to Pair(-100.0, -200.0),
+                        'H' to Pair(0.0, -200.0),
+                        'I' to Pair(100.0, -200.0),
+                    ),
+                name = "Example Graph 1",
+            )
+
+        graph.addEdge("E", "D")
+        graph.addEdge("D", "A")
+        graph.addEdge("E", "A")
+        graph.addEdge("F", "I")
+        graph.addEdge("E", "F")
+        graph.addEdge("E", "I")
+        graph.addEdge("E", "C")
+        graph.addEdge("A", "B")
+        graph.addEdge("I", "H")
+        graph.addEdge("C", "F")
+        graph.addEdge("G", "D")
+        graph.addEdge("H", "G")
+        graph.addEdge("B", "C")
+        graph.addEdge("E", "G")
+
+        addGraph(graph)
+    }
+
+    private fun addExampleGraph2() {
+        val graph =
+            EdmondsGraph(
+                vertices =
+                    mutableSetOf(
+                        EdmondsVertex(id = "A"),
+                        EdmondsVertex(id = "B"),
+                        EdmondsVertex(id = "C"),
+                        EdmondsVertex(id = "D"),
+                        EdmondsVertex(id = "E"),
+                        EdmondsVertex(id = "F"),
+                        EdmondsVertex(id = "G"),
+                    ),
+                idCoordinatesMap =
+                    mutableMapOf(
+                        'A' to Pair(-50.0, 150.0),
+                        'B' to Pair(-100.0, 50.0),
+                        'C' to Pair(0.0, 50.0),
+                        'D' to Pair(-50.0, -50.0),
+                        'E' to Pair(50.0, -50.0),
+                        'F' to Pair(0.0, -150.0),
+                        'G' to Pair(100.0, -150.0),
+                    ),
+                name = "Example Graph 2",
+            )
+
+        graph.addEdge("A", "B")
+        graph.addEdge("A", "C")
+        graph.addEdge("B", "C")
+        graph.addEdge("C", "D")
+        graph.addEdge("D", "E")
+        graph.addEdge("E", "C")
+        graph.addEdge("E", "F")
+        graph.addEdge("F", "G")
+        graph.addEdge("G", "E")
+
+        addGraph(graph)
+    }
+}
