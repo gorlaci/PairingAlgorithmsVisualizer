@@ -7,20 +7,23 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.DARK_GREEN
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.PINK
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.YELLOW
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalEdge
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalGraph
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalVertex
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.HighlightType
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 
 class EdmondsGraph(
     override val vertices: MutableSet<EdmondsVertex> = mutableSetOf(),
     override val edges: MutableSet<EdmondsEdge> = mutableSetOf(),
-    val idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf(),
+    idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf(),
     name: String = "",
     private var activeEdge: EdmondsEdge? = null,
     private val augmentingPathEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
     private val blossomEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
-): Graph( name, vertices, edges ) {
+): Graph(
+    name = name,
+    idCoordinatesMap = idCoordinatesMap
+) {
 
     fun copy(): EdmondsGraph {
         val vertexMap = mutableMapOf<EdmondsVertex, EdmondsVertex>()
@@ -472,7 +475,6 @@ class EdmondsGraph(
                             vertex.id,
                             highlightType = HighlightType.DOUBLE_CIRCLE,
                             highlight = DARK_GREEN,
-                            vertexType = VertexType.ROOT,
                         ),
                     )
                 }
@@ -485,7 +487,6 @@ class EdmondsGraph(
                             vertex.id,
                             highlightType = HighlightType.SQUARE,
                             highlight = DARK_GREEN,
-                            vertexType = VertexType.INNER,
                         ),
                     )
                 }
@@ -498,7 +499,6 @@ class EdmondsGraph(
                             vertex.id,
                             highlightType = HighlightType.CIRCLE,
                             highlight = DARK_GREEN,
-                            vertexType = VertexType.OUTER,
                         ),
                     )
                 }
@@ -561,15 +561,6 @@ class EdmondsGraph(
             return Color.LightGray
         }
         return Color.Transparent
-    }
-
-    fun getVertexCoordinates(vertex: EdmondsVertex): Pair<Double, Double> {
-        var coordinatesSum = Pair(0.0, 0.0)
-        for (char in vertex.id) {
-            val coord = idCoordinatesMap[char] ?: Pair(0.0, 0.0)
-            coordinatesSum = Pair(coordinatesSum.first + coord.first, coordinatesSum.second + coord.second)
-        }
-        return Pair(coordinatesSum.first / vertex.id.length, coordinatesSum.second / vertex.id.length)
     }
 
     fun getVertexByCoordinates(

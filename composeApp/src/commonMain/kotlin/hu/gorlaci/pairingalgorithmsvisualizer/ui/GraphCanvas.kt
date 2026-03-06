@@ -11,7 +11,7 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 
 @Composable
 fun GraphCanvas(
@@ -52,7 +52,7 @@ fun GraphCanvas(
                 measuredText,
                 topLeft =
                     vertex.transformCoordinates(centerX, centerY) -
-                        Offset(measuredText.size.toSize().width / 2f, measuredText.size.toSize().height / 2f),
+                            Offset(measuredText.size.toSize().width / 2f, measuredText.size.toSize().height / 2f),
             )
         }
     }

@@ -1,17 +1,15 @@
-package hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.model
 
 import androidx.compose.ui.graphics.Color
+import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.VertexType
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.DARK_GREEN
 
 data class GraphicalGraph(
     val graphicalVertices: List<GraphicalVertex>,
     val graphicalEdges: List<GraphicalEdge>,
-    val stepType: EdmondsStepType,
+    val stepType: StepType,
 ) {
     fun addHighlight(vertex: EdmondsVertex): GraphicalGraph {
         val graphicalVertex = graphicalVertices.find { it.label == vertex.id }
@@ -64,52 +62,11 @@ data class GraphicalGraph(
         )
     }
 
-    fun restoreHighlight(vertex: EdmondsVertex): GraphicalGraph {
-        val graphicalVertex = graphicalVertices.find { it.label == vertex.id }
-        if (graphicalVertex == null) {
-            return this
-        }
-        val newGraphicalVertex =
-            when (graphicalVertex.vertexType) {
-                VertexType.ROOT -> {
-                    graphicalVertex.copy(
-                        highlightType = HighlightType.DOUBLE_CIRCLE,
-                        highlight = DARK_GREEN,
-                    )
-                }
-
-                VertexType.INNER -> {
-                    graphicalVertex.copy(
-                        highlightType = HighlightType.SQUARE,
-                        highlight = DARK_GREEN,
-                    )
-                }
-
-                VertexType.OUTER -> {
-                    graphicalVertex.copy(
-                        highlightType = HighlightType.CIRCLE,
-                        highlight = DARK_GREEN,
-                    )
-                }
-
-                VertexType.CLEARING, VertexType.NONE -> {
-                    graphicalVertex.copy(
-                        highlightType = HighlightType.CIRCLE,
-                        highlight = Color.Transparent,
-                    )
-                }
-            }
-        val newGraphicalVertices = graphicalVertices - graphicalVertex + newGraphicalVertex
-        return this.copy(graphicalVertices = newGraphicalVertices)
-    }
-
     fun animateBlossomVertices(
         blossomVertices: Set<EdmondsVertex>,
         originalGraph: EdmondsGraph,
         animationProgress: Float,
     ): GraphicalGraph {
-        val graphicalBlossomVertices =
-            blossomVertices.map { vertex -> graphicalVertices.first { it.label == vertex.id } }
 
         val blossomX =
             blossomVertices.sumOf { originalGraph.getVertexCoordinates(it).first * it.id.length } / blossomVertices.sumOf { it.id.length }

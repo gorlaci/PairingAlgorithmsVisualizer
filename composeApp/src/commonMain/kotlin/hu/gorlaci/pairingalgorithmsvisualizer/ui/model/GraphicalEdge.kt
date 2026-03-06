@@ -1,4 +1,4 @@
-package hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.model
 
 import androidx.compose.ui.graphics.Color
 

@@ -12,7 +12,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun MainMenuScreen(
     onEdmondsMenuClick: () -> Unit,
-    onAugmentingPathMenuClick: () -> Unit = {},
+    onAugmentingPathMenuClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -21,8 +21,7 @@ fun MainMenuScreen(
     ) {
         Button(
             onClick = onAugmentingPathMenuClick,
-            enabled = false,
-        ){
+        ) {
             Text("Javítóutas algoritmus")
         }
 

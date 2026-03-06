@@ -1,18 +1,17 @@
-package hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.model
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.VertexType
 
 data class GraphicalVertex(
     val x: Double = 0.0,
     val y: Double = 0.0,
     val label: String = "",
     val selected: Boolean = false,
-    val vertexType: VertexType = VertexType.NONE,
     val highlight: Color = Color.Transparent,
     val highlightType: HighlightType = HighlightType.CIRCLE,
 ) {
+
     fun transformCoordinates(
         offsetX: Double,
         offsetY: Double,

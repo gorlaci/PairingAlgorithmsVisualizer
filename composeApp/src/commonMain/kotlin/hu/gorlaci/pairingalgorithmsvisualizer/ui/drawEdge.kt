@@ -1,7 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.ui
 
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 
 fun DrawScope.drawEdge(
     edge: GraphicalEdge,

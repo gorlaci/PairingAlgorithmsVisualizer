@@ -1,8 +1,10 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.data
 
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.asAugmentingPathGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.toAugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 
@@ -23,11 +25,12 @@ class InMemoryGraphStorage : GraphStorage {
     }
 
     override fun getAllAugmentingPathGraphs(): List<AugmentingPathGraph> =
-        graphs.filter { it.isBipartite }.map { it.asAugmentingPathGraph() }
+        graphs.filter { it.isBipartite }.map { it.toAugmentingPathGraph() }
 
     private fun addExampleGraphs() {
         addExampleGraph1()
         addExampleGraph2()
+        addExampleGraph3()
     }
 
     private fun addExampleGraph1() {
@@ -114,6 +117,37 @@ class InMemoryGraphStorage : GraphStorage {
         graph.addEdge("F", "G")
         graph.addEdge("G", "E")
 
+        addGraph(graph)
+    }
+
+    private fun addExampleGraph3() {
+        val vertices = ('A'..'G').map {
+            Vertex(id = it.toString())
+        }
+        val edges = mutableSetOf(
+            Edge(fromVertex = vertices[0], toVertex = vertices[3]),
+            Edge(fromVertex = vertices[0], toVertex = vertices[4]),
+            Edge(fromVertex = vertices[0], toVertex = vertices[5]),
+            Edge(fromVertex = vertices[1], toVertex = vertices[4]),
+            Edge(fromVertex = vertices[1], toVertex = vertices[5]),
+            Edge(fromVertex = vertices[1], toVertex = vertices[6]),
+            Edge(fromVertex = vertices[2], toVertex = vertices[3]),
+        )
+        val graph = Graph(
+            vertices = vertices.toMutableSet(),
+            edges = edges,
+            idCoordinatesMap =
+                mutableMapOf(
+                    'A' to Pair(-100.0, -100.0),
+                    'B' to Pair(0.0, -100.0),
+                    'C' to Pair(100.0, -100.0),
+                    'D' to Pair(-150.0, 100.0),
+                    'E' to Pair(-50.0, 100.0),
+                    'F' to Pair(50.0, 100.0),
+                    'G' to Pair(150.0, 100.0),
+                ),
+            name = "Example Graph 3",
+        )
         addGraph(graph)
     }
 }

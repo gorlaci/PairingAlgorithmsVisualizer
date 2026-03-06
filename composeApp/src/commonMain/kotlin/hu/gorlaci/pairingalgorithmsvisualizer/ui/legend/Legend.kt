@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalEdge
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalVertex
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.HighlightType
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 
 @Preview
 @Composable

@@ -3,12 +3,12 @@ package hu.gorlaci.pairingalgorithmsvisualizer.navigation
 import kotlinx.serialization.Serializable
 
 
-object Screen{
+object Screen {
 
     object Edmonds {
 
         @Serializable
-        object Canvas
+        object RunAlgorithm
 
         @Serializable
         object GraphDrawing
@@ -18,6 +18,16 @@ object Screen{
 
         @Serializable
         object Quiz
+    }
+
+    object AugmentingPath {
+
+        @Serializable
+        object RunAlgorithm
+
+        @Serializable
+        object Menu
+
     }
 
     @Serializable

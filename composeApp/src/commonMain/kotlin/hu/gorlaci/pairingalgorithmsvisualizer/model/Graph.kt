@@ -4,10 +4,11 @@ open class Graph(
     var name: String = "",
     open val vertices: MutableSet<out Vertex> = mutableSetOf(),
     open val edges: MutableSet<out Edge> = mutableSetOf(),
-){
+    val idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf()
+) {
     val isBipartite: Boolean
         get() {
-            if( vertices.size < 3 ) {
+            if (vertices.size < 3) {
                 return true
             }
             val unvisited = vertices.toMutableSet()
@@ -21,8 +22,10 @@ open class Graph(
                     val current = queue.removeFirst()
                     unvisited.remove(current)
                     val currentColor = colorMap[current] ?: continue
-                    val neighbours = edges.filter { it.fromVertex == current && it.toVertex in unvisited }.map { it.toVertex } +
-                            edges.filter { it.toVertex == current && it.fromVertex in unvisited }.map { it.fromVertex }
+                    val neighbours =
+                        edges.filter { it.fromVertex == current && it.toVertex in unvisited }.map { it.toVertex } +
+                                edges.filter { it.toVertex == current && it.fromVertex in unvisited }
+                                    .map { it.fromVertex }
                     for (neighbour in neighbours) {
                         if (neighbour in colorMap) {
                             if (colorMap[neighbour] == currentColor) {
@@ -37,4 +40,14 @@ open class Graph(
             }
             return true
         }
+
+    fun getVertexCoordinates(vertex: Vertex): Pair<Double, Double> =
+        Pair(
+            vertex.id.map { char ->
+                idCoordinatesMap[char]?.first ?: 0.0
+            }.sum() / vertex.id.length,
+            vertex.id.map { char ->
+                idCoordinatesMap[char]?.second ?: 0.0
+            }.sum() / vertex.id.length
+        )
 }

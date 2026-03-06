@@ -4,8 +4,8 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.GraphicalVertex
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.model.HighlightType
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 
 fun DrawScope.drawVertex(
     vertex: GraphicalVertex,

@@ -10,12 +10,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 
 @Composable
 fun GraphSelectionDropdown(
-    selectedGraph: EdmondsGraph,
-    graphList: List<EdmondsGraph>,
+    selectedGraph: Graph,
+    graphList: List<Graph>,
     onGraphSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
