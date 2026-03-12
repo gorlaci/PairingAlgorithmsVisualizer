@@ -1,18 +1,21 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.drawgraph
+package hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.ORANGE
 
 class GraphDrawingScreenViewmodel(
     private val graphStorage: GraphStorage,
 ) : ViewModel() {
     private var graph =
-        EdmondsGraph(
+        Graph(
             name = "Custom Graph",
+            newVertex = { Vertex(it) },
+            newEdge = { from, to -> Edge(from, to) },
         )
 
     val graphicalGraph = mutableStateOf(graph.toGraphicalGraph())
@@ -23,7 +26,7 @@ class GraphDrawingScreenViewmodel(
         x: Double,
         y: Double,
     ) {
-        graph.vertices.add(EdmondsVertex("$nextID"))
+        graph.vertices.add(Vertex("$nextID"))
         graph.idCoordinatesMap[nextID] = Pair(x, y)
         nextID++
         graphicalGraph.value = graph.toGraphicalGraph()
@@ -36,7 +39,7 @@ class GraphDrawingScreenViewmodel(
         firstVertexForEdge = null
     }
 
-    private var firstVertexForEdge: EdmondsVertex? = null
+    private var firstVertexForEdge: Vertex? = null
 
     fun onLeftClick(
         x: Double,
@@ -67,7 +70,7 @@ class GraphDrawingScreenViewmodel(
         }
     }
 
-    var draggedVertex: EdmondsVertex? = null
+    var draggedVertex: Vertex? = null
 
     fun onDragStart(
         x: Double,
@@ -97,8 +100,10 @@ class GraphDrawingScreenViewmodel(
         if (!graphStorage.getAllGraphs().contains(graph)) {
             graphStorage.addGraph(graph)
             graph =
-                EdmondsGraph(
+                Graph(
                     name = "Custom Graph",
+                    newVertex = { Vertex(it) },
+                    newEdge = { from, to -> Edge(from, to) },
                 )
             graphicalGraph.value = graph.toGraphicalGraph()
             graphName.value = "Custom Graph"

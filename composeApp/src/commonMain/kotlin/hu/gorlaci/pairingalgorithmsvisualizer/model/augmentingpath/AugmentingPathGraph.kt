@@ -1,7 +1,9 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath
 
 import androidx.compose.ui.graphics.Color
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.quiz.AugmentingStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
@@ -13,11 +15,13 @@ class AugmentingPathGraph(
     override val vertices: MutableSet<AugmentingPathVertex> = mutableSetOf(),
     name: String = "",
     idCoordinatesMap: MutableMap<Char, Pair<Double, Double>>
-) : Graph(
+) : Graph<AugmentingPathVertex, Edge>(
     name = name,
     vertices = vertices,
     edges = mutableSetOf(),
-    idCoordinatesMap = idCoordinatesMap
+    idCoordinatesMap = idCoordinatesMap,
+    newVertex = { AugmentingPathVertex(it) },
+    newEdge = { from, to -> Edge(from, to) },
 ) {
 
 
@@ -216,7 +220,7 @@ class AugmentingPathGraph(
     }
 }
 
-fun Graph.toAugmentingPathGraph(): AugmentingPathGraph {
+fun Graph<out Vertex, out Edge>.toAugmentingPathGraph(): AugmentingPathGraph {
     val augmentingPathVertices = vertices.map { vertex ->
         AugmentingPathVertex(
             id = vertex.id,

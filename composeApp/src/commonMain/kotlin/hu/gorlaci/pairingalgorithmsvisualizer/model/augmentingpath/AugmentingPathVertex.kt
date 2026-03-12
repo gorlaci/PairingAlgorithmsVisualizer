@@ -4,7 +4,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 
 class AugmentingPathVertex(
     id: String,
-    val neighbours: MutableSet<AugmentingPathVertex>,
+    val neighbours: MutableSet<AugmentingPathVertex> = mutableSetOf(),
     var visited: Boolean = false,
     var pair: AugmentingPathVertex? = null,
     var parent: AugmentingPathVertex? = null,

@@ -1,45 +1,44 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.run_algorithm
+package hu.gorlaci.pairingalgorithmsvisualizer.ui
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphCanvas
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphSelectionDropdown
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.SimpleTopAppbar
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource
-import pairingalgorithmsvisualizer.composeapp.generated.resources.*
+import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
+import pairingalgorithmsvisualizer.composeapp.generated.resources.back_button
+import pairingalgorithmsvisualizer.composeapp.generated.resources.next_button
+import pairingalgorithmsvisualizer.composeapp.generated.resources.run_button
 
 @Composable
 fun AlgorithmRunningScreen(
-    graphStorage: GraphStorage,
+    title: String,
+    selectedGraph: Graph<out Vertex, out Edge>,
+    graphList: List<Graph<out Vertex, out Edge>>,
+    onGraphIndexSelected: (Int) -> Unit,
+    graphicalGraph: GraphicalGraph,
+    nextEnabled: Boolean,
+    backEnabled: Boolean,
+    runEnabled: Boolean,
+    onNext: () -> Unit,
     onBack: () -> Unit,
+    onRun: () -> Unit,
+    onNavigateBack: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    val coroutineScope = rememberCoroutineScope()
-
-    val viewModel = viewModel { AlgorithmRunningScreenViewModel(graphStorage, coroutineScope.coroutineContext) }
-
-    val selectedGraph by viewModel.currentGraph
-
-    val graphicalGraph by viewModel.graphicalGraph
-
-    val nextEnabled by viewModel.nextEnabled
-    val backEnabled by viewModel.backEnabled
-    val runEnabled by viewModel.runEnabled
-
     Scaffold(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier,
         topBar = {
             SimpleTopAppbar(
-                title = stringResource(Res.string.run_algorithm_screen),
-                onBack = onBack,
+                title = title,
+                onBack = onNavigateBack,
             )
         },
     ) { paddingValues ->
@@ -51,8 +50,8 @@ fun AlgorithmRunningScreen(
             ) {
                 GraphSelectionDropdown(
                     selectedGraph = selectedGraph,
-                    graphList = viewModel.graphList,
-                    onGraphSelected = viewModel::onGraphSelected,
+                    graphList = graphList,
+                    onGraphSelected = onGraphIndexSelected,
                 )
 
                 GraphCanvas(
@@ -80,19 +79,19 @@ fun AlgorithmRunningScreen(
                     Spacer(modifier = Modifier.fillMaxHeight(0.1f))
 
                     Button(
-                        onClick = { viewModel.onNext() },
+                        onClick = onNext,
                         enabled = nextEnabled,
                     ) {
                         Text(stringResource(Res.string.next_button))
                     }
                     Button(
-                        onClick = { viewModel.onBack() },
+                        onClick = onBack,
                         enabled = backEnabled,
                     ) {
                         Text(stringResource(Res.string.back_button))
                     }
                     Button(
-                        onClick = { viewModel.onRun() },
+                        onClick = onRun,
                         enabled = runEnabled,
                     ) {
                         Text(stringResource(Res.string.run_button))

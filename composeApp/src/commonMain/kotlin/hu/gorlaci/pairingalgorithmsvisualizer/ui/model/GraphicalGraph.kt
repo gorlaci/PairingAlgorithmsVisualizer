@@ -1,8 +1,9 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.ui.model
 
 import androidx.compose.ui.graphics.Color
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 
@@ -11,7 +12,10 @@ data class GraphicalGraph(
     val graphicalEdges: List<GraphicalEdge>,
     val stepType: StepType,
 ) {
-    fun changeInnerColor(vertex: EdmondsVertex, color: Color): GraphicalGraph {
+    fun changeInnerColor(
+        vertex: Vertex,
+        color: Color
+    ): GraphicalGraph {
         val graphicalVertex = graphicalVertices.find { it.label == vertex.id }
         if (graphicalVertex == null) {
             return this
@@ -22,7 +26,7 @@ data class GraphicalGraph(
     }
 
     fun addHighlight(
-        edge: EdmondsEdge,
+        edge: Edge,
         color: Color,
     ): GraphicalGraph {
         val graphicalEdge =
@@ -38,7 +42,7 @@ data class GraphicalGraph(
         return this.copy(graphicalEdges = newGraphicalEdges)
     }
 
-    fun removeHighlight(edge: EdmondsEdge) = addHighlight(edge, Color.Transparent)
+    fun removeHighlight(edge: Edge) = addHighlight(edge, Color.Transparent)
 
     fun removeAllEdgeHighlights(): GraphicalGraph {
         val newGraphicalEdges =

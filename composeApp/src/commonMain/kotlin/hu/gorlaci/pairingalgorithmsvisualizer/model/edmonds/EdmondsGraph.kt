@@ -13,16 +13,20 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 
 class EdmondsGraph(
-    override val vertices: MutableSet<EdmondsVertex> = mutableSetOf(),
-    override val edges: MutableSet<EdmondsEdge> = mutableSetOf(),
+    vertices: MutableSet<EdmondsVertex> = mutableSetOf(),
+    edges: MutableSet<EdmondsEdge> = mutableSetOf(),
     idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf(),
     name: String = "",
     private var activeEdge: EdmondsEdge? = null,
     private val augmentingPathEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
     private val blossomEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
-): Graph(
+) : Graph<EdmondsVertex, EdmondsEdge>(
     name = name,
-    idCoordinatesMap = idCoordinatesMap
+    vertices = vertices,
+    edges = edges,
+    idCoordinatesMap = idCoordinatesMap,
+    newVertex = { EdmondsVertex(it) },
+    newEdge = { from, to -> EdmondsEdge(from, to) },
 ) {
 
     fun copy(): EdmondsGraph {
@@ -77,18 +81,6 @@ class EdmondsGraph(
 
     private fun saveStep(stepType: EdmondsStepType = EdmondsStepType.Nothing("")) {
         steps.add(copy() to stepType)
-    }
-
-    fun addEdge(
-        fromId: String,
-        toId: String,
-    ) {
-        val fromVertex = vertices.find { it.id == fromId }
-        val toVertex = vertices.find { it.id == toId }
-        if (fromVertex != null && toVertex != null) {
-            val newEdge = EdmondsEdge(fromVertex, toVertex)
-            edges.add(newEdge)
-        }
     }
 
     private var edgesLeft = true
@@ -336,7 +328,7 @@ class EdmondsGraph(
                 edges.find {
                     // O(m)
                     it.fromVertex == unpairedVertex && it.toVertex == blossomVertex.pair ||
-                        it.fromVertex == blossomVertex.pair && it.toVertex == unpairedVertex.pair
+                            it.fromVertex == blossomVertex.pair && it.toVertex == unpairedVertex.pair
                 }
             if (edge != null) {
                 edge.fromVertex.pair = edge.toVertex
@@ -346,7 +338,7 @@ class EdmondsGraph(
                     edges.first {
                         // O(m*n')
                         it.fromVertex == blossomVertex.pair && it.toVertex in blossomVertices ||
-                            it.toVertex == blossomVertex.pair && it.fromVertex in blossomVertices
+                                it.toVertex == blossomVertex.pair && it.fromVertex in blossomVertices
                     }
                 incomingEdge.fromVertex.pair = incomingEdge.toVertex
                 incomingEdge.toVertex.pair = incomingEdge.fromVertex
@@ -434,7 +426,7 @@ class EdmondsGraph(
             val edge =
                 edges.find {
                     (it.fromVertex == currentVertex && it.toVertex == parent) ||
-                        (it.fromVertex == parent && it.toVertex == currentVertex)
+                            (it.fromVertex == parent && it.toVertex == currentVertex)
                 }
             if (edge != null) {
                 augmentingPathEdges.add(edge)
@@ -561,21 +553,5 @@ class EdmondsGraph(
             return Color.LightGray
         }
         return Color.Transparent
-    }
-
-    fun getVertexByCoordinates(
-        x: Double,
-        y: Double,
-    ): EdmondsVertex? {
-        try {
-            return vertices.last { vertex ->
-                val coordinates = getVertexCoordinates(vertex)
-                val dx = coordinates.first - x
-                val dy = coordinates.second - y
-                return@last dx * dx + dy * dy <= 400.0
-            }
-        } catch (_: NoSuchElementException) {
-            return null
-        }
     }
 }

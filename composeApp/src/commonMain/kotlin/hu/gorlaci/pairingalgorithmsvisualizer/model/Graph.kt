@@ -1,10 +1,16 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model
 
-open class Graph(
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
+
+open class Graph<VertexType : Vertex, EdgeType : Edge>(
     var name: String = "",
-    open val vertices: MutableSet<out Vertex> = mutableSetOf(),
-    open val edges: MutableSet<out Edge> = mutableSetOf(),
-    val idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf()
+    open val vertices: MutableSet<VertexType> = mutableSetOf(),
+    open val edges: MutableSet<EdgeType> = mutableSetOf(),
+    val idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf(),
+    private val newVertex: (String) -> VertexType,
+    private val newEdge: (VertexType, VertexType) -> EdgeType,
 ) {
     val isBipartite: Boolean
         get() {
@@ -50,4 +56,57 @@ open class Graph(
                 idCoordinatesMap[char]?.second ?: 0.0
             }.sum() / vertex.id.length
         )
+
+    open fun toGraphicalGraph(): GraphicalGraph {
+        val graphicalVertices = vertices.map { vertex ->
+            val coordinates = getVertexCoordinates(vertex)
+            GraphicalVertex(
+                label = vertex.id,
+                x = coordinates.first,
+                y = coordinates.second,
+            )
+        }
+
+        val graphicalEdges = edges.map { edge ->
+            val fromVertex = graphicalVertices.first { it.label == edge.fromVertex.id }
+            val toVertex = graphicalVertices.first { it.label == edge.toVertex.id }
+            GraphicalEdge(
+                startGraphicalVertex = fromVertex,
+                endGraphicalVertex = toVertex,
+            )
+        }
+        return GraphicalGraph(
+            graphicalVertices = graphicalVertices,
+            graphicalEdges = graphicalEdges,
+            stepType = StepType("")
+        )
+    }
+
+    fun getVertexByCoordinates(
+        x: Double,
+        y: Double,
+    ): VertexType? {
+        try {
+            return vertices.last { vertex ->
+                val coordinates = getVertexCoordinates(vertex)
+                val dx = coordinates.first - x
+                val dy = coordinates.second - y
+                return@last dx * dx + dy * dy <= 400.0
+            }
+        } catch (_: NoSuchElementException) {
+            return null
+        }
+    }
+
+    fun addEdge(
+        fromId: String,
+        toId: String,
+    ) {
+        val fromVertex = vertices.find { it.id == fromId }
+        val toVertex = vertices.find { it.id == toId }
+        if (fromVertex != null && toVertex != null) {
+            val newEdge = newEdge(fromVertex, toVertex)
+            edges.add(newEdge)
+        }
+    }
 }

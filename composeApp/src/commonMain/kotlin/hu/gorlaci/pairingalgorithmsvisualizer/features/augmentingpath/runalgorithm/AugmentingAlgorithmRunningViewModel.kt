@@ -4,7 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 
-class AlgorithmRunningViewModel(
+class AugmentingAlgorithmRunningViewModel(
     val graphStorage: GraphStorage
 ) : ViewModel() {
     val graphList = graphStorage.getAllAugmentingPathGraphs()

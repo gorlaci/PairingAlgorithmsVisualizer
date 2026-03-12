@@ -12,7 +12,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlin.coroutines.CoroutineContext
 
-open class AlgorithmRunningScreenViewModel(
+open class EdmondsAlgorithmRunningScreenViewModel(
     protected val graphStorage: GraphStorage,
     protected val composableCoroutineContext: CoroutineContext,
 ) : ViewModel() {
@@ -20,7 +20,8 @@ open class AlgorithmRunningScreenViewModel(
     protected var selectedGraphIndex = 0
     val currentGraph = mutableStateOf(graphList[selectedGraphIndex])
 
-    protected val steps = mutableListOf<Pair<EdmondsGraph, EdmondsStepType>>(currentGraph.value to EdmondsStepType.Nothing())
+    protected val steps =
+        mutableListOf<Pair<EdmondsGraph, EdmondsStepType>>(currentGraph.value to EdmondsStepType.Nothing())
     protected var step = 0
 
     val graphicalGraph = mutableStateOf(steps[0].first.toGraphicalGraph())
@@ -100,7 +101,11 @@ open class AlgorithmRunningScreenViewModel(
                             is EdmondsStepType.BlossomOutAnimation -> {
                                 graphicalGraph.value =
                                     graphicalGraph.value
-                                        .animateBlossomVertices(stepType.blossomVertices, currentGraph.value, 1f - value)
+                                        .animateBlossomVertices(
+                                            stepType.blossomVertices,
+                                            currentGraph.value,
+                                            1f - value
+                                        )
                             }
 
                             else -> {}

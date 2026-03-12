@@ -3,7 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.quiz
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.run_algorithm.AlgorithmRunningScreenViewModel
+import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.run_algorithm.EdmondsAlgorithmRunningScreenViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsAnswer
@@ -19,7 +19,7 @@ import kotlin.random.Random
 class QuizScreenViewmodel(
     graphStorage: GraphStorage,
     composableCoroutineContext: CoroutineContext,
-) : AlgorithmRunningScreenViewModel(graphStorage, composableCoroutineContext) {
+) : EdmondsAlgorithmRunningScreenViewModel(graphStorage, composableCoroutineContext) {
     val quizStarted = mutableStateOf(false)
 
     val questionMode = mutableStateOf(QuestionMode.NOTHING)
