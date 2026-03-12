@@ -1,6 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.quiz
 
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.run_algorithm.AlgorithmRunningScreenViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
@@ -138,12 +139,12 @@ class QuizScreenViewmodel(
                     markedVertices.value = markedVertices.value.dropLast(1)
                     graphicalGraph.value =
                         graphicalGraph.value
-                            .removeHighlight(clickedVertex)
+                            .changeInnerColor(clickedVertex, Color.White)
                 } else {
                     markedVertices.value += clickedVertex
                     graphicalGraph.value =
                         graphicalGraph.value
-                            .addHighlight(clickedVertex)
+                            .changeInnerColor(clickedVertex, ORANGE)
                 }
             }
         }
@@ -157,7 +158,7 @@ class QuizScreenViewmodel(
             val edge =
                 currentGraph.value.edges.find { edge ->
                     (edge.fromVertex.id == aId && edge.toVertex.id == bId) ||
-                        (edge.fromVertex.id == bId && edge.toVertex.id == aId)
+                            (edge.fromVertex.id == bId && edge.toVertex.id == aId)
                 }
             if (edge != null) {
                 markedEdges.add(edge)
@@ -191,9 +192,11 @@ class QuizScreenViewmodel(
                 EdmondsAnswer.Correct
             } else {
                 EdmondsAnswer.Incorrect(
-                    "A javító út a következő élekből áll: ${question.pathEdges.joinToString {
-                        "(${it.fromVertex.id}, ${it.toVertex.id})"
-                    }}",
+                    "A javító út a következő élekből áll: ${
+                        question.pathEdges.joinToString {
+                            "(${it.fromVertex.id}, ${it.toVertex.id})"
+                        }
+                    }",
                 )
             }
         showAnswer()
@@ -207,9 +210,11 @@ class QuizScreenViewmodel(
                 EdmondsAnswer.Correct
             } else {
                 EdmondsAnswer.Incorrect(
-                    "A kelyhet a következő élek alkotják: ${question.blossomEdges.joinToString {
-                        "(${it.fromVertex.id}, ${it.toVertex.id})"
-                    }}",
+                    "A kelyhet a következő élek alkotják: ${
+                        question.blossomEdges.joinToString {
+                            "(${it.fromVertex.id}, ${it.toVertex.id})"
+                        }
+                    }",
                 )
             }
         showAnswer()

@@ -44,7 +44,7 @@ fun GraphCanvas(
                     style =
                         TextStyle(
                             fontSize = 20.sp,
-                            fontWeight = if (vertex.selected) FontWeight.Bold else FontWeight.Normal,
+                            fontWeight = FontWeight.Normal,
                         ),
                     constraints = Constraints(maxWidth = vertex.maxTextSize),
                 )

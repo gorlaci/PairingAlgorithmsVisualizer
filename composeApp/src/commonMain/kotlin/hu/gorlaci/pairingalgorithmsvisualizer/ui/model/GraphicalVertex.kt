@@ -7,7 +7,7 @@ data class GraphicalVertex(
     val x: Double = 0.0,
     val y: Double = 0.0,
     val label: String = "",
-    val selected: Boolean = false,
+    val innerColor: Color = Color.White,
     val highlight: Color = Color.Transparent,
     val highlightType: HighlightType = HighlightType.CIRCLE,
 ) {

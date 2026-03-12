@@ -11,22 +11,12 @@ data class GraphicalGraph(
     val graphicalEdges: List<GraphicalEdge>,
     val stepType: StepType,
 ) {
-    fun addHighlight(vertex: EdmondsVertex): GraphicalGraph {
+    fun changeInnerColor(vertex: EdmondsVertex, color: Color): GraphicalGraph {
         val graphicalVertex = graphicalVertices.find { it.label == vertex.id }
         if (graphicalVertex == null) {
             return this
         }
-        val newGraphicalVertex = graphicalVertex.copy(selected = true)
-        val newGraphicalVertices = graphicalVertices - graphicalVertex + newGraphicalVertex
-        return this.copy(graphicalVertices = newGraphicalVertices)
-    }
-
-    fun removeHighlight(vertex: EdmondsVertex): GraphicalGraph {
-        val graphicalVertex = graphicalVertices.find { it.label == vertex.id }
-        if (graphicalVertex == null) {
-            return this
-        }
-        val newGraphicalVertex = graphicalVertex.copy(selected = false)
+        val newGraphicalVertex = graphicalVertex.copy(innerColor = color)
         val newGraphicalVertices = graphicalVertices - graphicalVertex + newGraphicalVertex
         return this.copy(graphicalVertices = newGraphicalVertices)
     }
@@ -38,7 +28,7 @@ data class GraphicalGraph(
         val graphicalEdge =
             graphicalEdges.find {
                 it.startGraphicalVertex.label == edge.fromVertex.id &&
-                    it.endGraphicalVertex.label == edge.toVertex.id
+                        it.endGraphicalVertex.label == edge.toVertex.id
             }
         if (graphicalEdge == null) {
             return this
@@ -78,15 +68,15 @@ data class GraphicalGraph(
             val graphicalVertex = graphicalVertices.find { it.label == vertex.id } ?: continue
             val newX =
                 originalGraph.getVertexCoordinates(vertex).first +
-                    (blossomX - originalGraph.getVertexCoordinates(vertex).first) * animationProgress
+                        (blossomX - originalGraph.getVertexCoordinates(vertex).first) * animationProgress
             val newY =
                 originalGraph.getVertexCoordinates(vertex).second + (
-                    blossomY -
-                        originalGraph
-                            .getVertexCoordinates(
-                                vertex,
-                            ).second
-                ) * animationProgress
+                        blossomY -
+                                originalGraph
+                                    .getVertexCoordinates(
+                                        vertex,
+                                    ).second
+                        ) * animationProgress
             val newGraphicalVertex =
                 graphicalVertex.copy(
                     x = newX,

@@ -1,8 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.features.mainmenu
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -24,6 +22,10 @@ fun MainMenuScreen(
         ) {
             Text("Javítóutas algoritmus")
         }
+
+        Spacer(
+            modifier = Modifier.fillMaxHeight(.1f)
+        )
 
         Button(
             onClick = onEdmondsMenuClick,

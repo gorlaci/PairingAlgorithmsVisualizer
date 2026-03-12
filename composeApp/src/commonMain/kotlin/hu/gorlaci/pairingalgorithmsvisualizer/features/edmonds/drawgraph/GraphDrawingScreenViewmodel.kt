@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.ORANGE
 
 class GraphDrawingScreenViewmodel(
     private val graphStorage: GraphStorage,
@@ -53,7 +54,7 @@ class GraphDrawingScreenViewmodel(
                 if (clickedVertex != null) {
                     if (firstVertexForEdge == null) {
                         firstVertexForEdge = clickedVertex
-                        graphicalGraph.value = graphicalGraph.value.addHighlight(clickedVertex)
+                        graphicalGraph.value = graphicalGraph.value.changeInnerColor(clickedVertex, ORANGE)
                     } else {
                         if (firstVertexForEdge != clickedVertex) {
                             graph.addEdge(firstVertexForEdge!!.id, clickedVertex.id)

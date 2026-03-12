@@ -60,7 +60,7 @@ fun DrawScope.drawVertex(
         center = center,
     )
     drawCircle(
-        color = if (vertex.selected) ORANGE else Color.White,
+        color = vertex.innerColor,
         radius = radius - 3f,
         center = center,
     )

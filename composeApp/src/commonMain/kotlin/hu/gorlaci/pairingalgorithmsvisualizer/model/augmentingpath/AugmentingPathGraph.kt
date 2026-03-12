@@ -3,8 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.quiz.AugmentingStepType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.DARK_GREEN
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.ORANGE
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
@@ -26,66 +25,112 @@ class AugmentingPathGraph(
 
     private fun saveStep(stepType: AugmentingStepType = AugmentingStepType.Nothing()) {
         steps.add(toGraphicalGraph(stepType))
-        println("Saved step: ${stepType.description}")
-    }
-
-    fun runAlgorithm() {
-        saveStep()
-        saveStep(AugmentingStepType.Nothing("Kiindulunk az üres párosításból"))
-        var nextVertex = getNextVertex()
-        while (nextVertex != null) {
-            findAugmentingPath(nextVertex)
-            nextVertex = getNextVertex()
-        }
-        reset()
-        saveStep(AugmentingStepType.Nothing("megvizsgáltunk minden párosítatlan csúcsot, kész a maximális párosítás"))
+//        println("Saved step: ${stepType.description}")
     }
 
     private val unpairedVertices = mutableSetOf<AugmentingPathVertex>()
     private val pairedVertices = mutableSetOf<AugmentingPathVertex>()
 
-    fun findAugmentingPath(startVertex: AugmentingPathVertex) {
+    private var augmentMade = true
 
-        println("Finding augmenting path from vertex ${startVertex.id}")
+    fun runAlgorithm() {
+        saveStep()
+        createClasses()
+        saveStep(AugmentingStepType.Nothing("Megállapítjuk a két osztályt"))
+        reset()
+        saveStep(AugmentingStepType.Nothing("Kiindulunk az üres párosításból"))
+        while (augmentMade) {
+            findAugmentingPath()
+        }
+        reset()
+        saveStep(AugmentingStepType.Nothing("Megvizsgáltunk minden párosítatlan csúcsot, kész a maximális párosítás"))
+    }
 
-        unpairedVertices.clear()
-        unpairedVertices.add(startVertex)
+    val class1 = mutableSetOf<AugmentingPathVertex>()
+    val class2 = mutableSetOf<AugmentingPathVertex>()
+
+    private fun createClasses() {
+        val unvisited = vertices.toMutableSet()
+
+        while (unvisited.isNotEmpty()) {
+            val vertex = unvisited.first()
+            unvisited.remove(vertex)
+            createClassesRecursive(vertex, class1, class2, unvisited)
+        }
+    }
+
+    private fun createClassesRecursive(
+        vertex: AugmentingPathVertex,
+        currentClass: MutableSet<AugmentingPathVertex>,
+        otherClass: MutableSet<AugmentingPathVertex>,
+        unvisited: MutableSet<AugmentingPathVertex>
+    ) {
+        currentClass.add(vertex)
+        for (neighbour in vertex.neighbours) {
+            if (neighbour in unvisited) {
+                unvisited.remove(neighbour)
+                createClassesRecursive(neighbour, otherClass, currentClass, unvisited)
+            }
+        }
+    }
+
+    private var activeVertex: AugmentingPathVertex? = null
+    private var augmentingPathVertices = mutableSetOf<AugmentingPathVertex>()
+
+    fun findAugmentingPath() {
+
+        augmentMade = false
+
+        saveStep(AugmentingStepType.Nothing("Keressünk javítóutat a gráfban!"))
+
+        unpairedVertices.addAll(class1.filter { it.pair == null && !it.visited })
+
+        if (unpairedVertices.isEmpty()) {
+            return
+        }
+
+        saveStep(AugmentingStepType.Nothing("Elindulunk ez egyik osztálybeli összes párosítatlan csúcsból"))
 
         pairedVertices.clear()
 
         while (unpairedVertices.isNotEmpty()) {
-            for (vertex in unpairedVertices) {
+            val unpairedCopy = unpairedVertices.toSet()
+            for (vertex in unpairedCopy) {
                 vertex.visited = true
-                saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${vertex.id} csúcs szomszédait"))
+                activeVertex = vertex
+                saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
                 for (neighbour in vertex.neighbours.filter { !it.visited }) {
                     neighbour.parent = vertex
-                    saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${neighbour.id} csúcsot"))
-                    if (neighbour.pair == null) {
-                        saveStep(AugmentingStepType.Nothing("Nincs párja, javítóutat találtunk"))
-                        augmentFromVertex(neighbour)
-                        reset()
-                        return
-                    } else {
-                        pairedVertices.add(neighbour)
-                        saveStep(AugmentingStepType.Nothing("Vegyük be a párját a vizsgálandó csúcsok közé"))
-                    }
+                    neighbour.visited = true
+                    pairedVertices.add(neighbour)
                 }
+                saveStep(AugmentingStepType.Nothing("Vegyük be a szomszédait a vizsgálandó csúcsok közé"))
+                unpairedVertices.remove(vertex)
+                activeVertex = null
             }
             unpairedVertices.clear()
-            for (vertex in pairedVertices) {
-                vertex.visited = true
-                if (vertex.pair?.visited == false) {
-                    vertex.pair?.parent = vertex
-                    unpairedVertices.add(vertex.pair!!)
+            val pairedCopy = pairedVertices.toSet()
+            for (vertex in pairedCopy) {
+                activeVertex = vertex
+                saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
+                if (vertex.pair == null) {
+                    saveStep(AugmentingStepType.Nothing("Találtunk egy párosítatlan csúcsot"))
+                    markAugmentingPath(vertex)
+                    saveStep(AugmentingStepType.Nothing("Javítsunk a javítóút mentén!"))
+                    augmentFromVertex(vertex)
+                    saveStep(AugmentingStepType.Nothing("Javítottunk a párosításon"))
+                    augmentMade = true
+                    reset()
+                    return
                 }
+                unpairedVertices.add(vertex.pair!!)
+                vertex.pair!!.parent = vertex
+                saveStep(AugmentingStepType.Nothing("Vegyük be a párját a vizsgálandó csúcsok közé"))
+                pairedVertices.remove(vertex)
+                activeVertex = null
             }
             pairedVertices.clear()
         }
-    }
-
-    private fun getNextVertex(): AugmentingPathVertex? {
-        saveStep(AugmentingStepType.Nothing("Keresünk egy párosítatlan csúcsot"))
-        return vertices.firstOrNull { !it.visited && it.pair == null }
     }
 
     private fun reset() {
@@ -93,20 +138,28 @@ class AugmentingPathGraph(
             vertex.visited = false
             vertex.parent = null
         }
+        activeVertex = null
+        augmentingPathVertices.clear()
+        unpairedVertices.clear()
+        pairedVertices.clear()
+    }
+
+    private fun markAugmentingPath(vertex: AugmentingPathVertex) {
+        var current: AugmentingPathVertex? = vertex
+        while (current != null) {
+            augmentingPathVertices.add(current)
+            current = current.parent
+        }
     }
 
     private fun augmentFromVertex(vertex: AugmentingPathVertex) {
         var current: AugmentingPathVertex? = vertex
         while (current != null) {
-            val parent = current.parent
-            if (parent != null) {
-                val grandParent = parent.parent
-                parent.pair = current
-                current.pair = parent
-                current = grandParent
-            } else {
-                break
-            }
+            val parent = current.parent!!
+            val grandParent = parent.parent
+            parent.pair = current
+            current.pair = parent
+            current = grandParent
         }
     }
 
@@ -117,9 +170,19 @@ class AugmentingPathGraph(
                 x = coordinates.first,
                 y = coordinates.second,
                 label = vertex.id,
-                selected = vertex.visited,
-                highlight = if (vertex in unpairedVertices || vertex in pairedVertices) ORANGE else Color.Transparent,
+                highlight = if (vertex == activeVertex) {
+                    ORANGE
+                } else if (vertex in unpairedVertices) {
+                    LIGHT_RED
+                } else if (vertex in pairedVertices) {
+                    LIGHT_BLUE
+                } else if (vertex.visited) {
+                    GRAY
+                } else {
+                    Color.Transparent
+                },
                 highlightType = HighlightType.CIRCLE,
+                innerColor = if (vertex in class1) BLUE else if (vertex in class2) RED else Color.White
             )
         }
 
@@ -132,8 +195,13 @@ class AugmentingPathGraph(
                         GraphicalEdge(
                             startGraphicalVertex = graphicalVertices.first { it.label == vertex.id },
                             endGraphicalVertex = graphicalVertices.first { it.label == neighbour.id },
-                            color = if (vertex.parent == neighbour || neighbour.parent == vertex) DARK_GREEN else Color.Black,
+                            color = if (vertex.parent == neighbour || neighbour.parent == vertex) BRIGHT_GREEN else Color.Black,
                             selected = vertex.pair == neighbour,
+                            highlight = if (vertex in augmentingPathVertices && neighbour in augmentingPathVertices) {
+                                PURPLE
+                            } else {
+                                Color.Transparent
+                            },
                         )
                     )
                 }

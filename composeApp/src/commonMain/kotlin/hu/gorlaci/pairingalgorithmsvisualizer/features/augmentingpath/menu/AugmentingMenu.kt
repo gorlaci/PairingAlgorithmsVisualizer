@@ -1,5 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.features.augmentingpath.menu
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Button
@@ -14,6 +15,7 @@ fun AugmentingMenu(
 ) {
     Column(
         horizontalAlignment = CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
         modifier = Modifier.fillMaxSize()
     ) {
         Button(onClick = onRunAlgorithm) {
