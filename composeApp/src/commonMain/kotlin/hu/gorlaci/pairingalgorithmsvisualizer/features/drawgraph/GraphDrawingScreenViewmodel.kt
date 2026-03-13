@@ -60,7 +60,17 @@ class GraphDrawingScreenViewmodel(
                         graphicalGraph.value = graphicalGraph.value.changeInnerColor(clickedVertex, ORANGE)
                     } else {
                         if (firstVertexForEdge != clickedVertex) {
-                            graph.addEdge(firstVertexForEdge!!.id, clickedVertex.id)
+
+                            val clickedEdge = graph.edges.find {
+                                it.fromVertex == clickedVertex && it.toVertex == firstVertexForEdge ||
+                                        it.toVertex == clickedVertex && it.fromVertex == firstVertexForEdge
+                            }
+
+                            if (clickedEdge != null) {
+                                graph.edges.remove(clickedEdge)
+                            } else {
+                                graph.addEdge(firstVertexForEdge!!.id, clickedVertex.id)
+                            }
                         }
                         firstVertexForEdge = null
                         graphicalGraph.value = graph.toGraphicalGraph()

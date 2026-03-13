@@ -1,7 +1,9 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds
 
 import androidx.compose.ui.graphics.Color
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.DARK_GREEN
@@ -554,4 +556,19 @@ class EdmondsGraph(
         }
         return Color.Transparent
     }
+}
+
+fun Graph<out Vertex, out Edge>.toEdmondsGraph(): EdmondsGraph {
+    val edmondsVertices = this.vertices.map { EdmondsVertex(it.id) }.toMutableSet()
+    val edmondsEdges = this.edges.map { edge ->
+        val fromVertex = edmondsVertices.find { it.id == edge.fromVertex.id }!!
+        val toVertex = edmondsVertices.find { it.id == edge.toVertex.id }!!
+        EdmondsEdge(fromVertex, toVertex)
+    }.toMutableSet()
+    return EdmondsGraph(
+        vertices = edmondsVertices,
+        edges = edmondsEdges,
+        idCoordinatesMap = this.idCoordinatesMap,
+        name = this.name,
+    )
 }

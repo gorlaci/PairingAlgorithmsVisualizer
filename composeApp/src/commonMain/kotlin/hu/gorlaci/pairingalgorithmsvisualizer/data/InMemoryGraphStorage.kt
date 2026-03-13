@@ -6,7 +6,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.toAugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.toEdmondsGraph
 
 class InMemoryGraphStorage : GraphStorage {
     private val graphs: MutableList<Graph<out Vertex, out Edge>> = mutableListOf()
@@ -22,7 +22,7 @@ class InMemoryGraphStorage : GraphStorage {
     override fun getAllGraphs(): List<Graph<out Vertex, out Edge>> = graphs
 
     override fun getAllEdmondsGraphs(): List<EdmondsGraph> {
-        return graphs.filterIsInstance<EdmondsGraph>()
+        return graphs.map { it.toEdmondsGraph() }
     }
 
     override fun getAllAugmentingPathGraphs(): List<AugmentingPathGraph> =
@@ -36,18 +36,18 @@ class InMemoryGraphStorage : GraphStorage {
 
     private fun addExampleGraph1() {
         val graph =
-            EdmondsGraph(
+            Graph(
                 vertices =
                     mutableSetOf(
-                        EdmondsVertex(id = "A"),
-                        EdmondsVertex(id = "B"),
-                        EdmondsVertex(id = "C"),
-                        EdmondsVertex(id = "D"),
-                        EdmondsVertex(id = "E"),
-                        EdmondsVertex(id = "F"),
-                        EdmondsVertex(id = "G"),
-                        EdmondsVertex(id = "H"),
-                        EdmondsVertex(id = "I"),
+                        Vertex(id = "A"),
+                        Vertex(id = "B"),
+                        Vertex(id = "C"),
+                        Vertex(id = "D"),
+                        Vertex(id = "E"),
+                        Vertex(id = "F"),
+                        Vertex(id = "G"),
+                        Vertex(id = "H"),
+                        Vertex(id = "I"),
                     ),
                 idCoordinatesMap =
                     mutableMapOf(
@@ -62,6 +62,8 @@ class InMemoryGraphStorage : GraphStorage {
                         'I' to Pair(100.0, -200.0),
                     ),
                 name = "Example Graph 1",
+                newVertex = { Vertex(it) },
+                newEdge = { from, to -> Edge(from, to) },
             )
 
         graph.addEdge("E", "D")
@@ -84,16 +86,16 @@ class InMemoryGraphStorage : GraphStorage {
 
     private fun addExampleGraph2() {
         val graph =
-            EdmondsGraph(
+            Graph(
                 vertices =
                     mutableSetOf(
-                        EdmondsVertex(id = "A"),
-                        EdmondsVertex(id = "B"),
-                        EdmondsVertex(id = "C"),
-                        EdmondsVertex(id = "D"),
-                        EdmondsVertex(id = "E"),
-                        EdmondsVertex(id = "F"),
-                        EdmondsVertex(id = "G"),
+                        Vertex(id = "A"),
+                        Vertex(id = "B"),
+                        Vertex(id = "C"),
+                        Vertex(id = "D"),
+                        Vertex(id = "E"),
+                        Vertex(id = "F"),
+                        Vertex(id = "G"),
                     ),
                 idCoordinatesMap =
                     mutableMapOf(
@@ -106,6 +108,8 @@ class InMemoryGraphStorage : GraphStorage {
                         'G' to Pair(100.0, -150.0),
                     ),
                 name = "Example Graph 2",
+                newVertex = { Vertex(it) },
+                newEdge = { from, to -> Edge(from, to) },
             )
 
         graph.addEdge("A", "B")

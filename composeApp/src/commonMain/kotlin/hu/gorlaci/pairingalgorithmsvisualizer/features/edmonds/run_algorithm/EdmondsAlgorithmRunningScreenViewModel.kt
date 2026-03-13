@@ -77,6 +77,7 @@ open class EdmondsAlgorithmRunningScreenViewModel(
         steps.add(currentGraph.value to EdmondsStepType.Nothing())
         graphicalGraph.value = currentGraph.value.toGraphicalGraph()
         step = 0
+        runEnabled.value = true
         setButtons()
     }
 
