@@ -3,6 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.BLUE
@@ -454,7 +455,7 @@ class EdmondsGraph(
         }
     }
 
-    fun toGraphicalGraph(stepType: EdmondsStepType = EdmondsStepType.Nothing()): GraphicalGraph {
+    override fun toGraphicalGraph(stepType: StepType): GraphicalGraph {
         val graphicalVertices = mutableListOf<GraphicalVertex>()
 
         for (vertex in vertices) {

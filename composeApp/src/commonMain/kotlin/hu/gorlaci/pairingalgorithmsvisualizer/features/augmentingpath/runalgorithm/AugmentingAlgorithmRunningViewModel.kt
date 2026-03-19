@@ -1,12 +1,11 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.features.augmentingpath.runalgorithm
 
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 
 class AugmentingAlgorithmRunningViewModel(
@@ -15,13 +14,12 @@ class AugmentingAlgorithmRunningViewModel(
     val graphList = graphStorage.getAllAugmentingPathGraphs()
     private var selectedGraphIndex = 0
 
-    val selectedGraph = mutableStateOf(graphList[selectedGraphIndex])
+    val selectedGraph: MutableState<AugmentingPathGraph> = mutableStateOf(graphList[selectedGraphIndex])
 
-    private val steps = mutableListOf(
-        selectedGraph.value.toGraphicalGraph() to Graph(
-            newVertex = { Vertex(it) },
-            newEdge = { from, to -> Edge(from, to) },
-        )
+    val x: AugmentingPathGraph = selectedGraph.value
+
+    private val steps: MutableList<Pair<GraphicalGraph, AugmentingPathGraph>> = mutableListOf(
+        x.toGraphicalGraph() to AugmentingPathGraph()
     )
     private var step = 0
 
@@ -71,10 +69,7 @@ class AugmentingAlgorithmRunningViewModel(
 
         steps.clear()
         steps.add(
-            selectedGraph.value.toGraphicalGraph() to Graph(
-                newVertex = { Vertex(it) },
-                newEdge = { from, to -> Edge(from, to) },
-            )
+            selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph()
         )
         step = 0
         setCurrentGraph()

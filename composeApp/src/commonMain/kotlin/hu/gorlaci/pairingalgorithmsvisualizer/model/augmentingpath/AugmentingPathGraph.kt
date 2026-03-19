@@ -3,6 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.quiz.AugmentingStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
@@ -14,7 +15,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 class AugmentingPathGraph(
     override val vertices: MutableSet<AugmentingPathVertex> = mutableSetOf(),
     name: String = "",
-    idCoordinatesMap: MutableMap<Char, Pair<Double, Double>>
+    idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf(),
 ) : Graph<AugmentingPathVertex, Edge>(
     name = name,
     vertices = vertices,
@@ -25,33 +26,103 @@ class AugmentingPathGraph(
 ) {
 
 
-    val steps = mutableListOf<Pair<GraphicalGraph, Graph<Vertex, Edge>>>()
-
-    private fun saveStep(stepType: AugmentingStepType = AugmentingStepType.Nothing()) {
-        steps.add(toGraphicalGraph(stepType) to getTree())
-//        println("Saved step: ${stepType.description}")
-    }
-
     private val unpairedVertices = mutableSetOf<AugmentingPathVertex>()
     private val pairedVertices = mutableSetOf<AugmentingPathVertex>()
 
+    private val class1 = mutableSetOf<AugmentingPathVertex>()
+    private val class2 = mutableSetOf<AugmentingPathVertex>()
+
+    private var activeVertex: AugmentingPathVertex? = null
+    private var augmentingPathVertices = mutableSetOf<AugmentingPathVertex>()
+
+    private constructor(
+        vertices: MutableSet<AugmentingPathVertex>,
+        newUnpairedVertices: MutableSet<AugmentingPathVertex>,
+        newPairedVertices: MutableSet<AugmentingPathVertex>,
+        newClass1: MutableSet<AugmentingPathVertex>,
+        newClass2: MutableSet<AugmentingPathVertex>,
+        newActiveVertex: AugmentingPathVertex?,
+        newAugmentingPathVertices: MutableSet<AugmentingPathVertex>,
+    ) : this(vertices = vertices) {
+        this.unpairedVertices.addAll(newUnpairedVertices)
+        this.pairedVertices.addAll(newPairedVertices)
+        this.class1.addAll(newClass1)
+        this.class2.addAll(newClass2)
+        this.activeVertex = newActiveVertex
+        this.augmentingPathVertices.addAll(newAugmentingPathVertices)
+    }
+
+
+    val steps = mutableListOf<Pair<GraphicalGraph, AugmentingPathGraph>>()
+
+    private fun saveStep(stepType: AugmentingStepType = AugmentingStepType.Nothing()) {
+        steps.add(toGraphicalGraph(stepType) to getTree())
+    }
+
+
     private var augmentMade = true
 
-    fun getTree(): Graph<Vertex, Edge> {
+    fun getTree(): AugmentingPathGraph {
         val treeVertices = vertices.filter { it.visited || it in unpairedVertices || it in pairedVertices }
-        val newTreeVertices = treeVertices.map { Vertex(it.id) }.toMutableSet()
+        val newTreeVertices = treeVertices.map {
+            AugmentingPathVertex(
+                id = it.id,
+                visited = it.visited,
+            )
+        }.toMutableSet()
 
-        val graph = Graph(
-            vertices = newTreeVertices,
-            edges = mutableSetOf(),
-            newVertex = { Vertex(it) },
-            newEdge = { from, to -> Edge(from, to) },
-        )
+        val newUnpairedVertices = mutableSetOf<AugmentingPathVertex>()
+        val newPairedVertices = mutableSetOf<AugmentingPathVertex>()
+        val newClass1 = mutableSetOf<AugmentingPathVertex>()
+        val newClass2 = mutableSetOf<AugmentingPathVertex>()
+        var newActiveVertex: AugmentingPathVertex? = null
+        val newAugmentingPathVertices = mutableSetOf<AugmentingPathVertex>()
+
         treeVertices.forEach { vertex ->
-            vertex.parent?.let { parent ->
-                graph.addEdge(vertex.id, parent.id)
+            val newVertex = newTreeVertices.first { it.id == vertex.id }
+            if (vertex.pair != null) {
+                val newPair = newTreeVertices.find { it.id == vertex.pair!!.id }
+                newVertex.pair = newPair
+            }
+            if (vertex.parent != null) {
+                val newParent = newTreeVertices.find { it.id == vertex.parent!!.id }
+                newVertex.parent = newParent
+                if (newParent != null) {
+                    newVertex.neighbours.add(newParent)
+                    newParent.neighbours.add(newVertex)
+                }
+            }
+
+            if (vertex in unpairedVertices) {
+                newUnpairedVertices.add(newVertex)
+            }
+            if (vertex in pairedVertices) {
+                newPairedVertices.add(newVertex)
+            }
+            if (vertex in class1) {
+                newClass1.add(newVertex)
+            }
+            if (vertex in class2) {
+                newClass2.add(newVertex)
+            }
+            if (vertex == activeVertex) {
+                newActiveVertex = newVertex
+            }
+            if (vertex in augmentingPathVertices) {
+                newAugmentingPathVertices.add(newVertex)
             }
         }
+
+        val graph = AugmentingPathGraph(
+            vertices = newTreeVertices,
+            newUnpairedVertices = newUnpairedVertices,
+            newPairedVertices = newPairedVertices,
+            newClass1 = newClass1,
+            newClass2 = newClass2,
+            newActiveVertex = newActiveVertex,
+            newAugmentingPathVertices = newAugmentingPathVertices,
+        )
+
         return graph
     }
 
@@ -66,7 +137,7 @@ class AugmentingPathGraph(
         val cols = treeGrid.maxOfOrNull { it.size } ?: return mutableMapOf()
 
         val rowDiff = minOf(500.0 / (rows - 1), 100.0)
-        val colDiff = minOf(500.0 / (cols - 1), 100.0)
+        val colDiff = minOf(400.0 / (cols - 1), 100.0)
 
         val coordinates = mutableMapOf<Char, Pair<Double, Double>>()
 
@@ -105,9 +176,6 @@ class AugmentingPathGraph(
         saveStep(AugmentingStepType.Nothing("Nincs már javító út, kész a maximális párosítás"))
     }
 
-    val class1 = mutableSetOf<AugmentingPathVertex>()
-    val class2 = mutableSetOf<AugmentingPathVertex>()
-
     private fun createClasses() {
         val unvisited = vertices.toMutableSet()
 
@@ -133,8 +201,6 @@ class AugmentingPathGraph(
         }
     }
 
-    private var activeVertex: AugmentingPathVertex? = null
-    private var augmentingPathVertices = mutableSetOf<AugmentingPathVertex>()
 
     fun findAugmentingPath() {
 
@@ -233,7 +299,7 @@ class AugmentingPathGraph(
         }
     }
 
-    fun toGraphicalGraph(stepType: AugmentingStepType = AugmentingStepType.Nothing()): GraphicalGraph {
+    override fun toGraphicalGraph(stepType: StepType): GraphicalGraph {
         val graphicalVertices = vertices.map { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
@@ -265,7 +331,7 @@ class AugmentingPathGraph(
                         GraphicalEdge(
                             startGraphicalVertex = graphicalVertices.first { it.label == vertex.id },
                             endGraphicalVertex = graphicalVertices.first { it.label == neighbour.id },
-                            color = if (vertex.parent == neighbour || neighbour.parent == vertex) BRIGHT_GREEN else Color.Black,
+                            color = if (vertex.parent == neighbour || neighbour.parent == vertex) GREEN else Color.Black,
                             selected = vertex.pair == neighbour,
                             highlight = if (vertex in augmentingPathVertices && neighbour in augmentingPathVertices) {
                                 YELLOW
