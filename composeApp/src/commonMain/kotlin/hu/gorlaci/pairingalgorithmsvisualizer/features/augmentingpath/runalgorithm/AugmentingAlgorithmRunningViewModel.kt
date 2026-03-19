@@ -3,6 +3,11 @@ package hu.gorlaci.pairingalgorithmsvisualizer.features.augmentingpath.runalgori
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 
 class AugmentingAlgorithmRunningViewModel(
     val graphStorage: GraphStorage
@@ -12,10 +17,22 @@ class AugmentingAlgorithmRunningViewModel(
 
     val selectedGraph = mutableStateOf(graphList[selectedGraphIndex])
 
-    private val steps = mutableListOf(selectedGraph.value.toGraphicalGraph())
+    private val steps = mutableListOf(
+        selectedGraph.value.toGraphicalGraph() to Graph(
+            newVertex = { Vertex(it) },
+            newEdge = { from, to -> Edge(from, to) },
+        )
+    )
     private var step = 0
 
-    val graphicalGraph = mutableStateOf(steps[0])
+    val graphicalGraph = mutableStateOf(steps[0].first)
+    val tree = mutableStateOf(
+        GraphicalGraph(
+            listOf(),
+            listOf(),
+            StepType()
+        )
+    )
 
     val nextEnabled = mutableStateOf(false)
     val backEnabled = mutableStateOf(false)
@@ -39,7 +56,8 @@ class AugmentingAlgorithmRunningViewModel(
     }
 
     private fun setCurrentGraph() {
-        graphicalGraph.value = steps[step]
+        graphicalGraph.value = steps[step].first
+        tree.value = steps[step].second.toGraphicalGraph()
     }
 
     private fun setButtons() {
@@ -52,7 +70,12 @@ class AugmentingAlgorithmRunningViewModel(
         selectedGraph.value = graphList[selectedGraphIndex]
 
         steps.clear()
-        steps.add(selectedGraph.value.toGraphicalGraph())
+        steps.add(
+            selectedGraph.value.toGraphicalGraph() to Graph(
+                newVertex = { Vertex(it) },
+                newEdge = { from, to -> Edge(from, to) },
+            )
+        )
         step = 0
         setCurrentGraph()
         setButtons()

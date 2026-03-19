@@ -8,9 +8,9 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 
 data class GraphicalGraph(
-    val graphicalVertices: List<GraphicalVertex>,
-    val graphicalEdges: List<GraphicalEdge>,
-    val stepType: StepType,
+    val graphicalVertices: List<GraphicalVertex> = emptyList(),
+    val graphicalEdges: List<GraphicalEdge> = emptyList(),
+    val stepType: StepType = StepType(),
 ) {
     fun changeInnerColor(
         vertex: Vertex,

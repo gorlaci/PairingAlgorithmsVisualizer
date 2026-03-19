@@ -32,6 +32,12 @@ fun AlgorithmRunningScreen(
     onRun: () -> Unit,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
+    content: @Composable () -> Unit = {
+        GraphCanvas(
+            graphicalGraph = graphicalGraph,
+            modifier = Modifier.fillMaxSize(),
+        )
+    }
 ) {
     Scaffold(
         modifier = modifier,
@@ -54,10 +60,7 @@ fun AlgorithmRunningScreen(
                     onGraphSelected = onGraphIndexSelected,
                 )
 
-                GraphCanvas(
-                    graphicalGraph = graphicalGraph,
-                    modifier = Modifier.fillMaxSize(),
-                )
+                content()
             }
 
             Column(

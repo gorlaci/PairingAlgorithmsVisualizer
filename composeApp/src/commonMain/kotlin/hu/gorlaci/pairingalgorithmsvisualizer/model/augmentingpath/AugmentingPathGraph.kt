@@ -25,10 +25,10 @@ class AugmentingPathGraph(
 ) {
 
 
-    val steps = mutableListOf<GraphicalGraph>()
+    val steps = mutableListOf<Pair<GraphicalGraph, Graph<Vertex, Edge>>>()
 
     private fun saveStep(stepType: AugmentingStepType = AugmentingStepType.Nothing()) {
-        steps.add(toGraphicalGraph(stepType))
+        steps.add(toGraphicalGraph(stepType) to getTree())
 //        println("Saved step: ${stepType.description}")
     }
 
@@ -36,6 +36,61 @@ class AugmentingPathGraph(
     private val pairedVertices = mutableSetOf<AugmentingPathVertex>()
 
     private var augmentMade = true
+
+    fun getTree(): Graph<Vertex, Edge> {
+        val treeVertices = vertices.filter { it.visited || it in unpairedVertices || it in pairedVertices }
+        val newTreeVertices = treeVertices.map { Vertex(it.id) }.toMutableSet()
+
+        val graph = Graph(
+            vertices = newTreeVertices,
+            edges = mutableSetOf(),
+            newVertex = { Vertex(it) },
+            newEdge = { from, to -> Edge(from, to) },
+        )
+        treeVertices.forEach { vertex ->
+            vertex.parent?.let { parent ->
+                graph.addEdge(vertex.id, parent.id)
+            }
+        }
+        return graph
+    }
+
+    private val treeGrid = mutableListOf<MutableList<AugmentingPathVertex>>()
+
+    private fun calculateTreeCoordinates(): MutableMap<Char, Pair<Double, Double>> {
+        if (treeGrid.last().isEmpty()) {
+            treeGrid.removeLast()
+        }
+
+        val rows = treeGrid.size
+        val cols = treeGrid.maxOfOrNull { it.size } ?: return mutableMapOf()
+
+        val rowDiff = minOf(500.0 / (rows - 1), 100.0)
+        val colDiff = minOf(500.0 / (cols - 1), 100.0)
+
+        val coordinates = mutableMapOf<Char, Pair<Double, Double>>()
+
+        var y = (rowDiff * (rows - 1)) / 2
+
+        treeGrid.forEach { row ->
+            var x = -(colDiff * (cols - 1)) / 2
+            row.forEach { vertex ->
+                coordinates[vertex.id[0]] = Pair(x, y)
+                x += colDiff
+            }
+            y -= rowDiff
+        }
+        return coordinates
+    }
+
+    private fun saveTreeCoordinates() {
+        val coordinates = calculateTreeCoordinates()
+        for (tree in steps.map { it.second }) {
+            if (tree.idCoordinatesMap.isEmpty()) {
+                tree.idCoordinatesMap.putAll(coordinates)
+            }
+        }
+    }
 
     fun runAlgorithm() {
         saveStep()
@@ -47,7 +102,7 @@ class AugmentingPathGraph(
             findAugmentingPath()
         }
         reset()
-        saveStep(AugmentingStepType.Nothing("Megvizsgáltunk minden párosítatlan csúcsot, kész a maximális párosítás"))
+        saveStep(AugmentingStepType.Nothing("Nincs már javító út, kész a maximális párosítás"))
     }
 
     val class1 = mutableSetOf<AugmentingPathVertex>()
@@ -89,9 +144,8 @@ class AugmentingPathGraph(
 
         unpairedVertices.addAll(class1.filter { it.pair == null && !it.visited })
 
-        if (unpairedVertices.isEmpty()) {
-            return
-        }
+        treeGrid.add(mutableListOf())
+        treeGrid.last().addAll(unpairedVertices)
 
         saveStep(AugmentingStepType.Nothing("Elindulunk ez egyik osztálybeli összes párosítatlan csúcsból"))
 
@@ -99,6 +153,9 @@ class AugmentingPathGraph(
 
         while (unpairedVertices.isNotEmpty()) {
             val unpairedCopy = unpairedVertices.toSet()
+
+            treeGrid.add(mutableListOf())
+
             for (vertex in unpairedCopy) {
                 vertex.visited = true
                 activeVertex = vertex
@@ -107,11 +164,16 @@ class AugmentingPathGraph(
                     neighbour.parent = vertex
                     neighbour.visited = true
                     pairedVertices.add(neighbour)
+
+                    treeGrid.last().add(neighbour)
                 }
                 saveStep(AugmentingStepType.Nothing("Vegyük be a szomszédait a vizsgálandó csúcsok közé"))
                 unpairedVertices.remove(vertex)
                 activeVertex = null
             }
+
+            treeGrid.add(mutableListOf())
+
             unpairedVertices.clear()
             val pairedCopy = pairedVertices.toSet()
             for (vertex in pairedCopy) {
@@ -123,12 +185,14 @@ class AugmentingPathGraph(
                     saveStep(AugmentingStepType.Nothing("Javítsunk a javítóút mentén!"))
                     augmentFromVertex(vertex)
                     saveStep(AugmentingStepType.Nothing("Javítottunk a párosításon"))
+                    saveTreeCoordinates()
                     augmentMade = true
                     reset()
                     return
                 }
                 unpairedVertices.add(vertex.pair!!)
                 vertex.pair!!.parent = vertex
+                treeGrid.last().add(vertex.pair!!)
                 saveStep(AugmentingStepType.Nothing("Vegyük be a párját a vizsgálandó csúcsok közé"))
                 pairedVertices.remove(vertex)
                 activeVertex = null
@@ -146,6 +210,8 @@ class AugmentingPathGraph(
         augmentingPathVertices.clear()
         unpairedVertices.clear()
         pairedVertices.clear()
+
+        treeGrid.clear()
     }
 
     private fun markAugmentingPath(vertex: AugmentingPathVertex) {
@@ -202,7 +268,7 @@ class AugmentingPathGraph(
                             color = if (vertex.parent == neighbour || neighbour.parent == vertex) BRIGHT_GREEN else Color.Black,
                             selected = vertex.pair == neighbour,
                             highlight = if (vertex in augmentingPathVertices && neighbour in augmentingPathVertices) {
-                                PURPLE
+                                YELLOW
                             } else {
                                 Color.Transparent
                             },
