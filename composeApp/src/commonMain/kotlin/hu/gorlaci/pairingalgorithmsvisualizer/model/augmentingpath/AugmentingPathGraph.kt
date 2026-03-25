@@ -33,23 +33,27 @@ class AugmentingPathGraph(
     private val class2 = mutableSetOf<AugmentingPathVertex>()
 
     private var activeVertex: AugmentingPathVertex? = null
-    private var augmentingPathVertices = mutableSetOf<AugmentingPathVertex>()
+    private val augmentingPathVertices = mutableSetOf<AugmentingPathVertex>()
+
+    private val minCoverSet = mutableSetOf<AugmentingPathVertex>()
 
     private constructor(
         vertices: MutableSet<AugmentingPathVertex>,
-        newUnpairedVertices: MutableSet<AugmentingPathVertex>,
-        newPairedVertices: MutableSet<AugmentingPathVertex>,
-        newClass1: MutableSet<AugmentingPathVertex>,
-        newClass2: MutableSet<AugmentingPathVertex>,
-        newActiveVertex: AugmentingPathVertex?,
+        unpairedVertices: MutableSet<AugmentingPathVertex>,
+        pairedVertices: MutableSet<AugmentingPathVertex>,
+        class1: MutableSet<AugmentingPathVertex>,
+        class2: MutableSet<AugmentingPathVertex>,
+        activeVertex: AugmentingPathVertex?,
         newAugmentingPathVertices: MutableSet<AugmentingPathVertex>,
+        minCoverSet: MutableSet<AugmentingPathVertex>,
     ) : this(vertices = vertices) {
-        this.unpairedVertices.addAll(newUnpairedVertices)
-        this.pairedVertices.addAll(newPairedVertices)
-        this.class1.addAll(newClass1)
-        this.class2.addAll(newClass2)
-        this.activeVertex = newActiveVertex
+        this.unpairedVertices.addAll(unpairedVertices)
+        this.pairedVertices.addAll(pairedVertices)
+        this.class1.addAll(class1)
+        this.class2.addAll(class2)
+        this.activeVertex = activeVertex
         this.augmentingPathVertices.addAll(newAugmentingPathVertices)
+        this.minCoverSet.addAll(minCoverSet)
     }
 
 
@@ -77,6 +81,7 @@ class AugmentingPathGraph(
         val newClass2 = mutableSetOf<AugmentingPathVertex>()
         var newActiveVertex: AugmentingPathVertex? = null
         val newAugmentingPathVertices = mutableSetOf<AugmentingPathVertex>()
+        val newMinCoverSet = mutableSetOf<AugmentingPathVertex>()
 
         treeVertices.forEach { vertex ->
             val newVertex = newTreeVertices.first { it.id == vertex.id }
@@ -115,12 +120,13 @@ class AugmentingPathGraph(
 
         val graph = AugmentingPathGraph(
             vertices = newTreeVertices,
-            newUnpairedVertices = newUnpairedVertices,
-            newPairedVertices = newPairedVertices,
-            newClass1 = newClass1,
-            newClass2 = newClass2,
-            newActiveVertex = newActiveVertex,
+            unpairedVertices = newUnpairedVertices,
+            pairedVertices = newPairedVertices,
+            class1 = newClass1,
+            class2 = newClass2,
+            activeVertex = newActiveVertex,
             newAugmentingPathVertices = newAugmentingPathVertices,
+            minCoverSet = newMinCoverSet,
         )
 
         return graph
@@ -174,6 +180,16 @@ class AugmentingPathGraph(
         }
         reset()
         saveStep(AugmentingStepType.Nothing("Nincs már javító út, kész a maximális párosítás"))
+
+        saveStep()
+
+        saveStep(AugmentingStepType.Nothing("Keressünk egy minimális lefogó ponthalmazt"))
+        findAugmentingPath(saveSteps = false)
+        saveStep(AugmentingStepType.Nothing("Vizsgáljuk az utolsó fát!"))
+        markMinCoverSet()
+        saveStep(AugmentingStepType.Nothing("A megtalált párosítás és a megtalált lefogó ponthalmaz mérete megegyezik, így mindkettő optimális."))
+        saveStep()
+
     }
 
     private fun createClasses() {
@@ -202,19 +218,21 @@ class AugmentingPathGraph(
     }
 
 
-    fun findAugmentingPath() {
+    fun findAugmentingPath(saveSteps: Boolean = true) {
 
         augmentMade = false
 
-        saveStep(AugmentingStepType.Nothing("Keressünk javítóutat a gráfban!"))
+        if (saveSteps) {
+            saveStep(AugmentingStepType.Nothing("Keressünk javítóutat a gráfban!"))
+        }
 
         unpairedVertices.addAll(class1.filter { it.pair == null && !it.visited })
 
         treeGrid.add(mutableListOf())
         treeGrid.last().addAll(unpairedVertices)
-
-        saveStep(AugmentingStepType.Nothing("Elindulunk ez egyik osztálybeli összes párosítatlan csúcsból"))
-
+        if (saveSteps) {
+            saveStep(AugmentingStepType.Nothing("Elindulunk ez egyik osztálybeli összes párosítatlan csúcsból"))
+        }
         pairedVertices.clear()
 
         while (unpairedVertices.isNotEmpty()) {
@@ -225,7 +243,9 @@ class AugmentingPathGraph(
             for (vertex in unpairedCopy) {
                 vertex.visited = true
                 activeVertex = vertex
-                saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
+                if (saveSteps) {
+                    saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
+                }
                 for (neighbour in vertex.neighbours.filter { !it.visited }) {
                     neighbour.parent = vertex
                     neighbour.visited = true
@@ -233,7 +253,9 @@ class AugmentingPathGraph(
 
                     treeGrid.last().add(neighbour)
                 }
-                saveStep(AugmentingStepType.Nothing("Vegyük be a szomszédait a vizsgálandó csúcsok közé"))
+                if (saveSteps) {
+                    saveStep(AugmentingStepType.Nothing("Vegyük be a szomszédait a vizsgálandó csúcsok közé"))
+                }
                 unpairedVertices.remove(vertex)
                 activeVertex = null
             }
@@ -244,13 +266,21 @@ class AugmentingPathGraph(
             val pairedCopy = pairedVertices.toSet()
             for (vertex in pairedCopy) {
                 activeVertex = vertex
-                saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
+                if (saveSteps) {
+                    saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
+                }
                 if (vertex.pair == null) {
-                    saveStep(AugmentingStepType.Nothing("Találtunk egy párosítatlan csúcsot"))
+                    if (saveSteps) {
+                        saveStep(AugmentingStepType.Nothing("Találtunk egy párosítatlan csúcsot"))
+                    }
                     markAugmentingPath(vertex)
-                    saveStep(AugmentingStepType.Nothing("Javítsunk a javítóút mentén!"))
+                    if (saveSteps) {
+                        saveStep(AugmentingStepType.Nothing("Javítsunk a javítóút mentén!"))
+                    }
                     augmentFromVertex(vertex)
-                    saveStep(AugmentingStepType.Nothing("Javítottunk a párosításon"))
+                    if (saveSteps) {
+                        saveStep(AugmentingStepType.Nothing("Javítottunk a párosításon"))
+                    }
                     saveTreeCoordinates()
                     augmentMade = true
                     reset()
@@ -259,7 +289,9 @@ class AugmentingPathGraph(
                 unpairedVertices.add(vertex.pair!!)
                 vertex.pair!!.parent = vertex
                 treeGrid.last().add(vertex.pair!!)
-                saveStep(AugmentingStepType.Nothing("Vegyük be a párját a vizsgálandó csúcsok közé"))
+                if (saveSteps) {
+                    saveStep(AugmentingStepType.Nothing("Vegyük be a párját a vizsgálandó csúcsok közé"))
+                }
                 pairedVertices.remove(vertex)
                 activeVertex = null
             }
@@ -299,6 +331,14 @@ class AugmentingPathGraph(
         }
     }
 
+    private fun markMinCoverSet() {
+        minCoverSet.addAll(class1.filter { !it.visited })
+        saveStep(AugmentingStepType.Nothing("Vegyük a fa által nem fedett kék csúcsokat"))
+        minCoverSet.addAll(class2.filter { it.visited })
+        saveStep(AugmentingStepType.Nothing("És a fa által fedett piros csúcsokat"))
+        saveStep(AugmentingStepType.Nothing("Ezzel megkaptuk a minimális lefogó ponthalmazt"))
+    }
+
     override fun toGraphicalGraph(stepType: StepType): GraphicalGraph {
         val graphicalVertices = vertices.map { vertex ->
             val coordinates = getVertexCoordinates(vertex)
@@ -306,16 +346,18 @@ class AugmentingPathGraph(
                 x = coordinates.first,
                 y = coordinates.second,
                 label = vertex.id,
-                highlight = if (vertex == activeVertex) {
-                    ORANGE
-                } else if (vertex in unpairedVertices) {
-                    LIGHT_RED
-                } else if (vertex in pairedVertices) {
-                    LIGHT_BLUE
-                } else if (vertex.visited) {
-                    GRAY
-                } else {
-                    Color.Transparent
+                highlight = when {
+                    vertex in minCoverSet -> GREEN
+
+                    vertex == activeVertex -> ORANGE
+
+                    vertex in unpairedVertices -> LIGHT_RED
+
+                    vertex in pairedVertices -> LIGHT_BLUE
+
+                    vertex.visited -> GRAY
+
+                    else -> Color.Transparent
                 },
                 highlightType = HighlightType.CIRCLE,
                 innerColor = if (vertex in class1) BLUE else if (vertex in class2) RED else Color.White
