@@ -25,6 +25,19 @@ class AugmentingPathGraph(
     newEdge = { from, to -> Edge(from, to) },
 ) {
 
+    override val edges: MutableSet<Edge>
+        get() {
+            val set = mutableSetOf<Edge>()
+            vertices.forEach { vertex ->
+                vertex.neighbours.forEach { neighbour ->
+                    if (vertex.id < neighbour.id) {
+                        set.add(Edge(vertex, neighbour))
+                    }
+                }
+            }
+            return set
+        }
+
 
     private val unpairedVertices = mutableSetOf<AugmentingPathVertex>()
     private val pairedVertices = mutableSetOf<AugmentingPathVertex>()
