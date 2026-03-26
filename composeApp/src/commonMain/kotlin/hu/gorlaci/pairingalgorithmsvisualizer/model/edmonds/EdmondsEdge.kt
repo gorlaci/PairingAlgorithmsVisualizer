@@ -12,34 +12,34 @@ class EdmondsEdge(
 
     fun getType() =
         when (fromVertex.type) {
-            VertexType.OUTER, VertexType.ROOT -> {
+            EdmondsVertexType.OUTER, EdmondsVertexType.ROOT -> {
                 when (toVertex.type) {
-                    VertexType.OUTER, VertexType.ROOT -> EdmondsEdgeType.OUTER_OUTER
-                    VertexType.CLEARING -> EdmondsEdgeType.OUTER_CLEARING
-                    VertexType.INNER -> EdmondsEdgeType.OUTER_INNER
-                    VertexType.NONE -> throw IllegalStateException("VertexType.NONE is not allowed when determining edge type")
+                    EdmondsVertexType.OUTER, EdmondsVertexType.ROOT -> EdmondsEdgeType.OUTER_OUTER
+                    EdmondsVertexType.CLEARING -> EdmondsEdgeType.OUTER_CLEARING
+                    EdmondsVertexType.INNER -> EdmondsEdgeType.OUTER_INNER
+                    EdmondsVertexType.NONE -> throw IllegalStateException("VertexType.NONE is not allowed when determining edge type")
                 }
             }
 
-            VertexType.CLEARING -> {
+            EdmondsVertexType.CLEARING -> {
                 when (toVertex.type) {
-                    VertexType.OUTER, VertexType.ROOT -> EdmondsEdgeType.OUTER_CLEARING
-                    VertexType.CLEARING -> EdmondsEdgeType.CLEARING_CLEARING
-                    VertexType.INNER -> EdmondsEdgeType.CLEARING_INNER
-                    VertexType.NONE -> throw IllegalStateException("VertexType.NONE is not allowed when determining edge type")
+                    EdmondsVertexType.OUTER, EdmondsVertexType.ROOT -> EdmondsEdgeType.OUTER_CLEARING
+                    EdmondsVertexType.CLEARING -> EdmondsEdgeType.CLEARING_CLEARING
+                    EdmondsVertexType.INNER -> EdmondsEdgeType.CLEARING_INNER
+                    EdmondsVertexType.NONE -> throw IllegalStateException("VertexType.NONE is not allowed when determining edge type")
                 }
             }
 
-            VertexType.INNER -> {
+            EdmondsVertexType.INNER -> {
                 when (toVertex.type) {
-                    VertexType.OUTER, VertexType.ROOT -> EdmondsEdgeType.OUTER_INNER
-                    VertexType.CLEARING -> EdmondsEdgeType.CLEARING_INNER
-                    VertexType.INNER -> EdmondsEdgeType.INNER_INNER
-                    VertexType.NONE -> throw IllegalStateException("VertexType.NONE is not allowed when determining edge type")
+                    EdmondsVertexType.OUTER, EdmondsVertexType.ROOT -> EdmondsEdgeType.OUTER_INNER
+                    EdmondsVertexType.CLEARING -> EdmondsEdgeType.CLEARING_INNER
+                    EdmondsVertexType.INNER -> EdmondsEdgeType.INNER_INNER
+                    EdmondsVertexType.NONE -> throw IllegalStateException("VertexType.NONE is not allowed when determining edge type")
                 }
             }
 
-            VertexType.NONE -> {
+            EdmondsVertexType.NONE -> {
                 throw IllegalStateException("VertexType.NONE is not allowed when determining edge type")
             }
         }

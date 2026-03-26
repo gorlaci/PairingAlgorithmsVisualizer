@@ -1,4 +1,4 @@
-package hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.legend
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.legend
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text

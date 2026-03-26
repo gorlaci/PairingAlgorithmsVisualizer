@@ -6,7 +6,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.ORANGE
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 
 class GraphDrawingScreenViewmodel(
     private val graphStorage: GraphStorage,
@@ -57,7 +57,7 @@ class GraphDrawingScreenViewmodel(
                 if (clickedVertex != null) {
                     if (firstVertexForEdge == null) {
                         firstVertexForEdge = clickedVertex
-                        graphicalGraph.value = graphicalGraph.value.changeInnerColor(clickedVertex, ORANGE)
+                        graphicalGraph.value = graphicalGraph.value.changeInnerColor(clickedVertex, LIGHT_ORANGE)
                     } else {
                         if (firstVertexForEdge != clickedVertex) {
 

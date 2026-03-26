@@ -9,9 +9,9 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsAnswer
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsEdgeType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.BLUE
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.ORANGE
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.PINK
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_PINK
 import hu.gorlaci.pairingalgorithmsvisualizer.util.containsSameEdges
 import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
@@ -57,7 +57,7 @@ class QuizScreenViewmodel(
                         graphicalGraph.value =
                             graphicalGraph.value
                                 .removeAllEdgeHighlights()
-                                .addHighlight(possibleQuestion.currentEdge, ORANGE)
+                                .addHighlight(possibleQuestion.currentEdge, LIGHT_ORANGE)
                     }
 
                     is EdmondsStepType.MarkBlossom -> {
@@ -66,7 +66,7 @@ class QuizScreenViewmodel(
                         graphicalGraph.value =
                             graphicalGraph.value
                                 .removeAllEdgeHighlights()
-                                .addHighlight(possibleQuestion.currentEdge, ORANGE)
+                                .addHighlight(possibleQuestion.currentEdge, LIGHT_ORANGE)
                     }
 
                     else -> {}
@@ -144,7 +144,7 @@ class QuizScreenViewmodel(
                     markedVertices.value += clickedVertex
                     graphicalGraph.value =
                         graphicalGraph.value
-                            .changeInnerColor(clickedVertex, ORANGE)
+                            .changeInnerColor(clickedVertex, LIGHT_ORANGE)
                 }
             }
         }
@@ -225,7 +225,7 @@ class QuizScreenViewmodel(
 
         var newGraphicalGraph = graphicalGraph.value
         for (edge in getMarkedEdges()) {
-            newGraphicalGraph = newGraphicalGraph.addHighlight(edge, if (augmentingPath) BLUE else PINK)
+            newGraphicalGraph = newGraphicalGraph.addHighlight(edge, if (augmentingPath) LIGHT_BLUE else LIGHT_PINK)
         }
         graphicalGraph.value = newGraphicalGraph
 
@@ -241,7 +241,7 @@ class QuizScreenViewmodel(
                         (graphicalGraph.value.stepType as? EdmondsStepType.MarkAugmentingPath)?.currentEdge
                             ?: (graphicalGraph.value.stepType as? EdmondsStepType.MarkBlossom)?.currentEdge
                             ?: return,
-                    color = ORANGE,
+                    color = LIGHT_ORANGE,
                 )
 
         confirmationDisplayed.value = false

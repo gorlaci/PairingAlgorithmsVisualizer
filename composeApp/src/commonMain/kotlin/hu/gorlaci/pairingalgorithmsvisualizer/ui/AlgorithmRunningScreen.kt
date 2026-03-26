@@ -6,11 +6,11 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.back_button
@@ -32,6 +32,7 @@ fun AlgorithmRunningScreen(
     onRun: () -> Unit,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
+    legend: @Composable ColumnScope.() -> Unit = { Spacer(modifier = Modifier.height(0.dp)) },
     content: @Composable () -> Unit = {
         GraphCanvas(
             graphicalGraph = graphicalGraph,
@@ -67,9 +68,7 @@ fun AlgorithmRunningScreen(
                 verticalArrangement = Arrangement.SpaceBetween,
                 modifier = Modifier.fillMaxSize(),
             ) {
-                OpenableLegend(
-                    modifier = Modifier.fillMaxSize().weight(1f),
-                )
+                legend()
 
                 Column(
                     modifier = Modifier,

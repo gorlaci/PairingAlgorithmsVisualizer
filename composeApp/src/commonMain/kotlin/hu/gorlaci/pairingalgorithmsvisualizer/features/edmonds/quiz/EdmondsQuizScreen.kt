@@ -17,7 +17,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.quiz.QuestionMode.*
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsEdgeType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
-import hu.gorlaci.uni.edmonds_algorithm_visualizer.ui.legend.OpenableLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.EdmondsLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.*
 
@@ -81,7 +82,11 @@ fun EdmondsQuizScreen(
             ) {
                 OpenableLegend(
                     modifier = Modifier.fillMaxSize().weight(1f),
-                )
+                ) {
+                    EdmondsLegend(
+                        modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f)
+                    )
+                }
 
                 Column(
                     modifier = Modifier,

@@ -6,10 +6,10 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.BLUE
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.DARK_GREEN
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.PINK
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.YELLOW
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_GREEN
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_PINK
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_YELLOW
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
@@ -23,6 +23,9 @@ class EdmondsGraph(
     private var activeEdge: EdmondsEdge? = null,
     private val augmentingPathEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
     private val blossomEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
+    private val setD: MutableSet<EdmondsVertex> = mutableSetOf(),
+    private val setA: MutableSet<EdmondsVertex> = mutableSetOf(),
+    private val setC: MutableSet<EdmondsVertex> = mutableSetOf(),
 ) : Graph<EdmondsVertex, EdmondsEdge>(
     name = name,
     vertices = vertices,
@@ -42,10 +45,23 @@ class EdmondsGraph(
                     newVertex
                 }.toMutableSet()
 
+        val newD = mutableSetOf<EdmondsVertex>()
+        val newA = mutableSetOf<EdmondsVertex>()
+        val newC = mutableSetOf<EdmondsVertex>()
+
         vertices.forEach { vertex ->
             val newVertex = vertexMap[vertex]!!
             newVertex.pair = vertex.pair?.let { vertexMap[it] }
             newVertex.parent = vertex.parent?.let { vertexMap[it] }
+            if (vertex in setD) {
+                newD.add(newVertex)
+            }
+            if (vertex in setA) {
+                newA.add(newVertex)
+            }
+            if (vertex in setC) {
+                newC.add(newVertex)
+            }
         }
 
         var newActiveEdge: EdmondsEdge? = null
@@ -77,13 +93,24 @@ class EdmondsGraph(
             activeEdge = newActiveEdge,
             augmentingPathEdges = newAugmentingPathEdges,
             blossomEdges = newBlossomEdges,
+            setD = newD,
+            setA = newA,
+            setC = newC,
         )
     }
 
     val steps = mutableListOf<Pair<EdmondsGraph, EdmondsStepType>>()
 
+    private var saveSteps = true
+
     private fun saveStep(stepType: EdmondsStepType = EdmondsStepType.Nothing("")) {
-        steps.add(copy() to stepType)
+        if (saveSteps) {
+            steps.add(copy() to stepType)
+        }
+    }
+
+    private fun saveStep(description: String) {
+        saveStep(EdmondsStepType.Nothing(description))
     }
 
     private var edgesLeft = true
@@ -96,21 +123,32 @@ class EdmondsGraph(
             saveStep()
         }
         reset() // O(m+n)
-        saveStep(EdmondsStepType.Nothing("Bontsuk ki a kelyheket!"))
-        val verticesCopy = vertices.toList()
-        verticesCopy.forEach { vertex ->
-            // O(m*n)
-            if (vertex is BlossomVertex) {
-                deconstructBlossom(vertex)
-            }
-        }
-        reset() // O(m+n)
+        deconstructAllBlossoms()
         saveStep(EdmondsStepType.Nothing("A megtalált párosításunk maximális"))
+
+        saveStep()
+
+        saveStep(EdmondsStepType.Nothing("Keressük meg a gráf DAC felbontását!"))
+        saveSteps = false
+        buildForest()
+        saveSteps = true
+        saveStep(EdmondsStepType.Nothing("Vizsgáljuk az utolsó erdőt!"))
+        markD()
+        saveStep("A külső csúcsok alkotják D(G)-t")
+        markA()
+        saveStep("A belső csúcsok alkotják A(G)-t")
+        markC()
+        saveStep("A tisztáson lévő csúcsok, pedig C(G)-t")
+
+        deconstructAllBlossoms()
+
+        saveStep("Megkaptuk a gráf DAC felbontását")
+
     }
 
     private fun reset() { // O(n+m)
         for (vertex in vertices) {
-            vertex.type = VertexType.NONE
+            vertex.type = EdmondsVertexType.NONE
             vertex.parent = null
         }
         for (edge in edges) {
@@ -118,10 +156,21 @@ class EdmondsGraph(
         }
     }
 
+    private fun unvisitEdges(newOuterVertex: EdmondsVertex) {
+        val edgesOnVertex = edges.filter { it.fromVertex == newOuterVertex || it.toVertex == newOuterVertex }
+            .filter {
+                !(it.fromVertex == newOuterVertex && it.toVertex == newOuterVertex.pair ||
+                        it.fromVertex == newOuterVertex.pair && it.toVertex == newOuterVertex)
+            }
+        for (edge in edgesOnVertex) {
+            edge.visited = false
+        }
+    }
+
     private fun buildForest() { // O(m^2*n^2)
         reset() // O(m+n)
         for (vertex in vertices) { // O(n)
-            vertex.type = if (vertex.pair == null) VertexType.ROOT else VertexType.CLEARING
+            vertex.type = if (vertex.pair == null) EdmondsVertexType.ROOT else EdmondsVertexType.CLEARING
         }
         saveStep(EdmondsStepType.Nothing("Megépítjük a 0 élű alternáló erdőt"))
 
@@ -177,13 +226,13 @@ class EdmondsGraph(
                     return
                 }
             }
-            if (edge.fromVertex.type.isOuter() && edge.toVertex.type == VertexType.CLEARING) { // O(m)
+            if (edge.fromVertex.type.isOuter() && edge.toVertex.type == EdmondsVertexType.CLEARING) { // O(m)
                 extendForest(edge.fromVertex, edge.toVertex) // O(1)
                 edge = edges.find { !it.visited } // O(m)
                 activeEdge = null
                 continue
             }
-            if (edge.fromVertex.type == VertexType.CLEARING && edge.toVertex.type.isOuter()) { // O(m)
+            if (edge.fromVertex.type == EdmondsVertexType.CLEARING && edge.toVertex.type.isOuter()) { // O(m)
                 extendForest(edge.toVertex, edge.fromVertex) // O(1)
                 edge = edges.find { !it.visited } // O(m)
                 activeEdge = null
@@ -373,6 +422,17 @@ class EdmondsGraph(
         }
     }
 
+    private fun deconstructAllBlossoms() {
+        saveStep(EdmondsStepType.Nothing("Bontsuk ki a kelyheket!"))
+        val verticesCopy = vertices.toList()
+        verticesCopy.forEach { vertex ->
+            if (vertex is BlossomVertex) {
+                deconstructBlossom(vertex)
+            }
+        }
+        reset()
+    }
+
     private fun findCommonRoot(
         vertexA: EdmondsVertex,
         vertexB: EdmondsVertex,
@@ -399,11 +459,13 @@ class EdmondsGraph(
     ) { // O(1)
         saveStep(EdmondsStepType.Nothing("Külső-tisztás\nBővítsük az erdőt!"))
 
-        clearingVertex.type = VertexType.INNER
+        clearingVertex.type = EdmondsVertexType.INNER
         clearingVertex.parent = outerVertex
         clearingVertex.pair?.let {
-            it.type = VertexType.OUTER
+            it.type = EdmondsVertexType.OUTER
             it.parent = clearingVertex
+
+            unvisitEdges(it)
         }
 
         saveStep()
@@ -455,55 +517,88 @@ class EdmondsGraph(
         }
     }
 
+    private fun markD() {
+        setD.addAll(vertices.filter { it.type.isOuter() })
+        setD.filterIsInstance<BlossomVertex>().forEach { markD(it) }
+    }
+
+    private fun markD(blossomVertex: BlossomVertex) {
+        for (vertex in blossomVertex.previousStructureVertices) {
+            setD.add(vertex)
+            if (vertex is BlossomVertex) {
+                markD(vertex)
+            }
+        }
+    }
+
+    private fun markA() {
+        setA.addAll(vertices.filter { it.type == EdmondsVertexType.INNER })
+    }
+
+    private fun markC() {
+        setC.addAll(vertices.filter { it.type == EdmondsVertexType.CLEARING })
+    }
+
     override fun toGraphicalGraph(stepType: StepType): GraphicalGraph {
         val graphicalVertices = mutableListOf<GraphicalVertex>()
 
         for (vertex in vertices) {
             val coordinates = getVertexCoordinates(vertex)
 
+            val innerColor = when (vertex) {
+                in setD -> LIGHT_BLUE
+                in setA -> LIGHT_PINK
+                in setC -> LIGHT_GREEN
+                else -> Color.White
+            }
+
             when (vertex.type) {
-                VertexType.ROOT -> {
+                EdmondsVertexType.ROOT -> {
                     graphicalVertices.add(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
                             vertex.id,
                             highlightType = HighlightType.DOUBLE_CIRCLE,
-                            highlight = DARK_GREEN,
+                            highlight = LIGHT_GREEN,
+                            innerColor = innerColor,
                         ),
                     )
                 }
 
-                VertexType.INNER -> {
+                EdmondsVertexType.INNER -> {
                     graphicalVertices.add(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
                             vertex.id,
                             highlightType = HighlightType.SQUARE,
-                            highlight = DARK_GREEN,
+                            highlight = LIGHT_GREEN,
+                            innerColor = innerColor,
                         ),
                     )
                 }
 
-                VertexType.OUTER -> {
+                EdmondsVertexType.OUTER -> {
                     graphicalVertices.add(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
                             vertex.id,
                             highlightType = HighlightType.CIRCLE,
-                            highlight = DARK_GREEN,
+                            highlight = LIGHT_GREEN,
+                            innerColor = innerColor,
                         ),
                     )
                 }
 
-                VertexType.CLEARING, VertexType.NONE -> {
+                EdmondsVertexType.CLEARING, EdmondsVertexType.NONE -> {
                     graphicalVertices.add(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
                             vertex.id,
+                            innerColor = innerColor,
                         ),
                     )
                 }
@@ -531,7 +626,7 @@ class EdmondsGraph(
                         if (edge.fromVertex.parent == edge.toVertex ||
                             edge.toVertex.parent == edge.fromVertex
                         ) {
-                            DARK_GREEN
+                            LIGHT_GREEN
                         } else {
                             Color.Black
                         },
@@ -544,13 +639,13 @@ class EdmondsGraph(
 
     private fun edgeHighlightColor(edge: EdmondsEdge): Color {
         if (edge in augmentingPathEdges) {
-            return BLUE
+            return LIGHT_BLUE
         }
         if (edge in blossomEdges) {
-            return PINK
+            return LIGHT_PINK
         }
         if (edge == activeEdge) {
-            return YELLOW
+            return LIGHT_YELLOW
         }
         if (edge.visited) {
             return Color.LightGray

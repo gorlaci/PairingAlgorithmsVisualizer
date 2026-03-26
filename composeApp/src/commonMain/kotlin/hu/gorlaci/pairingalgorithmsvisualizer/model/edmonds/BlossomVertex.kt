@@ -2,7 +2,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds
 
 class BlossomVertex(
     id: String,
-    type: VertexType = VertexType.NONE,
+    type: EdmondsVertexType = EdmondsVertexType.NONE,
     pair: EdmondsVertex? = null,
     parent: EdmondsVertex? = null,
     val previousStructureVertices: List<EdmondsVertex>,

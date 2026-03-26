@@ -196,7 +196,7 @@ class AugmentingPathGraph(
 
         saveStep()
 
-        saveStep(AugmentingStepType.Nothing("Keressünk egy minimális lefogó ponthalmazt"))
+        saveStep(AugmentingStepType.Nothing("Keressünk egy minimális lefogó ponthalmazt!"))
         findAugmentingPath(saveSteps = false)
         saveStep(AugmentingStepType.Nothing("Vizsgáljuk az utolsó fát!"))
         markMinCoverSet()
@@ -360,20 +360,20 @@ class AugmentingPathGraph(
                 y = coordinates.second,
                 label = vertex.id,
                 highlight = when {
-                    vertex in minCoverSet -> GREEN
+                    vertex in minCoverSet -> DARK_GREEN
 
-                    vertex == activeVertex -> ORANGE
+                    vertex == activeVertex -> LIGHT_ORANGE
 
-                    vertex in unpairedVertices -> LIGHT_RED
+                    vertex in unpairedVertices -> RED
 
-                    vertex in pairedVertices -> LIGHT_BLUE
+                    vertex in pairedVertices -> BLUE
 
                     vertex.visited -> GRAY
 
                     else -> Color.Transparent
                 },
                 highlightType = HighlightType.CIRCLE,
-                innerColor = if (vertex in class1) BLUE else if (vertex in class2) RED else Color.White
+                innerColor = if (vertex in class1) LIGHT_BLUE else if (vertex in class2) LIGHT_RED else Color.White
             )
         }
 
@@ -386,10 +386,10 @@ class AugmentingPathGraph(
                         GraphicalEdge(
                             startGraphicalVertex = graphicalVertices.first { it.label == vertex.id },
                             endGraphicalVertex = graphicalVertices.first { it.label == neighbour.id },
-                            color = if (vertex.parent == neighbour || neighbour.parent == vertex) GREEN else Color.Black,
+                            color = if (vertex.parent == neighbour || neighbour.parent == vertex) DARK_GREEN else Color.Black,
                             selected = vertex.pair == neighbour,
                             highlight = if (vertex in augmentingPathVertices && neighbour in augmentingPathVertices) {
-                                YELLOW
+                                LIGHT_YELLOW
                             } else {
                                 Color.Transparent
                             },

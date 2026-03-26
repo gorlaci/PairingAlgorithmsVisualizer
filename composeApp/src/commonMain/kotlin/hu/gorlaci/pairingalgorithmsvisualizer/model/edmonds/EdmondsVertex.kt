@@ -4,7 +4,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 
 open class EdmondsVertex(
     id: String,
-    var type: VertexType = VertexType.NONE,
+    var type: EdmondsVertexType = EdmondsVertexType.NONE,
     var pair: EdmondsVertex? = null,
     var parent: EdmondsVertex? = null,
 ) : Vertex(id) {
@@ -19,7 +19,7 @@ open class EdmondsVertex(
         )
 }
 
-enum class VertexType {
+enum class EdmondsVertexType {
     ROOT,
     INNER,
     OUTER,
