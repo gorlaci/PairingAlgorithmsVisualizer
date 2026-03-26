@@ -1,16 +1,16 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.features.augmentingpath.runalgorithm
 
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.AlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphCanvas
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.AugmentingLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.run_algorithm_screen
@@ -44,6 +44,15 @@ fun AugmentingAlgorithmRunningScreen(
         onRun = viewModel::onRun,
         onNavigateBack = onBack,
         modifier = Modifier.fillMaxSize(),
+        legend = {
+            OpenableLegend(
+                modifier = Modifier.fillMaxSize().weight(1f)
+            ) {
+                AugmentingLegend(
+                    modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f)
+                )
+            }
+        }
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),

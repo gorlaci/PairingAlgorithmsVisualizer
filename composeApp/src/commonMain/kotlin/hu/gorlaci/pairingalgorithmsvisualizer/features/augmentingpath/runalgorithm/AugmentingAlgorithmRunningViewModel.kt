@@ -74,6 +74,7 @@ class AugmentingAlgorithmRunningViewModel(
         step = 0
         setCurrentGraph()
         setButtons()
+        runEnabled.value = true
     }
 
     fun onRun() {

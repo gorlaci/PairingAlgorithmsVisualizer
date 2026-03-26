@@ -32,6 +32,7 @@ class InMemoryGraphStorage : GraphStorage {
         addExampleGraph1()
         addExampleGraph2()
         addExampleGraph3()
+        addExampleGraph4()
     }
 
     private fun addExampleGraph1() {
@@ -155,6 +156,57 @@ class InMemoryGraphStorage : GraphStorage {
             newVertex = { Vertex(it) },
             newEdge = { from, to -> Edge(from, to) },
         )
+        addGraph(graph)
+    }
+
+    private fun addExampleGraph4() {
+        val vertices = mutableSetOf<Vertex>()
+        val coordinates = mutableMapOf<Char, Pair<Double, Double>>()
+        ('A'..'I').forEachIndexed { i, it ->
+            vertices.add(Vertex(id = it.toString()))
+            coordinates[it] = Pair(-250.0 + i * (500.0 / 8), -100.0)
+        }
+        (0..9).forEachIndexed { i, it ->
+            vertices.add(Vertex(id = it.toString()))
+            val shiftedIndex = (i + 9) % 10
+            coordinates[it.toString()[0]] = Pair(-300.0 + shiftedIndex * (600.0 / 9), 100.0)
+        }
+        val graph = Graph(
+            name = "Example Graph 4",
+            vertices = vertices,
+            edges = mutableSetOf(),
+            idCoordinatesMap = coordinates,
+            newVertex = { Vertex(it) },
+            newEdge = { from, to -> Edge(from, to) },
+        )
+        graph.addEdge("A", "1")
+        graph.addEdge("A", "7")
+        graph.addEdge("A", "9")
+        graph.addEdge("A", "0")
+        graph.addEdge("B", "2")
+        graph.addEdge("B", "5")
+        graph.addEdge("C", "3")
+        graph.addEdge("C", "5")
+        graph.addEdge("C", "6")
+        graph.addEdge("C", "8")
+        graph.addEdge("C", "9")
+        graph.addEdge("D", "4")
+        graph.addEdge("D", "7")
+        graph.addEdge("D", "8")
+        graph.addEdge("D", "9")
+        graph.addEdge("E", "4")
+        graph.addEdge("E", "5")
+        graph.addEdge("F", "6")
+        graph.addEdge("F", "7")
+        graph.addEdge("F", "8")
+        graph.addEdge("F", "0")
+        graph.addEdge("G", "2")
+        graph.addEdge("G", "3")
+        graph.addEdge("G", "4")
+        graph.addEdge("H", "2")
+        graph.addEdge("H", "3")
+        graph.addEdge("I", "2")
+        graph.addEdge("I", "3")
         addGraph(graph)
     }
 }

@@ -200,6 +200,10 @@ class AugmentingPathGraph(
         findAugmentingPath(saveSteps = false)
         saveStep(AugmentingStepType.Nothing("Vizsgáljuk az utolsó fát!"))
         markMinCoverSet()
+        saveTreeCoordinates()
+
+        reset()
+
         saveStep(AugmentingStepType.Nothing("A megtalált párosítás és a megtalált lefogó ponthalmaz mérete megegyezik, így mindkettő optimális."))
         saveStep()
 
