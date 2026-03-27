@@ -59,8 +59,6 @@ open class Graph<VertexType : Vertex, EdgeType : Edge>(
 
     open fun toGraphicalGraph(stepType: StepType = StepType()): GraphicalGraph {
 
-        throw NotImplementedError("toGraphicalGraph is not implemented for this graph type")
-
         val graphicalVertices = vertices.map { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
