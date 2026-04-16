@@ -33,6 +33,7 @@ fun AlgorithmRunningScreen(
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
     legend: @Composable ColumnScope.() -> Unit = { Spacer(modifier = Modifier.height(0.dp)) },
+    controls: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {
         GraphCanvas(
             graphicalGraph = graphicalGraph,
@@ -55,11 +56,14 @@ fun AlgorithmRunningScreen(
             Column(
                 modifier = Modifier.fillMaxHeight().fillMaxWidth(0.8f),
             ) {
-                GraphSelectionDropdown(
-                    selectedGraph = selectedGraph,
-                    graphList = graphList,
-                    onGraphSelected = onGraphIndexSelected,
-                )
+                Row {
+                    GraphSelectionDropdown(
+                        selectedGraph = selectedGraph,
+                        graphList = graphList,
+                        onGraphSelected = onGraphIndexSelected,
+                    )
+                    controls()
+                }
 
                 content()
             }

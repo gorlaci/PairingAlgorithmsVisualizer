@@ -16,7 +16,6 @@ class AugmentingAlgorithmRunningViewModel(
 
     val selectedGraph: MutableState<AugmentingPathGraph> = mutableStateOf(graphList[selectedGraphIndex])
 
-
     private val steps: MutableList<Pair<GraphicalGraph, AugmentingPathGraph>> = mutableListOf(
         selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph()
     )
@@ -36,6 +35,7 @@ class AugmentingAlgorithmRunningViewModel(
     val nextEnabled = mutableStateOf(false)
     val backEnabled = mutableStateOf(false)
     val runEnabled = mutableStateOf(true)
+
 
     fun onNext() {
         if (step < steps.size - 1) {
