@@ -42,8 +42,8 @@ class AugmentingPathGraph(
     private val unpairedVertices = mutableSetOf<AugmentingPathVertex>()
     private val pairedVertices = mutableSetOf<AugmentingPathVertex>()
 
-    private val class1 = mutableSetOf<AugmentingPathVertex>()
-    private val class2 = mutableSetOf<AugmentingPathVertex>()
+    val class1 = mutableSetOf<AugmentingPathVertex>()
+    val class2 = mutableSetOf<AugmentingPathVertex>()
 
     private var activeVertex: AugmentingPathVertex? = null
     private val augmentingPathVertices = mutableSetOf<AugmentingPathVertex>()

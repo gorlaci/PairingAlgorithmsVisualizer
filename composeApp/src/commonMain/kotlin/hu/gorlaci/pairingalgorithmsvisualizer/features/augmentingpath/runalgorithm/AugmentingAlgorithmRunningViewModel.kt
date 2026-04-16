@@ -16,10 +16,9 @@ class AugmentingAlgorithmRunningViewModel(
 
     val selectedGraph: MutableState<AugmentingPathGraph> = mutableStateOf(graphList[selectedGraphIndex])
 
-    val x: AugmentingPathGraph = selectedGraph.value
 
     private val steps: MutableList<Pair<GraphicalGraph, AugmentingPathGraph>> = mutableListOf(
-        x.toGraphicalGraph() to AugmentingPathGraph()
+        selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph()
     )
     private var step = 0
 
@@ -31,6 +30,8 @@ class AugmentingAlgorithmRunningViewModel(
             StepType()
         )
     )
+    val class1Ids = mutableStateOf(emptyList<String>())
+    val class2Ids = mutableStateOf(emptyList<String>())
 
     val nextEnabled = mutableStateOf(false)
     val backEnabled = mutableStateOf(false)
@@ -72,9 +73,16 @@ class AugmentingAlgorithmRunningViewModel(
             selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph()
         )
         step = 0
+        getClasses()
         setCurrentGraph()
         setButtons()
         runEnabled.value = true
+    }
+
+    private fun getClasses() {
+        val graph = selectedGraph.value
+        class1Ids.value = graph.class1.map { it.id }
+        class2Ids.value = graph.class2.map { it.id }
     }
 
     fun onRun() {
@@ -85,8 +93,16 @@ class AugmentingAlgorithmRunningViewModel(
         steps.addAll(graph.steps)
 
         step = 0
+        getClasses()
         setCurrentGraph()
         setButtons()
         runEnabled.value = false
     }
+
+    val matrixMode = mutableStateOf(false)
+
+    fun changeMatrixMode(newValue: Boolean) {
+        matrixMode.value = newValue
+    }
+
 }
