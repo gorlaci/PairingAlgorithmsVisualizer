@@ -28,8 +28,8 @@ class QuizScreenViewmodel(
     val questionFrequency = mutableStateOf(1f)
 
     override fun onNext() {
-        if (step < steps.size - 1) {
-            step++
+        if (step.value < steps.value.size - 1) {
+            step.value++
 
             setCurrentGraph()
 
@@ -91,8 +91,8 @@ class QuizScreenViewmodel(
 
     override fun setButtons() {
         nextEnabled.value =
-            step < steps.size - 1 && questionMode.value == QuestionMode.NOTHING || questionMode.value == QuestionMode.SHOW_ANSWER
-        backEnabled.value = step > 0
+            step.value < steps.value.size - 1 && questionMode.value == QuestionMode.NOTHING || questionMode.value == QuestionMode.SHOW_ANSWER
+        backEnabled.value = step.value > 0
     }
 
     override fun onGraphSelected(index: Int) {

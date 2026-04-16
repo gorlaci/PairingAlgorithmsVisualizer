@@ -13,8 +13,6 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
-import pairingalgorithmsvisualizer.composeapp.generated.resources.back_button
-import pairingalgorithmsvisualizer.composeapp.generated.resources.next_button
 import pairingalgorithmsvisualizer.composeapp.generated.resources.run_button
 
 @Composable
@@ -24,6 +22,8 @@ fun AlgorithmRunningScreen(
     graphList: List<Graph<out Vertex, out Edge>>,
     onGraphIndexSelected: (Int) -> Unit,
     graphicalGraph: GraphicalGraph,
+    step: Int = 1,
+    maxStep: Int,
     nextEnabled: Boolean,
     backEnabled: Boolean,
     runEnabled: Boolean,
@@ -31,6 +31,7 @@ fun AlgorithmRunningScreen(
     onBack: () -> Unit,
     onRun: () -> Unit,
     onNavigateBack: () -> Unit,
+    onStepChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     legend: @Composable ColumnScope.() -> Unit = { Spacer(modifier = Modifier.height(0.dp)) },
     controls: @Composable () -> Unit = {},
@@ -85,23 +86,21 @@ fun AlgorithmRunningScreen(
                     Spacer(modifier = Modifier.fillMaxHeight(0.1f))
 
                     Button(
-                        onClick = onNext,
-                        enabled = nextEnabled,
-                    ) {
-                        Text(stringResource(Res.string.next_button))
-                    }
-                    Button(
-                        onClick = onBack,
-                        enabled = backEnabled,
-                    ) {
-                        Text(stringResource(Res.string.back_button))
-                    }
-                    Button(
                         onClick = onRun,
                         enabled = runEnabled,
                     ) {
                         Text(stringResource(Res.string.run_button))
                     }
+                    StepSelector(
+                        value = step,
+                        maxValue = maxStep,
+                        onValueChange = onStepChange,
+                        onPrevious = onBack,
+                        onNext = onNext,
+                        previousEnabled = backEnabled,
+                        nextEnabled = nextEnabled,
+                        modifier = Modifier.padding(10.dp),
+                    )
                 }
             }
         }

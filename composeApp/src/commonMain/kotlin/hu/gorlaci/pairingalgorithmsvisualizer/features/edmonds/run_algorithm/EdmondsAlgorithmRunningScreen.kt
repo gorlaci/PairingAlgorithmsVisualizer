@@ -30,6 +30,9 @@ fun EdmondsAlgorithmRunningScreen(
 
     val graphicalGraph by viewModel.graphicalGraph
 
+    val step by viewModel.step
+    val maxStep by viewModel.maxStep
+
     val nextEnabled by viewModel.nextEnabled
     val backEnabled by viewModel.backEnabled
     val runEnabled by viewModel.runEnabled
@@ -56,6 +59,9 @@ fun EdmondsAlgorithmRunningScreen(
                     modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f)
                 )
             }
-        }
+        },
+        step = step + 1,
+        maxStep = maxStep,
+        onStepChange = viewModel::onStepChange,
     )
 }

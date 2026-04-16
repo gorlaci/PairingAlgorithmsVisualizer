@@ -191,7 +191,7 @@ class AugmentingPathGraph(
         while (augmentMade) {
             findAugmentingPath()
         }
-        reset()
+        reset(resetForest = false)
         saveStep(AugmentingStepType.Nothing("Nincs már javító út, kész a maximális párosítás"))
 
         saveStep()
@@ -204,7 +204,9 @@ class AugmentingPathGraph(
 
         reset()
 
-        saveStep(AugmentingStepType.Nothing("A megtalált párosítás és a megtalált lefogó ponthalmaz mérete megegyezik, így mindkettő optimális."))
+        val pairingSize = minCoverSet.size
+
+        saveStep(AugmentingStepType.Nothing("Találtunk egy $pairingSize elemű párosítást és egy $pairingSize elemű lefogó ponthalmazt, tehát\n$pairingSize <= α(G) <= τ(G) <= $pairingSize,\nazaz α(G) = τ(G) = $pairingSize"))
         saveStep()
 
     }
@@ -316,17 +318,21 @@ class AugmentingPathGraph(
         }
     }
 
-    private fun reset() {
-        for (vertex in vertices) {
-            vertex.visited = false
-            vertex.parent = null
+    private fun reset(resetForest: Boolean = true) {
+
+        if (resetForest) {
+            for (vertex in vertices) {
+                vertex.visited = false
+                vertex.parent = null
+                unpairedVertices.clear()
+                pairedVertices.clear()
+                treeGrid.clear()
+            }
+
         }
         activeVertex = null
         augmentingPathVertices.clear()
-        unpairedVertices.clear()
-        pairedVertices.clear()
 
-        treeGrid.clear()
     }
 
     private fun markAugmentingPath(vertex: AugmentingPathVertex) {

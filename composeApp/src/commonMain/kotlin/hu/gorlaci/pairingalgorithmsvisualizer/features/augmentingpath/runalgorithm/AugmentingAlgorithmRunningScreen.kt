@@ -28,6 +28,9 @@ fun AugmentingAlgorithmRunningScreen(
     val graphicalGraph by viewModel.graphicalGraph
     val tree by viewModel.tree
 
+    val step by viewModel.step
+    val maxSteps by viewModel.maxSteps
+
     val class1Ids by viewModel.class1Ids
     val class2Ids by viewModel.class2Ids
 
@@ -66,7 +69,10 @@ fun AugmentingAlgorithmRunningScreen(
                 onSwitchChanged = viewModel::changeMatrixMode,
                 modifier = Modifier.padding(20.dp, 10.dp),
             )
-        }
+        },
+        step = step + 1,
+        maxStep = maxSteps,
+        onStepChange = viewModel::onStepChange,
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),

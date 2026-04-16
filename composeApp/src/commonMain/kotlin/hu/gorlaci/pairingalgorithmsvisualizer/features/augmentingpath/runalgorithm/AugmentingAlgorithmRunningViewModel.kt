@@ -1,6 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.features.augmentingpath.runalgorithm
 
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
@@ -16,12 +17,18 @@ class AugmentingAlgorithmRunningViewModel(
 
     val selectedGraph: MutableState<AugmentingPathGraph> = mutableStateOf(graphList[selectedGraphIndex])
 
-    private val steps: MutableList<Pair<GraphicalGraph, AugmentingPathGraph>> = mutableListOf(
-        selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph()
+    private val steps = mutableStateOf(
+        listOf(
+            selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph()
+        )
     )
-    private var step = 0
+    val step = mutableStateOf(0)
 
-    val graphicalGraph = mutableStateOf(steps[0].first)
+    val maxSteps = derivedStateOf {
+        steps.value.size
+    }
+
+    val graphicalGraph = mutableStateOf(steps.value[0].first)
     val tree = mutableStateOf(
         GraphicalGraph(
             listOf(),
@@ -38,8 +45,8 @@ class AugmentingAlgorithmRunningViewModel(
 
 
     fun onNext() {
-        if (step < steps.size - 1) {
-            step++
+        if (step.value < steps.value.size - 1) {
+            step.value++
 
             setCurrentGraph()
         }
@@ -47,32 +54,46 @@ class AugmentingAlgorithmRunningViewModel(
     }
 
     fun onBack() {
-        if (step > 0) {
-            step--
+        if (step.value > 0) {
+            step.value--
             setCurrentGraph()
         }
         setButtons()
     }
 
+    fun onStepChange(newValue: String) {
+        val int = try {
+            newValue.toInt() - 1
+        } catch (_: NumberFormatException) {
+            return
+        }
+        if (int < 0) {
+            return
+        }
+        if (int >= steps.value.size) {
+            return
+        }
+        step.value = int
+        setCurrentGraph()
+        setButtons()
+    }
+
     private fun setCurrentGraph() {
-        graphicalGraph.value = steps[step].first
-        tree.value = steps[step].second.toGraphicalGraph()
+        graphicalGraph.value = steps.value[step.value].first
+        tree.value = steps.value[step.value].second.toGraphicalGraph()
     }
 
     private fun setButtons() {
-        nextEnabled.value = step < steps.size - 1
-        backEnabled.value = step > 0
+        nextEnabled.value = step.value < steps.value.size - 1
+        backEnabled.value = step.value > 0
     }
 
     fun onGraphSelected(index: Int) {
         selectedGraphIndex = index
         selectedGraph.value = graphList[selectedGraphIndex]
 
-        steps.clear()
-        steps.add(
-            selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph()
-        )
-        step = 0
+        steps.value = listOf(selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph())
+        step.value = 0
         getClasses()
         setCurrentGraph()
         setButtons()
@@ -88,11 +109,11 @@ class AugmentingAlgorithmRunningViewModel(
     fun onRun() {
         val graph = graphList[selectedGraphIndex]
 
-        steps.clear()
         graph.runAlgorithm()
-        steps.addAll(graph.steps)
 
-        step = 0
+        steps.value = graph.steps
+
+        step.value = 0
         getClasses()
         setCurrentGraph()
         setButtons()
