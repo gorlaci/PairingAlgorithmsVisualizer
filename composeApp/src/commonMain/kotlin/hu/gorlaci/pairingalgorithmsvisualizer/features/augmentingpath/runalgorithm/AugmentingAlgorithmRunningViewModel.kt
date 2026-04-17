@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphDisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 
 class AugmentingAlgorithmRunningViewModel(
@@ -120,10 +121,10 @@ class AugmentingAlgorithmRunningViewModel(
         runEnabled.value = false
     }
 
-    val matrixMode = mutableStateOf(false)
+    val graphDisplayMode = mutableStateOf(GraphDisplayMode.BOTH)
 
-    fun changeMatrixMode(newValue: Boolean) {
-        matrixMode.value = newValue
+    fun changeDisplayMode(newValue: GraphDisplayMode) {
+        graphDisplayMode.value = newValue
     }
 
 }

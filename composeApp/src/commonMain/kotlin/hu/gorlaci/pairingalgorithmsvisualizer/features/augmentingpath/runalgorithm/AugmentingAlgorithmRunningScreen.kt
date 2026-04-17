@@ -7,10 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.AlgorithmRunningScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphCanvas
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphDisplayModeSwitch
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphMatrix
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.AugmentingLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource
@@ -38,7 +35,7 @@ fun AugmentingAlgorithmRunningScreen(
     val backEnabled by viewModel.backEnabled
     val runEnabled by viewModel.runEnabled
 
-    val matrixMode by viewModel.matrixMode
+    val displayMode by viewModel.graphDisplayMode
 
     AlgorithmRunningScreen(
         title = stringResource(Res.string.run_algorithm_screen),
@@ -65,9 +62,9 @@ fun AugmentingAlgorithmRunningScreen(
         },
         controls = {
             GraphDisplayModeSwitch(
-                matrixMode = matrixMode,
-                onSwitchChanged = viewModel::changeMatrixMode,
-                modifier = Modifier.padding(20.dp, 10.dp),
+                matrixMode = displayMode,
+                onModeChange = viewModel::changeDisplayMode,
+                modifier = Modifier.padding(10.dp)
             )
         },
         step = step + 1,
@@ -77,19 +74,41 @@ fun AugmentingAlgorithmRunningScreen(
         Row(
             modifier = Modifier.fillMaxSize(),
         ) {
+            Column(
+                modifier = Modifier.fillMaxWidth(.5f).fillMaxHeight(),
+            ) {
 
-            if (matrixMode) {
-                GraphMatrix(
-                    graphicalGraph = graphicalGraph,
-                    class1Ids = class1Ids,
-                    class2Ids = class2Ids,
-                    modifier = Modifier.fillMaxWidth(.5f).fillMaxHeight(),
-                )
-            } else {
-                GraphCanvas(
-                    graphicalGraph = graphicalGraph,
-                    modifier = Modifier.fillMaxWidth(.5f).fillMaxHeight(),
-                )
+
+                when (displayMode) {
+                    GraphDisplayMode.BOTH -> {
+                        GraphCanvas(
+                            graphicalGraph = graphicalGraph,
+                            modifier = Modifier.fillMaxWidth().fillMaxHeight(.5f),
+                        )
+                        GraphMatrix(
+                            graphicalGraph = graphicalGraph,
+                            class1Ids = class1Ids,
+                            class2Ids = class2Ids,
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
+
+                    GraphDisplayMode.GRAPHICAL -> {
+                        GraphCanvas(
+                            graphicalGraph = graphicalGraph,
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
+
+                    GraphDisplayMode.MATRIX -> {
+                        GraphMatrix(
+                            graphicalGraph = graphicalGraph,
+                            class1Ids = class1Ids,
+                            class2Ids = class2Ids,
+                            modifier = Modifier.fillMaxSize(),
+                        )
+                    }
+                }
             }
 
             GraphCanvas(

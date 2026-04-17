@@ -32,7 +32,7 @@ fun AugmentingMenu(
             modifier = Modifier.fillMaxSize().padding(paddingValues)
         ) {
             Button(onClick = onRunAlgorithm) {
-                Text("Run algorithm")
+                Text("Algoritmus futtatása")
             }
         }
     }

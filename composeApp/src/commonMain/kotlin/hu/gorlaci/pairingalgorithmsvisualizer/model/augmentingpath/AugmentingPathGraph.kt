@@ -206,7 +206,7 @@ class AugmentingPathGraph(
 
         val pairingSize = minCoverSet.size
 
-        saveStep(AugmentingStepType.Nothing("Találtunk egy $pairingSize elemű párosítást és egy $pairingSize elemű lefogó ponthalmazt, tehát\n$pairingSize <= α(G) <= τ(G) <= $pairingSize,\nazaz α(G) = τ(G) = $pairingSize"))
+        saveStep(AugmentingStepType.Nothing("Találtunk egy $pairingSize elemű párosítást és egy $pairingSize elemű lefogó ponthalmazt, tehát\n$pairingSize <= ν(G) <= τ(G) <= $pairingSize,\nazaz ν(G) = τ(G) = $pairingSize"))
         saveStep()
 
     }
