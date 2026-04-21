@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph
+package hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.visual
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel

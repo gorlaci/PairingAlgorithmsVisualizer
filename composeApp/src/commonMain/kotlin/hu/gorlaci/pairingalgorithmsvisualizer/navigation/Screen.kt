@@ -5,13 +5,22 @@ import kotlinx.serialization.Serializable
 
 object Screen {
 
+    object DrawGraph {
+
+        @Serializable
+        object Visual
+
+        @Serializable
+        object MatrixBipartite
+
+        @Serializable
+        object Menu
+    }
+
     object Edmonds {
 
         @Serializable
         object RunAlgorithm
-
-        @Serializable
-        object GraphDrawing
 
         @Serializable
         object Menu

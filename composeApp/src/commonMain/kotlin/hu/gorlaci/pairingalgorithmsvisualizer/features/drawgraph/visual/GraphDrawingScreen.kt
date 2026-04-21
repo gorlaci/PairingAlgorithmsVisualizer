@@ -1,6 +1,6 @@
 @file:Suppress("ktlint:standard:no-wildcard-imports")
 
-package hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph
+package hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.visual
 
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
