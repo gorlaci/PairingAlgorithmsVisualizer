@@ -7,21 +7,22 @@ import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphDisplayMode
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 
 class AugmentingAlgorithmRunningViewModel(
-    val graphStorage: GraphStorage
+    val graphStorage: GraphStorage,
 ) : ViewModel() {
     val graphList = graphStorage.getAllAugmentingPathGraphs()
     private var selectedGraphIndex = 0
 
-    val selectedGraph: MutableState<AugmentingPathGraph> = mutableStateOf(graphList[selectedGraphIndex])
+    val selectedGraph: MutableState<AugmentingPathGraph> =
+        mutableStateOf(graphList[selectedGraphIndex])
 
     private val steps = mutableStateOf(
         listOf(
-            selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph()
-        )
+            selectedGraph.value.toGraphicalGraph() to AugmentingPathGraph(),
+        ),
     )
     val step = mutableStateOf(0)
 
@@ -34,8 +35,8 @@ class AugmentingAlgorithmRunningViewModel(
         GraphicalGraph(
             listOf(),
             listOf(),
-            StepType()
-        )
+            StepType(),
+        ),
     )
     val class1Ids = mutableStateOf(emptyList<String>())
     val class2Ids = mutableStateOf(emptyList<String>())
@@ -43,7 +44,6 @@ class AugmentingAlgorithmRunningViewModel(
     val nextEnabled = mutableStateOf(false)
     val backEnabled = mutableStateOf(false)
     val runEnabled = mutableStateOf(true)
-
 
     fun onNext() {
         if (step.value < steps.value.size - 1) {
@@ -126,5 +126,4 @@ class AugmentingAlgorithmRunningViewModel(
     fun changeDisplayMode(newValue: GraphDisplayMode) {
         graphDisplayMode.value = newValue
     }
-
 }

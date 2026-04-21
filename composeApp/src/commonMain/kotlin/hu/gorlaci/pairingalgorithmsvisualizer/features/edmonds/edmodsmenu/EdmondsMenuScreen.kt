@@ -8,7 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.SimpleTopAppbar
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.quiz_screen
@@ -34,7 +34,6 @@ fun EdmondsMenuScreen(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
             Button(
                 onClick = onRunAlgorithmClick,
             ) {

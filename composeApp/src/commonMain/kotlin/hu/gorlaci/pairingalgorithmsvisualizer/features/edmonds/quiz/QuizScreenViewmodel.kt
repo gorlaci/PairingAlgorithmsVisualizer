@@ -3,7 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.quiz
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.run_algorithm.EdmondsAlgorithmRunningScreenViewModel
+import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.runalgorithm.EdmondsAlgorithmRunningScreenViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsAnswer
@@ -37,7 +37,9 @@ class QuizScreenViewmodel(
 
             val possibleQuestion = graphicalGraph.value.stepType
 
-            if (possibleQuestion is EdmondsStepType.BlossomInAnimation || possibleQuestion is EdmondsStepType.BlossomOutAnimation) {
+            if (possibleQuestion is EdmondsStepType.BlossomInAnimation ||
+                possibleQuestion is EdmondsStepType.BlossomOutAnimation
+            ) {
                 startBlossomAnimation()
                 setButtons()
                 return
@@ -91,7 +93,8 @@ class QuizScreenViewmodel(
 
     override fun setButtons() {
         nextEnabled.value =
-            step.value < steps.value.size - 1 && questionMode.value == QuestionMode.NOTHING || questionMode.value == QuestionMode.SHOW_ANSWER
+            step.value < steps.value.size - 1 && questionMode.value == QuestionMode.NOTHING ||
+            questionMode.value == QuestionMode.SHOW_ANSWER
         backEnabled.value = step.value > 0
     }
 
@@ -158,7 +161,7 @@ class QuizScreenViewmodel(
             val edge =
                 currentGraph.value.edges.find { edge ->
                     (edge.fromVertex.id == aId && edge.toVertex.id == bId) ||
-                            (edge.fromVertex.id == bId && edge.toVertex.id == aId)
+                        (edge.fromVertex.id == bId && edge.toVertex.id == aId)
                 }
             if (edge != null) {
                 markedEdges.add(edge)
@@ -225,7 +228,8 @@ class QuizScreenViewmodel(
 
         var newGraphicalGraph = graphicalGraph.value
         for (edge in getMarkedEdges()) {
-            newGraphicalGraph = newGraphicalGraph.addHighlight(edge, if (augmentingPath) LIGHT_BLUE else LIGHT_PINK)
+            newGraphicalGraph =
+                newGraphicalGraph.addHighlight(edge, if (augmentingPath) LIGHT_BLUE else LIGHT_PINK)
         }
         graphicalGraph.value = newGraphicalGraph
 

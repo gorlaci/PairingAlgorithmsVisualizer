@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.AugmentingLegend
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.OpenableLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.AugmentingLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.run_algorithm_screen
@@ -53,10 +53,10 @@ fun AugmentingAlgorithmRunningScreen(
         modifier = Modifier.fillMaxSize(),
         legend = {
             OpenableLegend(
-                modifier = Modifier.fillMaxSize().weight(1f)
+                modifier = Modifier.fillMaxSize().weight(1f),
             ) {
                 AugmentingLegend(
-                    modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f)
+                    modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f),
                 )
             }
         },
@@ -64,7 +64,7 @@ fun AugmentingAlgorithmRunningScreen(
             GraphDisplayModeSwitch(
                 matrixMode = displayMode,
                 onModeChange = viewModel::changeDisplayMode,
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(10.dp),
             )
         },
         step = step + 1,
@@ -77,8 +77,6 @@ fun AugmentingAlgorithmRunningScreen(
             Column(
                 modifier = Modifier.fillMaxWidth(.5f).fillMaxHeight(),
             ) {
-
-
                 when (displayMode) {
                     GraphDisplayMode.BOTH -> {
                         GraphCanvas(
@@ -117,5 +115,4 @@ fun AugmentingAlgorithmRunningScreen(
             )
         }
     }
-
 }

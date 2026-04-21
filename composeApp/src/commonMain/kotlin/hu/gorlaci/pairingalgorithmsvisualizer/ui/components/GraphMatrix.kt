@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -16,6 +16,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.DARK_GREEN
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
@@ -29,7 +30,6 @@ fun GraphMatrix(
 ) {
     val class1 = graphicalGraph.graphicalVertices.filter { class1Ids.contains(it.label) }
     val class2 = graphicalGraph.graphicalVertices.filter { class2Ids.contains(it.label) }
-
 
     LazyColumn(modifier = modifier.padding(10.dp)) {
         item {
@@ -46,10 +46,21 @@ fun GraphMatrix(
                 VertexCell(vertex = rowVertex, modifier = Modifier.weight(1f))
                 for (columnVertex in class1) {
                     val edge = graphicalGraph.graphicalEdges.find {
-                        it.startGraphicalVertex == rowVertex && it.endGraphicalVertex == columnVertex
-                                || it.startGraphicalVertex == columnVertex && it.endGraphicalVertex == rowVertex
+                        it.startGraphicalVertex == rowVertex &&
+                            it.endGraphicalVertex == columnVertex ||
+                            it.startGraphicalVertex == columnVertex &&
+                            it.endGraphicalVertex == rowVertex
                     }
-                    EdgeCell(edge = edge, modifier = Modifier.weight(1f))
+                    EdgeCell(
+                        edge = edge,
+                        modifier = if (rowVertex.highlight == DARK_GREEN ||
+                            columnVertex.highlight == DARK_GREEN
+                        ) {
+                            Modifier.weight(1f).background(DARK_GREEN)
+                        } else {
+                            Modifier.weight(1f)
+                        },
+                    )
                 }
             }
         }
@@ -61,14 +72,14 @@ fun TextCell(
     text: String,
     fontWeight: FontWeight = FontWeight.Normal,
     color: Color = Color.Black,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = text,
         modifier = modifier.border(1.dp, Color.Black).widthIn(max = 30.dp),
         fontWeight = fontWeight,
         color = color,
-        textAlign = TextAlign.Center
+        textAlign = TextAlign.Center,
     )
 }
 
@@ -80,11 +91,11 @@ fun EmptyCell(modifier: Modifier = Modifier) {
 @Composable
 fun HeartCell(
     selected: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         contentAlignment = Alignment.Center,
-        modifier = modifier
+        modifier = modifier,
     ) {
         EmptyCell(modifier = Modifier.fillMaxWidth())
 
@@ -92,7 +103,7 @@ fun HeartCell(
             imageVector = Icons.Default.Favorite,
             contentDescription = null,
             tint = Color.Red,
-            modifier = Modifier.size(16.dp)
+            modifier = Modifier.size(16.dp),
         )
 
         if (selected) {
@@ -100,7 +111,7 @@ fun HeartCell(
                 imageVector = Icons.Default.Favorite,
                 contentDescription = null,
                 tint = Color.Yellow,
-                modifier = Modifier.size(10.dp)
+                modifier = Modifier.size(10.dp),
             )
         }
     }
@@ -121,7 +132,7 @@ fun EdgeCell(
 @Composable
 fun VertexCell(
     vertex: GraphicalVertex,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     TextCell(
         text = vertex.label,
@@ -135,7 +146,7 @@ fun VertexCell(
 fun SelectedHeartCell() {
     HeartCell(
         selected = true,
-        modifier = Modifier.size(30.dp)
+        modifier = Modifier.size(30.dp),
     )
 }
 
@@ -144,24 +155,23 @@ fun SelectedHeartCell() {
 fun UnselectedHeartCell() {
     HeartCell(
         selected = false,
-        modifier = Modifier.size(30.dp)
+        modifier = Modifier.size(30.dp),
     )
 }
 
 @Preview
 @Composable
 fun RowExample() {
-
     Row {
         VertexCell(vertex = GraphicalVertex(label = "A"), modifier = Modifier.weight(1f))
         EdgeCell(
             edge = GraphicalEdge(
                 startGraphicalVertex = GraphicalVertex(),
                 endGraphicalVertex = GraphicalVertex(),
-            ), modifier = Modifier.weight(1f)
+            ),
+            modifier = Modifier.weight(1f),
         )
         HeartCell(selected = true, modifier = Modifier.weight(1f))
         HeartCell(selected = false, modifier = Modifier.weight(1f))
     }
-
 }

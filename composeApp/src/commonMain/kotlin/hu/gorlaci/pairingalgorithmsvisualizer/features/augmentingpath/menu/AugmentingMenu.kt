@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Modifier
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.SimpleTopAppbar
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
 
 @Composable
 fun AugmentingMenu(
@@ -24,12 +24,12 @@ fun AugmentingMenu(
                 onBack = onBack,
             )
         },
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxSize(),
     ) { paddingValues ->
         Column(
             horizontalAlignment = CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = Modifier.fillMaxSize().padding(paddingValues)
+            modifier = Modifier.fillMaxSize().padding(paddingValues),
         ) {
             Button(onClick = onRunAlgorithm) {
                 Text("Algoritmus futtatása")

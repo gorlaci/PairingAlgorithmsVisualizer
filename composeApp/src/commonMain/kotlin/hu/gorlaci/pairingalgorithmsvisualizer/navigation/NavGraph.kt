@@ -9,11 +9,11 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.features.augmentingpath.menu.AugmentingMenu
 import hu.gorlaci.pairingalgorithmsvisualizer.features.augmentingpath.runalgorithm.AugmentingAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.GraphDrawingMenu
-import hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.matrix_bipartite.MatrixBipartiteGraphMakerScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.matrixbipartite.MatrixBipartiteGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.visual.GraphDrawingScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.edmodsmenu.EdmondsMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.quiz.EdmondsQuizScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.run_algorithm.EdmondsAlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.runalgorithm.EdmondsAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.mainmenu.MainMenuScreen
 
 @Composable
@@ -62,7 +62,9 @@ fun NavGraph(
             MainMenuScreen(
                 onDrawClick = { navHostController.navigate(Screen.DrawGraph.Menu) },
                 onEdmondsMenuClick = { navHostController.navigate(Screen.Edmonds.Menu) },
-                onAugmentingPathMenuClick = { navHostController.navigate(Screen.AugmentingPath.Menu) },
+                onAugmentingPathMenuClick = {
+                    navHostController.navigate(Screen.AugmentingPath.Menu)
+                },
             )
         }
 
@@ -84,7 +86,9 @@ fun NavGraph(
             GraphDrawingMenu(
                 onBack = { navHostController.popBackStack() },
                 onVisual = { navHostController.navigate(Screen.DrawGraph.Visual) },
-                onMatrixBipartite = { navHostController.navigate(Screen.DrawGraph.MatrixBipartite) },
+                onMatrixBipartite = {
+                    navHostController.navigate(Screen.DrawGraph.MatrixBipartite)
+                },
             )
         }
 

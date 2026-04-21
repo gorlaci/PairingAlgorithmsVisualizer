@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.input.TextFieldLineLimits
@@ -53,7 +53,7 @@ fun StepSelector(
         }
 
         Card(
-            modifier = Modifier.padding(10.dp, 0.dp)
+            modifier = Modifier.padding(10.dp, 0.dp),
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
@@ -62,7 +62,7 @@ fun StepSelector(
                     state = textFieldState,
                     modifier = Modifier.width(50.dp).height(40.dp),
                     contentPadding = PaddingValues(8.dp, 0.dp),
-                    lineLimits = TextFieldLineLimits.SingleLine
+                    lineLimits = TextFieldLineLimits.SingleLine,
                 )
                 Text(
                     text = " / $maxValue",
@@ -83,8 +83,6 @@ fun StepSelector(
 @Preview
 @Composable
 fun StepSelectorPreview() {
-
-
     StepSelector(
         value = 125,
         maxValue = 125,

@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Card

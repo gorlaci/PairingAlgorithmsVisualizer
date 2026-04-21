@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui.legend
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Row
@@ -16,9 +16,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 @Composable
 fun Legend(
     legends: Map<String, Any>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-
     LazyColumn(
         modifier = modifier,
     ) {
@@ -102,14 +101,14 @@ fun EdmondsLegend(modifier: Modifier = Modifier) {
                 highlight = GRAY,
             ),
             "D(G)-ben lévő csúcs" to GraphicalVertex(
-                innerColor = LIGHT_BLUE
+                innerColor = LIGHT_BLUE,
             ),
             "A(G)-ben lévő csúcs" to GraphicalVertex(
-                innerColor = LIGHT_PINK
+                innerColor = LIGHT_PINK,
             ),
             "C(G)-ben lévő csúcs" to GraphicalVertex(
                 innerColor = LIGHT_GREEN,
-            )
+            ),
         )
     Legend(
         legends = legends,
@@ -121,10 +120,10 @@ fun EdmondsLegend(modifier: Modifier = Modifier) {
 fun AugmentingLegend(modifier: Modifier = Modifier) {
     val legends = mapOf(
         "Az A osztályba tartozó csúcs" to GraphicalVertex(
-            innerColor = LIGHT_BLUE
+            innerColor = LIGHT_BLUE,
         ),
         "A B osztályba tartozó csúcs" to GraphicalVertex(
-            innerColor = LIGHT_RED
+            innerColor = LIGHT_RED,
         ),
         "Vizsgálandó A-beli csúcs" to GraphicalVertex(
             innerColor = LIGHT_BLUE,
@@ -135,10 +134,10 @@ fun AugmentingLegend(modifier: Modifier = Modifier) {
             highlight = BLUE,
         ),
         "Aktuálisan vizsgált csúcs" to GraphicalVertex(
-            highlight = LIGHT_ORANGE
+            highlight = LIGHT_ORANGE,
         ),
         "Már vizsgált csúcs" to GraphicalVertex(
-            highlight = GRAY
+            highlight = GRAY,
         ),
         "Párosításbeli él" to GraphicalEdge(
             startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
@@ -157,7 +156,7 @@ fun AugmentingLegend(modifier: Modifier = Modifier) {
         ),
         "Lefogó ponthalmaz" to GraphicalVertex(
             highlight = DARK_GREEN,
-        )
+        ),
     )
     Legend(legends = legends, modifier = modifier)
 }

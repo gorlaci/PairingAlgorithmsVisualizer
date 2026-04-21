@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui.legend
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
@@ -24,14 +24,14 @@ fun OpenableLegend(
     val legendExpanded = remember { mutableStateOf(false) }
 
     Column(
-        modifier = modifier
+        modifier = modifier,
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text("Jelmagyarázat")
             IconButton(
-                onClick = { legendExpanded.value = !legendExpanded.value }
+                onClick = { legendExpanded.value = !legendExpanded.value },
             ) {
                 Icon(Icons.Default.ArrowDropDown, null)
             }

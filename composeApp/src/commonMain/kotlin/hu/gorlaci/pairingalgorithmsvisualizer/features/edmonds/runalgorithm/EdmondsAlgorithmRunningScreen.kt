@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.run_algorithm
+package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.runalgorithm
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -10,9 +10,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.AlgorithmRunningScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.EdmondsLegend
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.OpenableLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.EdmondsLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.run_algorithm_screen
@@ -24,7 +24,12 @@ fun EdmondsAlgorithmRunningScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val viewModel = viewModel { EdmondsAlgorithmRunningScreenViewModel(graphStorage, coroutineScope.coroutineContext) }
+    val viewModel = viewModel {
+        EdmondsAlgorithmRunningScreenViewModel(
+            graphStorage,
+            coroutineScope.coroutineContext,
+        )
+    }
 
     val selectedGraph by viewModel.currentGraph
 
@@ -53,10 +58,10 @@ fun EdmondsAlgorithmRunningScreen(
         modifier = Modifier.fillMaxSize(),
         legend = {
             OpenableLegend(
-                modifier = Modifier.fillMaxSize().weight(1f)
+                modifier = Modifier.fillMaxSize().weight(1f),
             ) {
                 EdmondsLegend(
-                    modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f)
+                    modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f),
                 )
             }
         },

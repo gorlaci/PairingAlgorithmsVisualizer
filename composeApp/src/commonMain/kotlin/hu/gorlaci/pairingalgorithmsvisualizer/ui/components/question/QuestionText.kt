@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text

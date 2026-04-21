@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer

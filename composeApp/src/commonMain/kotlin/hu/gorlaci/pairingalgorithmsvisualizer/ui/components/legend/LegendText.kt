@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui.legend
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -10,6 +10,6 @@ import androidx.compose.ui.unit.dp
 fun LegendText(text: String) {
     Text(
         text = text,
-        modifier = Modifier.padding(10.dp)
+        modifier = Modifier.padding(10.dp),
     )
 }

@@ -16,9 +16,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.quiz.QuestionMode.*
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsEdgeType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.EdmondsLegend
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.legend.OpenableLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.AnswerCard
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphSelectionDropdown
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.EdmondsLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.Question
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.QuestionText
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.*
 
@@ -84,7 +89,7 @@ fun EdmondsQuizScreen(
                     modifier = Modifier.fillMaxSize().weight(1f),
                 ) {
                     EdmondsLegend(
-                        modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f)
+                        modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f),
                     )
                 }
 

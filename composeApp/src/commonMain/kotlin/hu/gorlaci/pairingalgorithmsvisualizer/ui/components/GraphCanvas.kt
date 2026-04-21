@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.runtime.Composable
@@ -11,6 +11,8 @@ import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.unit.toSize
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 
 @Composable
@@ -52,7 +54,10 @@ fun GraphCanvas(
                 measuredText,
                 topLeft =
                     vertex.transformCoordinates(centerX, centerY) -
-                            Offset(measuredText.size.toSize().width / 2f, measuredText.size.toSize().height / 2f),
+                        Offset(
+                            measuredText.size.toSize().width / 2f,
+                            measuredText.size.toSize().height / 2f,
+                        ),
             )
         }
     }

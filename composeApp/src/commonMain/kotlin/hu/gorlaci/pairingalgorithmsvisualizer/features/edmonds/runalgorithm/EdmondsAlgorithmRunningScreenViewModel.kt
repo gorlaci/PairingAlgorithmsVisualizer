@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.run_algorithm
+package hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.runalgorithm
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
@@ -9,9 +9,9 @@ import androidx.lifecycle.viewModelScope
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.coroutines.CoroutineContext
 
 open class EdmondsAlgorithmRunningScreenViewModel(
     protected val graphStorage: GraphStorage,
@@ -22,7 +22,9 @@ open class EdmondsAlgorithmRunningScreenViewModel(
     val currentGraph = mutableStateOf(graphList[selectedGraphIndex])
 
     protected val steps = mutableStateOf(
-        listOf<Pair<EdmondsGraph, EdmondsStepType>>(currentGraph.value to EdmondsStepType.Nothing())
+        listOf<Pair<EdmondsGraph, EdmondsStepType>>(
+            currentGraph.value to EdmondsStepType.Nothing(),
+        ),
     )
     val step = mutableStateOf(0)
 
@@ -85,7 +87,8 @@ open class EdmondsAlgorithmRunningScreenViewModel(
 
     protected fun setCurrentGraph() {
         currentGraph.value = steps.value[step.value].first
-        graphicalGraph.value = steps.value[step.value].first.toGraphicalGraph(steps.value[step.value].second)
+        graphicalGraph.value =
+            steps.value[step.value].first.toGraphicalGraph(steps.value[step.value].second)
     }
 
     open fun setButtons() {
@@ -120,7 +123,11 @@ open class EdmondsAlgorithmRunningScreenViewModel(
                             is EdmondsStepType.BlossomInAnimation -> {
                                 graphicalGraph.value =
                                     graphicalGraph.value
-                                        .animateBlossomVertices(stepType.blossomVertices, currentGraph.value, value)
+                                        .animateBlossomVertices(
+                                            stepType.blossomVertices,
+                                            currentGraph.value,
+                                            value,
+                                        )
                             }
 
                             is EdmondsStepType.BlossomOutAnimation -> {
@@ -129,7 +136,7 @@ open class EdmondsAlgorithmRunningScreenViewModel(
                                         .animateBlossomVertices(
                                             stepType.blossomVertices,
                                             currentGraph.value,
-                                            1f - value
+                                            1f - value,
                                         )
                             }
 

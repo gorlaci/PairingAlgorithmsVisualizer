@@ -16,8 +16,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.GraphCanvas
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.SimpleTopAppbar
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.*
 

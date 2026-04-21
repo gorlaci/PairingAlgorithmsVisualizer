@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -31,7 +31,7 @@ fun GraphDisplayModeSwitch(
             SegmentedButton(
                 shape = SegmentedButtonDefaults.itemShape(
                     0,
-                    3
+                    3,
                 ),
                 selected = matrixMode == GraphDisplayMode.BOTH,
                 onClick = { onModeChange(GraphDisplayMode.BOTH) },
@@ -40,22 +40,21 @@ fun GraphDisplayModeSwitch(
                         Icon(
                             painterResource(Res.drawable.graph_7_24px),
                             contentDescription = null,
-                            modifier = Modifier.size(36.dp)
+                            modifier = Modifier.size(36.dp),
                         )
                         Icon(
                             Icons.Default.GridOn,
                             contentDescription = null,
-                            modifier = Modifier.size(36.dp)
+                            modifier = Modifier.size(36.dp),
                         )
-
                     }
                 },
-                icon = {}
+                icon = {},
             )
             SegmentedButton(
                 shape = SegmentedButtonDefaults.itemShape(
                     1,
-                    3
+                    3,
                 ),
                 selected = matrixMode == GraphDisplayMode.GRAPHICAL,
                 onClick = { onModeChange(GraphDisplayMode.GRAPHICAL) },
@@ -63,15 +62,15 @@ fun GraphDisplayModeSwitch(
                     Icon(
                         painterResource(Res.drawable.graph_7_24px),
                         contentDescription = null,
-                        modifier = Modifier.size(36.dp)
+                        modifier = Modifier.size(36.dp),
                     )
                 },
-                icon = {}
+                icon = {},
             )
             SegmentedButton(
                 shape = SegmentedButtonDefaults.itemShape(
                     2,
-                    3
+                    3,
                 ),
                 selected = matrixMode == GraphDisplayMode.MATRIX,
                 onClick = { onModeChange(GraphDisplayMode.MATRIX) },
@@ -79,10 +78,10 @@ fun GraphDisplayModeSwitch(
                     Icon(
                         Icons.Default.GridOn,
                         contentDescription = null,
-                        modifier = Modifier.size(36.dp)
+                        modifier = Modifier.size(36.dp),
                     )
                 },
-                icon = {}
+                icon = {},
             )
         }
     }
