@@ -184,7 +184,7 @@ class EdmondsGraph(
             activeEdge = edge
             saveStep(
                 EdmondsStepType.SelectedEdge(
-                    "Vizsgáljuk a ${edge.fromVertex.id}-${edge.toVertex.id} élt",
+                    "Vizsgáljuk a ${edge.fromVertex.label}-${edge.toVertex.label} élt",
                     edge,
                     edge.getType(),
                 ),
@@ -364,7 +364,7 @@ class EdmondsGraph(
     private fun deconstructBlossom(blossomVertex: BlossomVertex) { // O(m*n' + m'*n) = O(m*n)
         saveStep(
             EdmondsStepType.DeconstructBlossom(
-                "Bontsuk ki a ${blossomVertex.id} kelyhet!",
+                "Bontsuk ki a ${blossomVertex.label} kelyhet!",
                 blossomVertex,
             ),
         )

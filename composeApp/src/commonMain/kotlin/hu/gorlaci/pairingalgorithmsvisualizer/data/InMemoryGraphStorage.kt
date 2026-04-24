@@ -60,7 +60,7 @@ class InMemoryGraphStorage : GraphStorage {
                         "H" to Pair(0.0, -200.0),
                         "I" to Pair(100.0, -200.0),
                     ),
-                name = "Example Graph 1",
+                name = "Példa Gráf 1",
                 newVertex = { Vertex(it) },
                 newEdge = { from, to -> Edge(from, to) },
             )
@@ -106,7 +106,7 @@ class InMemoryGraphStorage : GraphStorage {
                         "F" to Pair(0.0, -150.0),
                         "G" to Pair(100.0, -150.0),
                     ),
-                name = "Example Graph 2",
+                name = "Példa Gráf 2",
                 newVertex = { Vertex(it) },
                 newEdge = { from, to -> Edge(from, to) },
             )
@@ -150,7 +150,7 @@ class InMemoryGraphStorage : GraphStorage {
                     "F" to Pair(50.0, 100.0),
                     "G" to Pair(150.0, 100.0),
                 ),
-            name = "Example Graph 3",
+            name = "Példa Páros Gráf 1",
             newVertex = { Vertex(it) },
             newEdge = { from, to -> Edge(from, to) },
         )
@@ -170,7 +170,7 @@ class InMemoryGraphStorage : GraphStorage {
             coordinates[it.toString()] = Pair(-300.0 + shiftedIndex * (600.0 / 9), 100.0)
         }
         val graph = Graph(
-            name = "Example Graph 4",
+            name = "Példa Páros Gráf 2",
             vertices = vertices,
             edges = mutableSetOf(),
             idCoordinatesMap = coordinates,

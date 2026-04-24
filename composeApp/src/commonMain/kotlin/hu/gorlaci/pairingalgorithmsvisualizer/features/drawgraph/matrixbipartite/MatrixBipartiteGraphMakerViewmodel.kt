@@ -15,7 +15,7 @@ class MatrixBipartiteGraphMakerViewmodel(
 
     val adjacencyMatrix = mutableStateOf(List(3) { List(3) { false } })
 
-    val name = mutableStateOf("Saját páros gráf")
+    val name = mutableStateOf("Saját Páros Gráf")
 
     fun setRows(newString: String) {
         val newValue = try {
@@ -115,6 +115,6 @@ class MatrixBipartiteGraphMakerViewmodel(
         rows.value = 3
         columns.value = 3
         adjacencyMatrix.value = List(3) { List(3) { false } }
-        name.value = "Saját páros gráf"
+        name.value = "Saját Páros Gráf"
     }
 }

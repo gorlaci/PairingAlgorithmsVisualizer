@@ -13,7 +13,7 @@ class GraphDrawingScreenViewmodel(
 ) : ViewModel() {
     private var graph =
         Graph(
-            name = "Custom Graph",
+            name = "Saját Gráf",
             newVertex = { Vertex(it) },
             newEdge = { from, to -> Edge(from, to) },
         )
@@ -73,9 +73,14 @@ class GraphDrawingScreenViewmodel(
                     } else {
                         if (firstVertexForEdge != clickedVertex) {
                             val clickedEdge = graph.edges.find {
-                                it.fromVertex == clickedVertex && it.toVertex == firstVertexForEdge ||
-                                    it.toVertex == clickedVertex &&
-                                    it.fromVertex == firstVertexForEdge
+                                (
+                                    it.fromVertex == clickedVertex &&
+                                        it.toVertex == firstVertexForEdge
+                                    ) ||
+                                    (
+                                        it.toVertex == clickedVertex &&
+                                            it.fromVertex == firstVertexForEdge
+                                        )
                             }
 
                             if (clickedEdge != null) {
@@ -123,17 +128,17 @@ class GraphDrawingScreenViewmodel(
             graphStorage.addGraph(graph)
             graph =
                 Graph(
-                    name = "Custom Graph",
+                    name = "Saját Gráf",
                     newVertex = { Vertex(it) },
                     newEdge = { from, to -> Edge(from, to) },
                 )
             graphicalGraph.value = graph.toGraphicalGraph()
-            graphName.value = "Custom Graph"
+            graphName.value = "Saját Gráf"
             nextID = "A"
         }
     }
 
-    val graphName = mutableStateOf("Custom Graph")
+    val graphName = mutableStateOf("Saját Gráf")
 
     fun onNameChange(newName: String) {
         graphName.value = newName
