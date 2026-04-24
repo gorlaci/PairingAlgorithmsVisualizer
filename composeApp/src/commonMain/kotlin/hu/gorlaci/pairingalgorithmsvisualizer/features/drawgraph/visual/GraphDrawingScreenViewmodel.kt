@@ -20,15 +20,26 @@ class GraphDrawingScreenViewmodel(
 
     val graphicalGraph = mutableStateOf(graph.toGraphicalGraph())
 
-    private var nextID = 'A'
+    private var nextID = "A"
+
+    private fun increaseID(index: Int) {
+        if (index == -1) {
+            nextID = "A$nextID"
+        } else if (nextID[index] == 'Z') {
+            nextID = nextID.substring(0, index) + "A" + nextID.substring(index + 1)
+            increaseID(index - 1)
+        } else {
+            nextID = nextID.substring(0, index) + (nextID[index] + 1) + nextID.substring(index + 1)
+        }
+    }
 
     private fun addVertex(
         x: Double,
         y: Double,
     ) {
-        graph.vertices.add(Vertex("$nextID"))
+        graph.vertices.add(Vertex(nextID))
         graph.idCoordinatesMap[nextID] = Pair(x, y)
-        nextID++
+        increaseID(nextID.length - 1)
         graphicalGraph.value = graph.toGraphicalGraph()
     }
 
@@ -57,19 +68,20 @@ class GraphDrawingScreenViewmodel(
                 if (clickedVertex != null) {
                     if (firstVertexForEdge == null) {
                         firstVertexForEdge = clickedVertex
-                        graphicalGraph.value = graphicalGraph.value.changeInnerColor(clickedVertex, LIGHT_ORANGE)
+                        graphicalGraph.value =
+                            graphicalGraph.value.changeInnerColor(clickedVertex, LIGHT_ORANGE)
                     } else {
                         if (firstVertexForEdge != clickedVertex) {
-
                             val clickedEdge = graph.edges.find {
                                 it.fromVertex == clickedVertex && it.toVertex == firstVertexForEdge ||
-                                        it.toVertex == clickedVertex && it.fromVertex == firstVertexForEdge
+                                    it.toVertex == clickedVertex &&
+                                    it.fromVertex == firstVertexForEdge
                             }
 
                             if (clickedEdge != null) {
                                 graph.edges.remove(clickedEdge)
                             } else {
-                                graph.addEdge(firstVertexForEdge!!.id, clickedVertex.id)
+                                graph.addEdge(firstVertexForEdge!!.label, clickedVertex.label)
                             }
                         }
                         firstVertexForEdge = null
@@ -117,7 +129,7 @@ class GraphDrawingScreenViewmodel(
                 )
             graphicalGraph.value = graph.toGraphicalGraph()
             graphName.value = "Custom Graph"
-            nextID = 'A'
+            nextID = "A"
         }
     }
 

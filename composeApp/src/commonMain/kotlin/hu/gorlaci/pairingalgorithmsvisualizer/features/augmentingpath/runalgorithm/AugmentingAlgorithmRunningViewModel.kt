@@ -103,8 +103,8 @@ class AugmentingAlgorithmRunningViewModel(
 
     private fun getClasses() {
         val graph = selectedGraph.value
-        class1Ids.value = graph.class1.map { it.id }
-        class2Ids.value = graph.class2.map { it.id }
+        class1Ids.value = graph.class1.map { it.label }
+        class2Ids.value = graph.class2.map { it.label }
     }
 
     fun onRun() {

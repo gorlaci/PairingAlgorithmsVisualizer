@@ -3,8 +3,10 @@ package hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.matrixbipartit
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -13,11 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.EmptyCell
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.HeartCell
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.IntInput
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
 
 @Composable
 fun MatrixBipartiteGraphMakerScreen(
@@ -29,6 +27,8 @@ fun MatrixBipartiteGraphMakerScreen(
     val rows by viewmodel.rows
     val columns by viewmodel.columns
     val adjacencyMatrix by viewmodel.adjacencyMatrix
+
+    val name by viewmodel.name
 
     Scaffold(
         topBar = {
@@ -42,6 +42,24 @@ fun MatrixBipartiteGraphMakerScreen(
         Column(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
         ) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                TextField(
+                    value = name,
+                    onValueChange = viewmodel::onNameChange,
+                    modifier = Modifier.padding(20.dp)
+                )
+
+                Button(
+                    onClick = viewmodel::saveGraph,
+                    modifier = Modifier.padding(20.dp),
+                ) {
+                    Text(text = "Mentés")
+                }
+            }
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.padding(30.dp, 15.dp),

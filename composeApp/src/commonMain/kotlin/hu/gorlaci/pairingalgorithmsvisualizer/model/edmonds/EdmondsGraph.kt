@@ -18,7 +18,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 class EdmondsGraph(
     vertices: MutableSet<EdmondsVertex> = mutableSetOf(),
     edges: MutableSet<EdmondsEdge> = mutableSetOf(),
-    idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf(),
+    idCoordinatesMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
     name: String = "",
     private var activeEdge: EdmondsEdge? = null,
     private val augmentingPathEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
@@ -73,7 +73,8 @@ class EdmondsGraph(
                 .map { edge ->
                     val newFromVertex = vertexMap[edge.fromVertex]!!
                     val newToVertex = vertexMap[edge.toVertex]!!
-                    val newEdge = EdmondsEdge(newFromVertex, newToVertex).also { it.visited = edge.visited }
+                    val newEdge =
+                        EdmondsEdge(newFromVertex, newToVertex).also { it.visited = edge.visited }
                     if (edge == activeEdge) {
                         newActiveEdge = newEdge
                     }
@@ -143,7 +144,6 @@ class EdmondsGraph(
         deconstructAllBlossoms()
 
         saveStep("Megkaptuk a gráf DAC felbontását")
-
     }
 
     private fun reset() { // O(n+m)
@@ -157,11 +157,14 @@ class EdmondsGraph(
     }
 
     private fun unvisitEdges(newOuterVertex: EdmondsVertex) {
-        val edgesOnVertex = edges.filter { it.fromVertex == newOuterVertex || it.toVertex == newOuterVertex }
-            .filter {
-                !(it.fromVertex == newOuterVertex && it.toVertex == newOuterVertex.pair ||
-                        it.fromVertex == newOuterVertex.pair && it.toVertex == newOuterVertex)
-            }
+        val edgesOnVertex =
+            edges.filter { it.fromVertex == newOuterVertex || it.toVertex == newOuterVertex }
+                .filter {
+                    !(
+                        (it.fromVertex == newOuterVertex && it.toVertex == newOuterVertex.pair) ||
+                            (it.fromVertex == newOuterVertex.pair && it.toVertex == newOuterVertex)
+                        )
+                }
         for (edge in edgesOnVertex) {
             edge.visited = false
         }
@@ -170,7 +173,8 @@ class EdmondsGraph(
     private fun buildForest() { // O(m^2*n^2)
         reset() // O(m+n)
         for (vertex in vertices) { // O(n)
-            vertex.type = if (vertex.pair == null) EdmondsVertexType.ROOT else EdmondsVertexType.CLEARING
+            vertex.type =
+                if (vertex.pair == null) EdmondsVertexType.ROOT else EdmondsVertexType.CLEARING
         }
         saveStep(EdmondsStepType.Nothing("Megépítjük a 0 élű alternáló erdőt"))
 
@@ -226,13 +230,17 @@ class EdmondsGraph(
                     return
                 }
             }
-            if (edge.fromVertex.type.isOuter() && edge.toVertex.type == EdmondsVertexType.CLEARING) { // O(m)
+            if (edge.fromVertex.type.isOuter() &&
+                edge.toVertex.type == EdmondsVertexType.CLEARING
+            ) { // O(m)
                 extendForest(edge.fromVertex, edge.toVertex) // O(1)
                 edge = edges.find { !it.visited } // O(m)
                 activeEdge = null
                 continue
             }
-            if (edge.fromVertex.type == EdmondsVertexType.CLEARING && edge.toVertex.type.isOuter()) { // O(m)
+            if (edge.fromVertex.type == EdmondsVertexType.CLEARING &&
+                edge.toVertex.type.isOuter()
+            ) { // O(m)
                 extendForest(edge.toVertex, edge.fromVertex) // O(1)
                 edge = edges.find { !it.visited } // O(m)
                 activeEdge = null
@@ -289,9 +297,12 @@ class EdmondsGraph(
         val blossomVertices = getBlossomVertices(vertexA, vertexB, commonRoot) // O(n)
         val blossomVerticesSet = blossomVertices.toSet() // O(n)
 
-        val blossomId = blossomVertices.map { it.id }.sorted().joinToString("") // O(n)
+        val blossomId = blossomVertices.map { it.label }.sorted().joinToString("") // O(n)
         val blossomEdges =
-            edges.filter { it.fromVertex in blossomVerticesSet || it.toVertex in blossomVerticesSet }.toSet() // O(m)
+            edges.filter {
+                it.fromVertex in blossomVerticesSet || it.toVertex in blossomVerticesSet
+            }
+                .toSet() // O(m)
 
         val blossomVertex =
             BlossomVertex(
@@ -306,10 +317,10 @@ class EdmondsGraph(
         val edgesCopy = edges.toList()
 
         for (edge in edgesCopy) { // O(m)
-            if (edge.fromVertex in blossomVerticesSet && edge.toVertex !in blossomVerticesSet) { // O(1)
+            if (edge.fromVertex in blossomVerticesSet && edge.toVertex !in blossomVerticesSet) {
                 edges.add(EdmondsEdge(blossomVertex, edge.toVertex))
             }
-            if (edge.fromVertex !in blossomVerticesSet && edge.toVertex in blossomVerticesSet) { // O(1)
+            if (edge.fromVertex !in blossomVerticesSet && edge.toVertex in blossomVerticesSet) {
                 edges.add(EdmondsEdge(edge.fromVertex, blossomVertex))
             }
         }
@@ -351,7 +362,12 @@ class EdmondsGraph(
     }
 
     private fun deconstructBlossom(blossomVertex: BlossomVertex) { // O(m*n' + m'*n) = O(m*n)
-        saveStep(EdmondsStepType.DeconstructBlossom("Bontsuk ki a ${blossomVertex.id} kelyhet!", blossomVertex))
+        saveStep(
+            EdmondsStepType.DeconstructBlossom(
+                "Bontsuk ki a ${blossomVertex.id} kelyhet!",
+                blossomVertex,
+            ),
+        )
 
         val blossomVertices = blossomVertex.previousStructureVertices
 
@@ -363,13 +379,13 @@ class EdmondsGraph(
                 if (edge.fromVertex in vertices) {
                     edge.fromVertex
                 } else {
-                    vertices.find { it.id.contains(edge.fromVertex.id) }!! // O(n)
+                    vertices.find { it.id.contains(edge.fromVertex.label) }!! // O(n)
                 }
             val toVertex =
                 if (edge.toVertex in vertices) {
                     edge.toVertex
                 } else {
-                    vertices.find { it.id.contains(edge.toVertex.id) }!! // O(n)
+                    vertices.find { it.id.contains(edge.toVertex.label) }!! // O(n)
                 }
             edges.add(EdmondsEdge(fromVertex, toVertex)) // O(1)
         }
@@ -379,8 +395,8 @@ class EdmondsGraph(
             val edge =
                 edges.find {
                     // O(m)
-                    it.fromVertex == unpairedVertex && it.toVertex == blossomVertex.pair ||
-                            it.fromVertex == blossomVertex.pair && it.toVertex == unpairedVertex.pair
+                    (it.fromVertex == unpairedVertex && it.toVertex == blossomVertex.pair) ||
+                        (it.fromVertex == blossomVertex.pair && it.toVertex == unpairedVertex.pair)
                 }
             if (edge != null) {
                 edge.fromVertex.pair = edge.toVertex
@@ -389,17 +405,25 @@ class EdmondsGraph(
                 val incomingEdge =
                     edges.first {
                         // O(m*n')
-                        it.fromVertex == blossomVertex.pair && it.toVertex in blossomVertices ||
-                                it.toVertex == blossomVertex.pair && it.fromVertex in blossomVertices
+                        (it.fromVertex == blossomVertex.pair && it.toVertex in blossomVertices) ||
+                            (it.toVertex == blossomVertex.pair && it.fromVertex in blossomVertices)
                     }
                 incomingEdge.fromVertex.pair = incomingEdge.toVertex
                 incomingEdge.toVertex.pair = incomingEdge.fromVertex
                 val pairedVertex =
-                    if (incomingEdge.fromVertex in blossomVertices) incomingEdge.fromVertex else incomingEdge.toVertex // O(n')
+                    if (incomingEdge.fromVertex in
+                        blossomVertices
+                    ) {
+                        incomingEdge.fromVertex
+                    } else {
+                        incomingEdge.toVertex // O(n')
+                    }
                 val indexOfPairedVertex = blossomVertices.indexOf(pairedVertex) + 1
                 for (i in 0..<blossomVertices.size / 2) { // O(n')
-                    val vertexA = blossomVertices[(indexOfPairedVertex + i * 2) % blossomVertices.size]
-                    val vertexB = blossomVertices[(indexOfPairedVertex + i * 2 + 1) % blossomVertices.size]
+                    val vertexA =
+                        blossomVertices[(indexOfPairedVertex + i * 2) % blossomVertices.size]
+                    val vertexB =
+                        blossomVertices[(indexOfPairedVertex + i * 2 + 1) % blossomVertices.size]
                     vertexA.pair = vertexB
                     vertexB.pair = vertexA
                 }
@@ -478,7 +502,10 @@ class EdmondsGraph(
         markBranchEdges(vertexA)
         markBranchEdges(vertexB)
         val edge =
-            edges.find { (it.fromVertex == vertexA && it.toVertex == vertexB) || (it.fromVertex == vertexB && it.toVertex == vertexA) }
+            edges.find {
+                (it.fromVertex == vertexA && it.toVertex == vertexB) ||
+                    (it.fromVertex == vertexB && it.toVertex == vertexA)
+            }
         if (edge != null) {
             augmentingPathEdges.add(edge)
         }
@@ -491,7 +518,7 @@ class EdmondsGraph(
             val edge =
                 edges.find {
                     (it.fromVertex == currentVertex && it.toVertex == parent) ||
-                            (it.fromVertex == parent && it.toVertex == currentVertex)
+                        (it.fromVertex == parent && it.toVertex == currentVertex)
                 }
             if (edge != null) {
                 augmentingPathEdges.add(edge)
@@ -510,7 +537,10 @@ class EdmondsGraph(
             val vertex = blossomVertices[i]
             val nextVertex = blossomVertices[(i + 1) % blossomVertices.size]
             edges
-                .filter { (it.fromVertex == vertex && it.toVertex == nextVertex) || (it.fromVertex == nextVertex && it.toVertex == vertex) }
+                .filter {
+                    (it.fromVertex == vertex && it.toVertex == nextVertex) ||
+                        (it.fromVertex == nextVertex && it.toVertex == vertex)
+                }
                 .forEach { edge ->
                     blossomEdges.add(edge)
                 }
@@ -558,7 +588,7 @@ class EdmondsGraph(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
-                            vertex.id,
+                            vertex.label,
                             highlightType = HighlightType.DOUBLE_CIRCLE,
                             highlight = LIGHT_GREEN,
                             innerColor = innerColor,
@@ -571,7 +601,7 @@ class EdmondsGraph(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
-                            vertex.id,
+                            vertex.label,
                             highlightType = HighlightType.SQUARE,
                             highlight = LIGHT_GREEN,
                             innerColor = innerColor,
@@ -584,7 +614,7 @@ class EdmondsGraph(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
-                            vertex.id,
+                            vertex.label,
                             highlightType = HighlightType.CIRCLE,
                             highlight = LIGHT_GREEN,
                             innerColor = innerColor,
@@ -597,7 +627,7 @@ class EdmondsGraph(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
-                            vertex.id,
+                            vertex.label,
                             innerColor = innerColor,
                         ),
                     )
@@ -608,11 +638,11 @@ class EdmondsGraph(
         val graphicalEdges = mutableListOf<GraphicalEdge>()
 
         for (edge in edges) {
-            val startGraphicalVertex = graphicalVertices.find { it.label == edge.fromVertex.id }
+            val startGraphicalVertex = graphicalVertices.find { it.label == edge.fromVertex.label }
             if (startGraphicalVertex == null) {
                 throw IllegalStateException("Vertex with id ${edge.fromVertex.id} not found")
             }
-            val endGraphicalVertex = graphicalVertices.find { it.label == edge.toVertex.id }
+            val endGraphicalVertex = graphicalVertices.find { it.label == edge.toVertex.label }
             if (endGraphicalVertex == null) {
                 throw IllegalStateException("Vertex with id ${edge.toVertex.id} not found")
             }

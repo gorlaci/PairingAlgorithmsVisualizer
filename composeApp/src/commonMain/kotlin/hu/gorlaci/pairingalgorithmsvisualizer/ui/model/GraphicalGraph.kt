@@ -14,9 +14,9 @@ data class GraphicalGraph(
 ) {
     fun changeInnerColor(
         vertex: Vertex,
-        color: Color
+        color: Color,
     ): GraphicalGraph {
-        val graphicalVertex = graphicalVertices.find { it.label == vertex.id }
+        val graphicalVertex = graphicalVertices.find { it.label == vertex.label }
         if (graphicalVertex == null) {
             return this
         }
@@ -31,8 +31,8 @@ data class GraphicalGraph(
     ): GraphicalGraph {
         val graphicalEdge =
             graphicalEdges.find {
-                it.startGraphicalVertex.label == edge.fromVertex.id &&
-                        it.endGraphicalVertex.label == edge.toVertex.id
+                it.startGraphicalVertex.label == edge.fromVertex.label &&
+                    it.endGraphicalVertex.label == edge.toVertex.label
             }
         if (graphicalEdge == null) {
             return this
@@ -61,26 +61,28 @@ data class GraphicalGraph(
         originalGraph: EdmondsGraph,
         animationProgress: Float,
     ): GraphicalGraph {
-
         val blossomX =
-            blossomVertices.sumOf { originalGraph.getVertexCoordinates(it).first * it.id.length } / blossomVertices.sumOf { it.id.length }
+            blossomVertices.sumOf { originalGraph.getVertexCoordinates(it).first * it.id.size } /
+                blossomVertices.sumOf { it.id.size }
         val blossomY =
-            blossomVertices.sumOf { originalGraph.getVertexCoordinates(it).second * it.id.length } / blossomVertices.sumOf { it.id.length }
+            blossomVertices.sumOf { originalGraph.getVertexCoordinates(it).second * it.id.size } /
+                blossomVertices.sumOf { it.id.size }
 
         val newGraphicalVertices = mutableMapOf<GraphicalVertex, GraphicalVertex>()
         for (vertex in blossomVertices) {
-            val graphicalVertex = graphicalVertices.find { it.label == vertex.id } ?: continue
+            val graphicalVertex = graphicalVertices.find { it.label == vertex.label } ?: continue
             val newX =
                 originalGraph.getVertexCoordinates(vertex).first +
-                        (blossomX - originalGraph.getVertexCoordinates(vertex).first) * animationProgress
+                    (blossomX - originalGraph.getVertexCoordinates(vertex).first) *
+                    animationProgress
             val newY =
                 originalGraph.getVertexCoordinates(vertex).second + (
-                        blossomY -
-                                originalGraph
-                                    .getVertexCoordinates(
-                                        vertex,
-                                    ).second
-                        ) * animationProgress
+                    blossomY -
+                        originalGraph
+                            .getVertexCoordinates(
+                                vertex,
+                            ).second
+                    ) * animationProgress
             val newGraphicalVertex =
                 graphicalVertex.copy(
                     x = newX,

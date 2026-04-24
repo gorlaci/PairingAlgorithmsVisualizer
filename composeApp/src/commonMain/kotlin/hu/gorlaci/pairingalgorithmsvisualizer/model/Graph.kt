@@ -8,7 +8,7 @@ open class Graph<VertexType : Vertex, EdgeType : Edge>(
     var name: String = "",
     open val vertices: MutableSet<VertexType> = mutableSetOf(),
     open val edges: MutableSet<EdgeType> = mutableSetOf(),
-    val idCoordinatesMap: MutableMap<Char, Pair<Double, Double>> = mutableMapOf(),
+    val idCoordinatesMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
     private val newVertex: (String) -> VertexType,
     private val newEdge: (VertexType, VertexType) -> EdgeType,
 ) {
@@ -29,9 +29,10 @@ open class Graph<VertexType : Vertex, EdgeType : Edge>(
                     unvisited.remove(current)
                     val currentColor = colorMap[current] ?: continue
                     val neighbours =
-                        edges.filter { it.fromVertex == current && it.toVertex in unvisited }.map { it.toVertex } +
-                                edges.filter { it.toVertex == current && it.fromVertex in unvisited }
-                                    .map { it.fromVertex }
+                        edges.filter { it.fromVertex == current && it.toVertex in unvisited }
+                            .map { it.toVertex } +
+                            edges.filter { it.toVertex == current && it.fromVertex in unvisited }
+                                .map { it.fromVertex }
                     for (neighbour in neighbours) {
                         if (neighbour in colorMap) {
                             if (colorMap[neighbour] == currentColor) {
@@ -47,30 +48,28 @@ open class Graph<VertexType : Vertex, EdgeType : Edge>(
             return true
         }
 
-    fun getVertexCoordinates(vertex: Vertex): Pair<Double, Double> =
-        Pair(
-            vertex.id.map { char ->
-                idCoordinatesMap[char]?.first ?: 0.0
-            }.sum() / vertex.id.length,
-            vertex.id.map { char ->
-                idCoordinatesMap[char]?.second ?: 0.0
-            }.sum() / vertex.id.length
-        )
+    fun getVertexCoordinates(vertex: Vertex): Pair<Double, Double> = Pair(
+        vertex.id.sumOf { str ->
+            idCoordinatesMap[str]?.first ?: 0.0
+        } / vertex.id.size,
+        vertex.id.sumOf { str ->
+            idCoordinatesMap[str]?.second ?: 0.0
+        } / vertex.id.size,
+    )
 
     open fun toGraphicalGraph(stepType: StepType = StepType()): GraphicalGraph {
-
         val graphicalVertices = vertices.map { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
-                label = vertex.id,
+                label = vertex.label,
                 x = coordinates.first,
                 y = coordinates.second,
             )
         }
 
         val graphicalEdges = edges.map { edge ->
-            val fromVertex = graphicalVertices.first { it.label == edge.fromVertex.id }
-            val toVertex = graphicalVertices.first { it.label == edge.toVertex.id }
+            val fromVertex = graphicalVertices.first { it.label == edge.fromVertex.label }
+            val toVertex = graphicalVertices.first { it.label == edge.toVertex.label }
             GraphicalEdge(
                 startGraphicalVertex = fromVertex,
                 endGraphicalVertex = toVertex,
@@ -79,7 +78,7 @@ open class Graph<VertexType : Vertex, EdgeType : Edge>(
         return GraphicalGraph(
             graphicalVertices = graphicalVertices,
             graphicalEdges = graphicalEdges,
-            stepType = StepType("")
+            stepType = StepType(""),
         )
     }
 
@@ -103,8 +102,8 @@ open class Graph<VertexType : Vertex, EdgeType : Edge>(
         fromId: String,
         toId: String,
     ) {
-        val fromVertex = vertices.find { it.id == fromId }
-        val toVertex = vertices.find { it.id == toId }
+        val fromVertex = vertices.find { it.label == fromId }
+        val toVertex = vertices.find { it.label == toId }
         if (fromVertex != null && toVertex != null) {
             val newEdge = newEdge(fromVertex, toVertex)
             edges.add(newEdge)
