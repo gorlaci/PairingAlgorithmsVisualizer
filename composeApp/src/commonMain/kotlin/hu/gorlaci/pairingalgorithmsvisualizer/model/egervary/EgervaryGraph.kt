@@ -31,7 +31,6 @@ class EgervaryGraph(
 
     private fun saveStep(stepType: StepType = StepType()) {
         steps.add(toGraphicalGraph(stepType))
-        println(stepType.description)
     }
 
     private fun saveStep(description: String) {
@@ -127,6 +126,7 @@ class EgervaryGraph(
         while (augmentMade) {
             findAugmentingPath()
         }
+        saveStep("Nincs már javítóút")
     }
 
     val unpairedVertices = mutableSetOf<EgervaryVertex>()
@@ -197,12 +197,12 @@ class EgervaryGraph(
         while (current.parentEdge != null) {
             val parentEdge = current.parentEdge ?: break
             augmentingPathEdges.add(parentEdge)
-            current = parentEdge.otherEnd(vertex) ?: break
+            current = parentEdge.otherEnd(current) ?: break
         }
     }
 
     private fun augmentFromVertex(vertex: EgervaryVertex) {
-        var current: EgervaryVertex = vertex
+        var current = vertex
         while (current.parentEdge != null) {
             val parentEdge = current.parentEdge ?: break
             parentEdge.selected = !parentEdge.selected
@@ -221,10 +221,11 @@ class EgervaryGraph(
         augmentingPathEdges.clear()
     }
 
-    val filteredClass1 = mutableSetOf<EgervaryVertex>()
-    val filteredClass2 = mutableSetOf<EgervaryVertex>()
+    private val filteredClass1 = mutableSetOf<EgervaryVertex>()
+    private val filteredClass2 = mutableSetOf<EgervaryVertex>()
 
     private fun adjustLabels() {
+        saveStep("Nem találtunk javítóutat, módosítanunk kell a címkéket")
         saveStep("Módosítsuk a címkéket")
         val u = class1.filter { it.pair == null }
         val tComma = class2.filter { it in visitedVertices }
@@ -233,7 +234,7 @@ class EgervaryGraph(
         filteredClass1.addAll(u)
         filteredClass2.addAll(class2 - tComma.toSet())
 
-        saveStep("Vegyük a T+U és B - T' közti éleket")
+        saveStep("Vegyük a T+U és B-T' közti éleket")
 
         val delta =
             edges.filter {

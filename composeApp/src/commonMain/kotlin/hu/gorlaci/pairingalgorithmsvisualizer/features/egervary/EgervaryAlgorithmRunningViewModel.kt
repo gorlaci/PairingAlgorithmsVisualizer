@@ -15,6 +15,10 @@ class EgervaryAlgorithmRunningViewModel(
         graphList[selectedGraphIndex.value]
     }
 
+    init {
+        selectedGraph.value.createClasses()
+    }
+
     private val steps = mutableStateOf(listOf(selectedGraph.value.toGraphicalGraph()))
 
     val step = mutableStateOf(0)
@@ -63,6 +67,7 @@ class EgervaryAlgorithmRunningViewModel(
         steps.value = listOf(selectedGraph.value.toGraphicalGraph())
         step.value = 0
         runEnabled.value = true
+        selectedGraph.value.createClasses()
     }
 
     fun onRun() {
@@ -78,5 +83,13 @@ class EgervaryAlgorithmRunningViewModel(
         step.value = 0
 
         runEnabled.value = false
+    }
+
+    val class1names = derivedStateOf {
+        selectedGraph.value.class1.map { it.name }
+    }
+
+    val class2names = derivedStateOf {
+        selectedGraph.value.class2.map { it.name }
     }
 }

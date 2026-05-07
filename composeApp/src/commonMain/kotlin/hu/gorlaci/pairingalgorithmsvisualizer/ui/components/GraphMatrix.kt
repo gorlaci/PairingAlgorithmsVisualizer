@@ -34,31 +34,35 @@ fun GraphMatrix(
     LazyColumn(modifier = modifier.padding(10.dp)) {
         item {
             Row {
-                Spacer(modifier = Modifier.weight(1f))
+                Spacer(modifier = Modifier.width(40.dp))
                 for (vertex in class1) {
-                    VertexCell(vertex = vertex, modifier = Modifier.weight(1f))
+                    VertexCell(vertex = vertex, modifier = Modifier.width(40.dp))
                 }
             }
         }
         items(class2.size) { index ->
             val rowVertex = class2[index]
             Row {
-                VertexCell(vertex = rowVertex, modifier = Modifier.weight(1f))
+                VertexCell(vertex = rowVertex, modifier = Modifier.width(40.dp))
                 for (columnVertex in class1) {
                     val edge = graphicalGraph.graphicalEdges.find {
-                        it.startGraphicalVertex == rowVertex &&
-                            it.endGraphicalVertex == columnVertex ||
-                            it.startGraphicalVertex == columnVertex &&
-                            it.endGraphicalVertex == rowVertex
+                        (
+                            it.startGraphicalVertex == rowVertex &&
+                                it.endGraphicalVertex == columnVertex
+                            ) ||
+                            (
+                                it.startGraphicalVertex == columnVertex &&
+                                    it.endGraphicalVertex == rowVertex
+                                )
                     }
                     EdgeCell(
                         edge = edge,
                         modifier = if (rowVertex.highlight == DARK_GREEN ||
                             columnVertex.highlight == DARK_GREEN
                         ) {
-                            Modifier.weight(1f).background(DARK_GREEN)
+                            Modifier.width(40.dp).background(DARK_GREEN)
                         } else {
-                            Modifier.weight(1f)
+                            Modifier.width(40.dp)
                         },
                     )
                 }
@@ -124,8 +128,14 @@ fun EdgeCell(
 ) {
     if (edge == null) {
         TextCell(text = " ", modifier = modifier)
-    } else {
+    } else if (edge.label == null) {
         HeartCell(selected = edge.selected, modifier = modifier.background(edge.highlight))
+    } else {
+        TextCell(
+            text = edge.label,
+            modifier = modifier.background(edge.highlight),
+            color = edge.color,
+        )
     }
 }
 
@@ -163,15 +173,15 @@ fun UnselectedHeartCell() {
 @Composable
 fun RowExample() {
     Row {
-        VertexCell(vertex = GraphicalVertex(name = "A"), modifier = Modifier.weight(1f))
+        VertexCell(vertex = GraphicalVertex(name = "A"), modifier = Modifier.width(40.dp))
         EdgeCell(
             edge = GraphicalEdge(
                 startGraphicalVertex = GraphicalVertex(),
                 endGraphicalVertex = GraphicalVertex(),
             ),
-            modifier = Modifier.weight(1f),
+            modifier = Modifier.width(40.dp),
         )
-        HeartCell(selected = true, modifier = Modifier.weight(1f))
-        HeartCell(selected = false, modifier = Modifier.weight(1f))
+        HeartCell(selected = true, modifier = Modifier.width(40.dp))
+        HeartCell(selected = false, modifier = Modifier.width(40.dp))
     }
 }

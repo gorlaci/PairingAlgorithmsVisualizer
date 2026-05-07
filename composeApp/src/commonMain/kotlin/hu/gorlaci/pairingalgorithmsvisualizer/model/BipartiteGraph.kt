@@ -18,7 +18,7 @@ abstract class BipartiteGraph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
     val class1 = mutableSetOf<VertexType>()
     val class2 = mutableSetOf<VertexType>()
 
-    protected fun createClasses() {
+    fun createClasses() {
         val unvisited = vertices.toMutableSet()
         while (unvisited.isNotEmpty()) {
             val vertex = unvisited.first()
