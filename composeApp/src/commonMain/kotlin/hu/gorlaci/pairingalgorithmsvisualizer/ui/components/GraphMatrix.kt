@@ -28,8 +28,8 @@ fun GraphMatrix(
     class2Ids: Collection<String>,
     modifier: Modifier = Modifier,
 ) {
-    val class1 = graphicalGraph.graphicalVertices.filter { class1Ids.contains(it.label) }
-    val class2 = graphicalGraph.graphicalVertices.filter { class2Ids.contains(it.label) }
+    val class1 = graphicalGraph.graphicalVertices.filter { class1Ids.contains(it.name) }
+    val class2 = graphicalGraph.graphicalVertices.filter { class2Ids.contains(it.name) }
 
     LazyColumn(modifier = modifier.padding(10.dp)) {
         item {
@@ -135,7 +135,7 @@ fun VertexCell(
     modifier: Modifier = Modifier,
 ) {
     TextCell(
-        text = vertex.label,
+        text = vertex.name,
         modifier = modifier.background(vertex.highlight),
         fontWeight = FontWeight.Bold,
     )
@@ -163,7 +163,7 @@ fun UnselectedHeartCell() {
 @Composable
 fun RowExample() {
     Row {
-        VertexCell(vertex = GraphicalVertex(label = "A"), modifier = Modifier.weight(1f))
+        VertexCell(vertex = GraphicalVertex(name = "A"), modifier = Modifier.weight(1f))
         EdgeCell(
             edge = GraphicalEdge(
                 startGraphicalVertex = GraphicalVertex(),

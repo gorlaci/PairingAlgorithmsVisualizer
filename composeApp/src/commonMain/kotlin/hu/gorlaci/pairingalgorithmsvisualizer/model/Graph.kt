@@ -4,7 +4,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 
-open class Graph<VertexType : Vertex, EdgeType : Edge>(
+open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
     var name: String = "",
     open val vertices: MutableSet<VertexType> = mutableSetOf(),
     open val edges: MutableSet<EdgeType> = mutableSetOf(),
@@ -61,15 +61,15 @@ open class Graph<VertexType : Vertex, EdgeType : Edge>(
         val graphicalVertices = vertices.map { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
-                label = vertex.label,
+                name = vertex.name,
                 x = coordinates.first,
                 y = coordinates.second,
             )
         }
 
         val graphicalEdges = edges.map { edge ->
-            val fromVertex = graphicalVertices.first { it.label == edge.fromVertex.label }
-            val toVertex = graphicalVertices.first { it.label == edge.toVertex.label }
+            val fromVertex = graphicalVertices.first { it.name == edge.fromVertex.name }
+            val toVertex = graphicalVertices.first { it.name == edge.toVertex.name }
             GraphicalEdge(
                 startGraphicalVertex = fromVertex,
                 endGraphicalVertex = toVertex,
@@ -102,11 +102,30 @@ open class Graph<VertexType : Vertex, EdgeType : Edge>(
         fromId: String,
         toId: String,
     ) {
-        val fromVertex = vertices.find { it.label == fromId }
-        val toVertex = vertices.find { it.label == toId }
+        val fromVertex = vertices.find { it.name == fromId }
+        val toVertex = vertices.find { it.name == toId }
         if (fromVertex != null && toVertex != null) {
             val newEdge = newEdge(fromVertex, toVertex)
             edges.add(newEdge)
         }
+    }
+
+    fun getNeighbours(vertex: VertexType): Set<VertexType> {
+        val neighbours = mutableSetOf<VertexType>()
+        for (edge in edges) {
+            val otherEnd = edge.otherEnd(vertex)
+            if (otherEnd != null) {
+                neighbours.add(otherEnd)
+            }
+        }
+        return neighbours
+    }
+
+    companion object {
+        fun getEmpty(name: String = ""): Graph<Vertex, Edge<Vertex>> = Graph(
+            name = name,
+            newVertex = { Vertex(it) },
+            newEdge = { from, to -> Edge(from, to) },
+        )
     }
 }

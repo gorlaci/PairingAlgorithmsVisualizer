@@ -184,7 +184,7 @@ class EdmondsGraph(
             activeEdge = edge
             saveStep(
                 EdmondsStepType.SelectedEdge(
-                    "Vizsgáljuk a ${edge.fromVertex.label}-${edge.toVertex.label} élt",
+                    "Vizsgáljuk a ${edge.fromVertex.name}-${edge.toVertex.name} élt",
                     edge,
                     edge.getType(),
                 ),
@@ -297,7 +297,7 @@ class EdmondsGraph(
         val blossomVertices = getBlossomVertices(vertexA, vertexB, commonRoot) // O(n)
         val blossomVerticesSet = blossomVertices.toSet() // O(n)
 
-        val blossomId = blossomVertices.map { it.label }.sorted().joinToString("") // O(n)
+        val blossomId = blossomVertices.map { it.name }.sorted().joinToString("") // O(n)
         val blossomEdges =
             edges.filter {
                 it.fromVertex in blossomVerticesSet || it.toVertex in blossomVerticesSet
@@ -364,7 +364,7 @@ class EdmondsGraph(
     private fun deconstructBlossom(blossomVertex: BlossomVertex) { // O(m*n' + m'*n) = O(m*n)
         saveStep(
             EdmondsStepType.DeconstructBlossom(
-                "Bontsuk ki a ${blossomVertex.label} kelyhet!",
+                "Bontsuk ki a ${blossomVertex.name} kelyhet!",
                 blossomVertex,
             ),
         )
@@ -379,13 +379,13 @@ class EdmondsGraph(
                 if (edge.fromVertex in vertices) {
                     edge.fromVertex
                 } else {
-                    vertices.find { it.id.contains(edge.fromVertex.label) }!! // O(n)
+                    vertices.find { it.id.contains(edge.fromVertex.name) }!! // O(n)
                 }
             val toVertex =
                 if (edge.toVertex in vertices) {
                     edge.toVertex
                 } else {
-                    vertices.find { it.id.contains(edge.toVertex.label) }!! // O(n)
+                    vertices.find { it.id.contains(edge.toVertex.name) }!! // O(n)
                 }
             edges.add(EdmondsEdge(fromVertex, toVertex)) // O(1)
         }
@@ -588,7 +588,7 @@ class EdmondsGraph(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
-                            vertex.label,
+                            vertex.name,
                             highlightType = HighlightType.DOUBLE_CIRCLE,
                             highlight = LIGHT_GREEN,
                             innerColor = innerColor,
@@ -601,7 +601,7 @@ class EdmondsGraph(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
-                            vertex.label,
+                            vertex.name,
                             highlightType = HighlightType.SQUARE,
                             highlight = LIGHT_GREEN,
                             innerColor = innerColor,
@@ -614,7 +614,7 @@ class EdmondsGraph(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
-                            vertex.label,
+                            vertex.name,
                             highlightType = HighlightType.CIRCLE,
                             highlight = LIGHT_GREEN,
                             innerColor = innerColor,
@@ -627,7 +627,7 @@ class EdmondsGraph(
                         GraphicalVertex(
                             coordinates.first,
                             coordinates.second,
-                            vertex.label,
+                            vertex.name,
                             innerColor = innerColor,
                         ),
                     )
@@ -638,11 +638,11 @@ class EdmondsGraph(
         val graphicalEdges = mutableListOf<GraphicalEdge>()
 
         for (edge in edges) {
-            val startGraphicalVertex = graphicalVertices.find { it.label == edge.fromVertex.label }
+            val startGraphicalVertex = graphicalVertices.find { it.name == edge.fromVertex.name }
             if (startGraphicalVertex == null) {
                 throw IllegalStateException("Vertex with id ${edge.fromVertex.id} not found")
             }
-            val endGraphicalVertex = graphicalVertices.find { it.label == edge.toVertex.label }
+            val endGraphicalVertex = graphicalVertices.find { it.name == edge.toVertex.name }
             if (endGraphicalVertex == null) {
                 throw IllegalStateException("Vertex with id ${edge.toVertex.id} not found")
             }
@@ -684,7 +684,7 @@ class EdmondsGraph(
     }
 }
 
-fun Graph<out Vertex, out Edge>.toEdmondsGraph(): EdmondsGraph {
+fun Graph<out Vertex, out Edge<out Vertex>>.toEdmondsGraph(): EdmondsGraph {
     val edmondsVertices = this.vertices.map { EdmondsVertex(it.id) }.toMutableSet()
     val edmondsEdges = this.edges.map { edge ->
         val fromVertex = edmondsVertices.find { it.id == edge.fromVertex.id }!!

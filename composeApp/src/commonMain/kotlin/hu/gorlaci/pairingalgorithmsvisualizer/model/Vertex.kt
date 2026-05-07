@@ -5,6 +5,6 @@ open class Vertex(
 ) {
     constructor(id: String) : this(listOf(id))
 
-    val label: String
+    val name: String
         get() = id.joinToString("")
 }

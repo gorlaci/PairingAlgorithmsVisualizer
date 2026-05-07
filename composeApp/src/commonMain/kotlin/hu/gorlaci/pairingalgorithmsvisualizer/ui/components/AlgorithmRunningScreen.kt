@@ -18,8 +18,8 @@ import pairingalgorithmsvisualizer.composeapp.generated.resources.run_button
 @Composable
 fun AlgorithmRunningScreen(
     title: String,
-    selectedGraph: Graph<out Vertex, out Edge>,
-    graphList: List<Graph<out Vertex, out Edge>>,
+    selectedGraph: Graph<out Vertex, out Edge<out Vertex>>,
+    graphList: List<Graph<out Vertex, out Edge<out Vertex>>>,
     onGraphIndexSelected: (Int) -> Unit,
     graphicalGraph: GraphicalGraph,
     step: Int = 1,

@@ -3,7 +3,6 @@ package hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.visual
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
@@ -11,12 +10,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 class GraphDrawingScreenViewmodel(
     private val graphStorage: GraphStorage,
 ) : ViewModel() {
-    private var graph =
-        Graph(
-            name = "Saját Gráf",
-            newVertex = { Vertex(it) },
-            newEdge = { from, to -> Edge(from, to) },
-        )
+    private var graph = Graph.getEmpty("Saját Gráf")
 
     val graphicalGraph = mutableStateOf(graph.toGraphicalGraph())
 
@@ -86,7 +80,7 @@ class GraphDrawingScreenViewmodel(
                             if (clickedEdge != null) {
                                 graph.edges.remove(clickedEdge)
                             } else {
-                                graph.addEdge(firstVertexForEdge!!.label, clickedVertex.label)
+                                graph.addEdge(firstVertexForEdge!!.name, clickedVertex.name)
                             }
                         }
                         firstVertexForEdge = null
@@ -126,12 +120,7 @@ class GraphDrawingScreenViewmodel(
     fun saveGraph() {
         if (!graphStorage.getAllGraphs().contains(graph)) {
             graphStorage.addGraph(graph)
-            graph =
-                Graph(
-                    name = "Saját Gráf",
-                    newVertex = { Vertex(it) },
-                    newEdge = { from, to -> Edge(from, to) },
-                )
+            graph = Graph.getEmpty("Saját Gráf")
             graphicalGraph.value = graph.toGraphicalGraph()
             graphName.value = "Saját Gráf"
             nextID = "A"

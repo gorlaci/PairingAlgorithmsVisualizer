@@ -42,7 +42,7 @@ fun GraphCanvas(
 
             val measuredText =
                 textMeasurer.measure(
-                    text = vertex.label,
+                    text = vertex.name,
                     style =
                         TextStyle(
                             fontSize = 20.sp,

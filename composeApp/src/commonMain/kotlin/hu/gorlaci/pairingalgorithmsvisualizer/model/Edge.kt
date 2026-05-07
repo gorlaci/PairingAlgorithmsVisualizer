@@ -1,11 +1,16 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model
 
-open class Edge(
-    open val fromVertex: Vertex,
-    open val toVertex: Vertex,
+open class Edge<VertexType : Vertex>(
+    open val fromVertex: VertexType,
+    open val toVertex: VertexType,
 ) {
-    companion object {
-        fun fromVertices(vertex1: Vertex, vertex2: Vertex): Edge =
-            Edge(vertex1, vertex2)
+    fun otherEnd(vertex: VertexType): VertexType? {
+        if (vertex == fromVertex) {
+            return toVertex
+        }
+        if (vertex == toVertex) {
+            return fromVertex
+        }
+        return null
     }
 }

@@ -9,17 +9,17 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.toEdmondsGraph
 
 class InMemoryGraphStorage : GraphStorage {
-    private val graphs: MutableList<Graph<out Vertex, out Edge>> = mutableListOf()
+    private val graphs: MutableList<Graph<out Vertex, out Edge<out Vertex>>> = mutableListOf()
 
     init {
         addExampleGraphs()
     }
 
-    override fun addGraph(graph: Graph<out Vertex, out Edge>) {
+    override fun addGraph(graph: Graph<out Vertex, out Edge<out Vertex>>) {
         graphs.add(graph)
     }
 
-    override fun getAllGraphs(): List<Graph<out Vertex, out Edge>> = graphs
+    override fun getAllGraphs(): List<Graph<out Vertex, out Edge<out Vertex>>> = graphs
 
     override fun getAllEdmondsGraphs(): List<EdmondsGraph> = graphs.map { it.toEdmondsGraph() }
 

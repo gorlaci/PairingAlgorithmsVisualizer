@@ -6,7 +6,7 @@ import androidx.compose.ui.graphics.Color
 data class GraphicalVertex(
     val x: Double = 0.0,
     val y: Double = 0.0,
-    val label: String = "",
+    val name: String = "",
     val innerColor: Color = Color.White,
     val highlight: Color = Color.Transparent,
     val highlightType: HighlightType = HighlightType.CIRCLE,
@@ -21,10 +21,10 @@ data class GraphicalVertex(
     )
 
     val radiusInFloat: Float
-        get() = 20f + (label.length - 1) * 5f
+        get() = 20f + (name.length - 1) * 5f
 
     val maxTextSize: Int
-        get() = (radiusInFloat * 2).toInt() - (label.length - 1) * 2
+        get() = (radiusInFloat * 2).toInt() - (name.length - 1) * 2
 }
 
 enum class HighlightType {

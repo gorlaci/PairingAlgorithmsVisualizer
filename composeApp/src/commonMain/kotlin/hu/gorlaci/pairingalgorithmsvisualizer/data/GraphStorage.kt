@@ -7,9 +7,9 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPat
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 
 interface GraphStorage {
-    fun addGraph(graph: Graph<out Vertex, out Edge>)
+    fun addGraph(graph: Graph<out Vertex, out Edge<out Vertex>>)
 
-    fun getAllGraphs(): List<Graph<out Vertex, out Edge>>
+    fun getAllGraphs(): List<Graph<out Vertex, out Edge<out Vertex>>>
 
     fun getAllEdmondsGraphs(): List<EdmondsGraph>
 

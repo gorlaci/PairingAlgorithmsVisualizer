@@ -16,7 +16,7 @@ data class GraphicalGraph(
         vertex: Vertex,
         color: Color,
     ): GraphicalGraph {
-        val graphicalVertex = graphicalVertices.find { it.label == vertex.label }
+        val graphicalVertex = graphicalVertices.find { it.name == vertex.name }
         if (graphicalVertex == null) {
             return this
         }
@@ -26,13 +26,13 @@ data class GraphicalGraph(
     }
 
     fun addHighlight(
-        edge: Edge,
+        edge: Edge<out Vertex>,
         color: Color,
     ): GraphicalGraph {
         val graphicalEdge =
             graphicalEdges.find {
-                it.startGraphicalVertex.label == edge.fromVertex.label &&
-                    it.endGraphicalVertex.label == edge.toVertex.label
+                it.startGraphicalVertex.name == edge.fromVertex.name &&
+                    it.endGraphicalVertex.name == edge.toVertex.name
             }
         if (graphicalEdge == null) {
             return this
@@ -42,7 +42,7 @@ data class GraphicalGraph(
         return this.copy(graphicalEdges = newGraphicalEdges)
     }
 
-    fun removeHighlight(edge: Edge) = addHighlight(edge, Color.Transparent)
+    fun removeHighlight(edge: Edge<out Vertex>) = addHighlight(edge, Color.Transparent)
 
     fun removeAllEdgeHighlights(): GraphicalGraph {
         val newGraphicalEdges =
@@ -70,7 +70,7 @@ data class GraphicalGraph(
 
         val newGraphicalVertices = mutableMapOf<GraphicalVertex, GraphicalVertex>()
         for (vertex in blossomVertices) {
-            val graphicalVertex = graphicalVertices.find { it.label == vertex.label } ?: continue
+            val graphicalVertex = graphicalVertices.find { it.name == vertex.name } ?: continue
             val newX =
                 originalGraph.getVertexCoordinates(vertex).first +
                     (blossomX - originalGraph.getVertexCoordinates(vertex).first) *

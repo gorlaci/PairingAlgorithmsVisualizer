@@ -66,8 +66,9 @@ class MatrixBipartiteGraphMakerViewmodel(
         name.value = newValue
     }
 
-    private fun getGraph(): Graph<Vertex, Edge> {
+    private fun getGraph(): Graph<Vertex, Edge<Vertex>> {
         val width = 700.0
+        val height = 300.0
 
         val coordinateMap = mutableMapOf<String, Pair<Double, Double>>()
 
@@ -75,16 +76,16 @@ class MatrixBipartiteGraphMakerViewmodel(
         for (i in 0..<columns.value) {
             val label = (i + 1).toString()
             columnVertices.add(Vertex(label))
-            coordinateMap[label] = Pair(-width / 2 + width / (columns.value - 1) * i, 200.0)
+            coordinateMap[label] = Pair(-width / 2 + width / (columns.value - 1) * i, height / 2)
         }
         val rowVertices = mutableListOf<Vertex>()
         for (i in 0..<rows.value) {
             val label = ('A' + i).toString()
             rowVertices.add(Vertex(label))
-            coordinateMap[label] = Pair(-width / 2 + width / (rows.value - 1) * i, -200.0)
+            coordinateMap[label] = Pair(-width / 2 + width / (rows.value - 1) * i, -height / 2)
         }
 
-        val edges = mutableSetOf<Edge>()
+        val edges = mutableSetOf<Edge<Vertex>>()
         for (i in 0..<rows.value) {
             for (j in 0..<columns.value) {
                 if (adjacencyMatrix.value[i][j]) {

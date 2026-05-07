@@ -16,8 +16,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 
 @Composable
 fun GraphSelectionDropdown(
-    selectedGraph: Graph<out Vertex, out Edge>,
-    graphList: List<Graph<out Vertex, out Edge>>,
+    selectedGraph: Graph<out Vertex, out Edge<out Vertex>>,
+    graphList: List<Graph<out Vertex, out Edge<out Vertex>>>,
     onGraphSelected: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {

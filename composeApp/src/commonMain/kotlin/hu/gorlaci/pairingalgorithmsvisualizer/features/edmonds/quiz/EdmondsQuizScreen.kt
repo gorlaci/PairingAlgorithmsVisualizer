@@ -147,7 +147,7 @@ fun EdmondsQuizScreen(
                                                 "Kijelölt út: "
                                             } else {
                                                 "Kijelölt kehely: "
-                                            } + markedVertices.joinToString(" - ") { it.label },
+                                            } + markedVertices.joinToString(" - ") { it.name },
                                     )
                                     Spacer(modifier = Modifier.height(10.dp))
 
