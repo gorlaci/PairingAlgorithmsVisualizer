@@ -353,14 +353,10 @@ class AugmentingPathGraph(
                     else -> Color.Transparent
                 },
                 highlightType = HighlightType.CIRCLE,
-                innerColor = if (vertex in
-                    class1
-                ) {
-                    LIGHT_BLUE
-                } else if (vertex in class2) {
-                    LIGHT_RED
-                } else {
-                    Color.White
+                innerColor = when (vertex) {
+                    in class1 -> LIGHT_BLUE
+                    in class2 -> LIGHT_RED
+                    else -> Color.White
                 },
             )
         }

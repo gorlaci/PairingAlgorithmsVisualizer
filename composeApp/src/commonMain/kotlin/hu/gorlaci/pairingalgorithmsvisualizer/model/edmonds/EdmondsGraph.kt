@@ -297,7 +297,7 @@ class EdmondsGraph(
         val blossomVertices = getBlossomVertices(vertexA, vertexB, commonRoot) // O(n)
         val blossomVerticesSet = blossomVertices.toSet() // O(n)
 
-        val blossomId = blossomVertices.map { it.name }.sorted().joinToString("") // O(n)
+        val blossomId = blossomVertices.sortedBy { it.name }.flatMap { it.id }
         val blossomEdges =
             edges.filter {
                 it.fromVertex in blossomVerticesSet || it.toVertex in blossomVerticesSet
@@ -434,7 +434,7 @@ class EdmondsGraph(
 
         saveStep(
             EdmondsStepType.BlossomOutAnimation(
-                "Bontsuk ki a ${blossomVertex.id} kelyhet!",
+                "Bontsuk ki a ${blossomVertex.name} kelyhet!",
                 blossomVertices.toSet(),
             ),
         )

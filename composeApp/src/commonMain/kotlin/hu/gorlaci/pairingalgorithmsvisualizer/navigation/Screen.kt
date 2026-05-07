@@ -2,7 +2,6 @@ package hu.gorlaci.pairingalgorithmsvisualizer.navigation
 
 import kotlinx.serialization.Serializable
 
-
 object Screen {
 
     object DrawGraph {
@@ -36,7 +35,12 @@ object Screen {
 
         @Serializable
         object Menu
+    }
 
+    @Serializable
+    object Egervary {
+        @Serializable
+        object RunAlgorithm
     }
 
     @Serializable

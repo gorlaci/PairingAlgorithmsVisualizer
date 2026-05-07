@@ -5,6 +5,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryGraph
 
 interface GraphStorage {
     fun addGraph(graph: Graph<out Vertex, out Edge<out Vertex>>)
@@ -14,4 +15,6 @@ interface GraphStorage {
     fun getAllEdmondsGraphs(): List<EdmondsGraph>
 
     fun getAllAugmentingPathGraphs(): List<AugmentingPathGraph>
+
+    fun getAllEgervaryGraphs(): List<EgervaryGraph>
 }

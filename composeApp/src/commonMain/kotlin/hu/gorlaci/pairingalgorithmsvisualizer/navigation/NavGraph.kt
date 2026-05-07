@@ -14,6 +14,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.visual.GraphDra
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.edmodsmenu.EdmondsMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.quiz.EdmondsQuizScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.runalgorithm.EdmondsAlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.features.egervary.EgervaryAlgorithmRunningViewScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.mainmenu.MainMenuScreen
 
 @Composable
@@ -60,10 +61,13 @@ fun NavGraph(
 
         composable<Screen.MainMenu> {
             MainMenuScreen(
-                onDrawClick = { navHostController.navigate(Screen.DrawGraph.Menu) },
-                onEdmondsMenuClick = { navHostController.navigate(Screen.Edmonds.Menu) },
-                onAugmentingPathMenuClick = {
-                    navHostController.navigate(Screen.AugmentingPath.Menu)
+                onDrawGraphClick = { navHostController.navigate(Screen.DrawGraph.Menu) },
+                onEdmondsClick = { navHostController.navigate(Screen.Edmonds.Menu) },
+                onAugmentingPathClick = {
+                    navHostController.navigate(Screen.AugmentingPath.RunAlgorithm)
+                },
+                onEgervaryClick = {
+                    navHostController.navigate(Screen.Egervary.RunAlgorithm)
                 },
             )
         }
@@ -94,6 +98,13 @@ fun NavGraph(
 
         composable<Screen.DrawGraph.MatrixBipartite> {
             MatrixBipartiteGraphMakerScreen(
+                graphStorage = graphStorage,
+                onBack = { navHostController.popBackStack() },
+            )
+        }
+
+        composable<Screen.Egervary.RunAlgorithm> {
+            EgervaryAlgorithmRunningViewScreen(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
             )

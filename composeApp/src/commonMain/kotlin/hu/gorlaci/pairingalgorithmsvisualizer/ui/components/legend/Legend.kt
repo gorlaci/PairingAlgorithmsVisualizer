@@ -7,6 +7,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
@@ -18,6 +19,8 @@ fun Legend(
     legends: Map<String, Any>,
     modifier: Modifier = Modifier,
 ) {
+    val textMeasurer = rememberTextMeasurer()
+
     LazyColumn(
         modifier = modifier,
     ) {
@@ -32,7 +35,8 @@ fun Legend(
                         ) {
                             drawVertex(
                                 vertex = graphicalElement,
-                                center = this.center,
+                                canvasCenter = this.center,
+                                textMeasurer = textMeasurer,
                             )
                         }
                     } else if (graphicalElement is GraphicalEdge) {

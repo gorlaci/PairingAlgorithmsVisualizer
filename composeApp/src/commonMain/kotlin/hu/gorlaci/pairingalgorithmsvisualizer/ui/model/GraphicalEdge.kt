@@ -8,4 +8,5 @@ data class GraphicalEdge(
     val selected: Boolean = false,
     val highlight: Color = Color.Transparent,
     val color: Color = Color.Black,
+    val label: String? = null,
 )

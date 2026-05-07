@@ -13,9 +13,10 @@ import pairingalgorithmsvisualizer.composeapp.generated.resources.draw_custom_sc
 
 @Composable
 fun MainMenuScreen(
-    onDrawClick: () -> Unit,
-    onEdmondsMenuClick: () -> Unit,
-    onAugmentingPathMenuClick: () -> Unit,
+    onDrawGraphClick: () -> Unit,
+    onEdmondsClick: () -> Unit,
+    onAugmentingPathClick: () -> Unit,
+    onEgervaryClick: () -> Unit,
 ) {
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -23,7 +24,7 @@ fun MainMenuScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Button(
-            onClick = onDrawClick,
+            onClick = onDrawGraphClick,
         ) {
             Text(text = stringResource(Res.string.draw_custom_screen))
         }
@@ -31,19 +32,29 @@ fun MainMenuScreen(
         Spacer(modifier = Modifier.height(50.dp))
 
         Button(
-            onClick = onAugmentingPathMenuClick,
+            onClick = onAugmentingPathClick,
         ) {
             Text("Javítóutas algoritmus")
         }
 
         Spacer(
-            modifier = Modifier.height(50.dp)
+            modifier = Modifier.height(50.dp),
         )
 
         Button(
-            onClick = onEdmondsMenuClick,
+            onClick = onEdmondsClick,
         ) {
             Text("Edmonds algoritmus")
+        }
+
+        Spacer(
+            modifier = Modifier.height(50.dp),
+        )
+
+        Button(
+            onClick = onEgervaryClick,
+        ) {
+            Text("Egerváry algoritmus")
         }
     }
 }

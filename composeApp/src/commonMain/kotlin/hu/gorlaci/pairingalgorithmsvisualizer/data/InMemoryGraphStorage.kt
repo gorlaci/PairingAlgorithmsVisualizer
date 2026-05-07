@@ -7,6 +7,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPat
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.toAugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.toEdmondsGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryVertex
 
 class InMemoryGraphStorage : GraphStorage {
     private val graphs: MutableList<Graph<out Vertex, out Edge<out Vertex>>> = mutableListOf()
@@ -26,11 +28,15 @@ class InMemoryGraphStorage : GraphStorage {
     override fun getAllAugmentingPathGraphs(): List<AugmentingPathGraph> =
         graphs.filter { it.isBipartite }.map { it.toAugmentingPathGraph() }
 
+    override fun getAllEgervaryGraphs(): List<EgervaryGraph> =
+        graphs.filterIsInstance<EgervaryGraph>()
+
     private fun addExampleGraphs() {
         addExampleGraph1()
         addExampleGraph2()
         addExampleGraph3()
         addExampleGraph4()
+        addExampleGraph5()
     }
 
     private fun addExampleGraph1() {
@@ -205,6 +211,53 @@ class InMemoryGraphStorage : GraphStorage {
         graph.addEdge("H", "3")
         graph.addEdge("I", "2")
         graph.addEdge("I", "3")
+        addGraph(graph)
+    }
+
+    private fun addExampleGraph5() {
+        val vertices = mutableSetOf(
+            EgervaryVertex("A"),
+            EgervaryVertex("B"),
+            EgervaryVertex("C"),
+            EgervaryVertex("D"),
+            EgervaryVertex("P"),
+            EgervaryVertex("Q"),
+            EgervaryVertex("R"),
+            EgervaryVertex("S"),
+        )
+        val idCoordinatesMap = mutableMapOf(
+            "A" to Pair(-300.0, -200.0),
+            "B" to Pair(-100.0, -200.0),
+            "C" to Pair(100.0, -200.0),
+            "D" to Pair(300.0, -200.0),
+            "P" to Pair(-300.0, 200.0),
+            "Q" to Pair(-100.0, 200.0),
+            "R" to Pair(100.0, 200.0),
+            "S" to Pair(300.0, 200.0),
+        )
+
+        val graph = EgervaryGraph(
+            name = "Példa Súlyozott Gráf 1",
+            vertices = vertices,
+            idCoordinateMap = idCoordinatesMap,
+        )
+        graph.addEdge("A", "P", weight = 8)
+        graph.addEdge("A", "Q", weight = 3)
+        graph.addEdge("A", "R", weight = 5)
+        graph.addEdge("A", "S", weight = 4)
+        graph.addEdge("B", "P", weight = 7)
+        graph.addEdge("B", "Q", weight = 1)
+        graph.addEdge("B", "R", weight = 6)
+        graph.addEdge("B", "S", weight = 2)
+        graph.addEdge("C", "P", weight = 9)
+        graph.addEdge("C", "Q", weight = 3)
+        graph.addEdge("C", "R", weight = 4)
+        graph.addEdge("C", "S", weight = 1)
+        graph.addEdge("D", "P", weight = 4)
+        graph.addEdge("D", "Q", weight = 2)
+        graph.addEdge("D", "R", weight = 7)
+        graph.addEdge("D", "S", weight = 5)
+
         addGraph(graph)
     }
 }
