@@ -13,6 +13,9 @@ object Screen {
         object MatrixBipartite
 
         @Serializable
+        object MatrixBipartiteWeighted
+
+        @Serializable
         object Menu
     }
 

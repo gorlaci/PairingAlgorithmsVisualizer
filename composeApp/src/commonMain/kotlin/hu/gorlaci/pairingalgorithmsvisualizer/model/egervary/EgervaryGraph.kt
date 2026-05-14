@@ -38,16 +38,24 @@ class EgervaryGraph(
     }
 
     fun addEdge(
+        fromVertex: EgervaryVertex,
+        toVertex: EgervaryVertex,
+        weight: Int = 1,
+    ){
+        val edge = EgervaryEdge(fromVertex, toVertex, weight)
+        fromVertex.edges.add(edge)
+        toVertex.edges.add(edge)
+        edges.add(edge)
+    }
+
+    fun addEdge(
         fromName: String,
         toName: String,
         weight: Int = 1,
     ) {
         val fromVertex = vertices.find { it.name == fromName } ?: return
         val toVertex = vertices.find { it.name == toName } ?: return
-        val edge = EgervaryEdge(fromVertex, toVertex, weight)
-        fromVertex.edges.add(edge)
-        toVertex.edges.add(edge)
-        edges.add(edge)
+        addEdge(fromVertex, toVertex, weight)
     }
 
     fun runAlgorithm() {

@@ -10,6 +10,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.features.augmentingpath.menu.Augme
 import hu.gorlaci.pairingalgorithmsvisualizer.features.augmentingpath.runalgorithm.AugmentingAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.GraphDrawingMenu
 import hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.matrixbipartite.MatrixBipartiteGraphMakerScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.matrixbipartiteweighted.MatrixBipartiteWeightedGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.drawgraph.visual.GraphDrawingScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.edmodsmenu.EdmondsMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.features.edmonds.quiz.EdmondsQuizScreen
@@ -93,6 +94,9 @@ fun NavGraph(
                 onMatrixBipartite = {
                     navHostController.navigate(Screen.DrawGraph.MatrixBipartite)
                 },
+                onMatrixBipartiteWeighted = {
+                    navHostController.navigate(Screen.DrawGraph.MatrixBipartiteWeighted)
+                },
             )
         }
 
@@ -105,6 +109,13 @@ fun NavGraph(
 
         composable<Screen.Egervary.RunAlgorithm> {
             EgervaryAlgorithmRunningViewScreen(
+                graphStorage = graphStorage,
+                onBack = { navHostController.popBackStack() },
+            )
+        }
+
+        composable<Screen.DrawGraph.MatrixBipartiteWeighted> {
+            MatrixBipartiteWeightedGraphMakerScreen(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
             )

@@ -4,9 +4,11 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -134,6 +136,7 @@ fun EdgeCell(
         TextCell(
             text = edge.label,
             modifier = modifier.background(edge.highlight),
+            fontWeight = if (edge.selected) FontWeight.ExtraBold else FontWeight.Normal,
             color = edge.color,
         )
     }
@@ -148,6 +151,28 @@ fun VertexCell(
         text = vertex.name,
         modifier = modifier.background(vertex.highlight),
         fontWeight = FontWeight.Bold,
+    )
+}
+
+@Composable
+fun TextFieldCell(
+    value: String,
+    onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BasicTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier.border(1.dp, Color.Black).widthIn(max = 30.dp),
+        textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
+        decorationBox = { innerTextField ->
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                innerTextField()
+            }
+        },
     )
 }
 
