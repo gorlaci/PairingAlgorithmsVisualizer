@@ -41,7 +41,7 @@ class EgervaryGraph(
         fromVertex: EgervaryVertex,
         toVertex: EgervaryVertex,
         weight: Int = 1,
-    ){
+    ) {
         val edge = EgervaryEdge(fromVertex, toVertex, weight)
         fromVertex.edges.add(edge)
         toVertex.edges.add(edge)
@@ -69,6 +69,17 @@ class EgervaryGraph(
         }
 
         saveStep("Kész vagyunk, a párosítás teljes")
+
+        drawRed = false
+
+        val totalWeight = edges.filter { it.selected }.sumOf { it.weight }
+
+        val totalLabels = vertices.sumOf { it.label }
+
+        saveStep(
+            "Találtunk egy $totalWeight összsúlyú párosítást és egy $totalLabels összegű címkézést",
+        )
+
         saveStep()
     }
 
@@ -93,6 +104,7 @@ class EgervaryGraph(
             vertex.label = 0
         }
 
+        drawRed = true
         saveStep()
     }
 
@@ -232,9 +244,10 @@ class EgervaryGraph(
     private val filteredClass1 = mutableSetOf<EgervaryVertex>()
     private val filteredClass2 = mutableSetOf<EgervaryVertex>()
 
+    private val deltaEdges = mutableSetOf<EgervaryEdge>()
+
     private fun adjustLabels() {
         saveStep("Nem találtunk javítóutat, módosítanunk kell a címkéket")
-        saveStep("Módosítsuk a címkéket")
         val u = class1.filter { it.pair == null }
         val tComma = class2.filter { it in visitedVertices }
         val t = tComma.mapNotNull { it.pair }
@@ -250,7 +263,17 @@ class EgervaryGraph(
                     (it.fromVertex in filteredClass1 && it.toVertex in filteredClass2)
             }.minOfOrNull { it.fromVertex.label + it.toVertex.label - it.weight }
                 ?: throw IllegalStateException("No edges found")
+
+        deltaEdges.addAll(
+            edges.filter {
+                (it.toVertex in filteredClass1 && it.fromVertex in filteredClass2) ||
+                    (it.fromVertex in filteredClass1 && it.toVertex in filteredClass2)
+            }.filter { it.fromVertex.label + it.toVertex.label - it.weight == delta },
+        )
+
         saveStep("δ = $delta")
+
+        deltaEdges.clear()
         for (vertex in (t + u)) {
             vertex.label -= delta
         }
@@ -262,6 +285,8 @@ class EgervaryGraph(
         filteredClass1.clear()
         filteredClass2.clear()
     }
+
+    var drawRed = false
 
     override fun toGraphicalGraph(stepType: StepType): GraphicalGraph {
         val graphicalVerticesMap = vertices.associateWith { vertex ->
@@ -291,18 +316,21 @@ class EgervaryGraph(
                 endGraphicalVertex = graphicalVerticesMap[edge.toVertex]!!,
                 selected = edge.selected,
                 color = when {
-                    edge.isRed -> RED
+                    edge.isRed && drawRed -> if (edge.weight == 0) LIGHT_RED else RED
 
                     (
                         edge.fromVertex in (filteredClass1 + filteredClass2) &&
                             edge.toVertex in (filteredClass1 + filteredClass2)
                         ) -> LIGHT_GREEN
 
+                    edge.weight == 0 -> GRAY
+
                     else -> Color.Black
                 },
                 label = edge.weight.toString(),
                 highlight = when (edge) {
                     in augmentingPathEdges -> LIGHT_YELLOW
+                    in deltaEdges -> LIGHT_PINK
                     else -> Color.Transparent
                 },
             )
