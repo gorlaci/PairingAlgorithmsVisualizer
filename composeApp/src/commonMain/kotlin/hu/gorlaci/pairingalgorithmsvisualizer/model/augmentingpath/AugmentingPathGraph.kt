@@ -2,7 +2,6 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath
 
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.*
-import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.quiz.AugmentingStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
@@ -64,7 +63,7 @@ class AugmentingPathGraph(
 
     val steps = mutableListOf<Pair<GraphicalGraph, AugmentingPathGraph>>()
 
-    private fun saveStep(stepType: AugmentingStepType = AugmentingStepType.Nothing()) {
+    private fun saveStep(stepType: StepType = StepType.Nothing()) {
         steps.add(toGraphicalGraph(stepType) to getTree())
     }
 
@@ -177,20 +176,20 @@ class AugmentingPathGraph(
     fun runAlgorithm() {
         saveStep()
         createClasses()
-        saveStep(AugmentingStepType.Nothing("Megállapítjuk a két osztályt"))
-        reset()
-        saveStep(AugmentingStepType.Nothing("Kiindulunk az üres párosításból"))
+        saveStep(StepType.Nothing("Megállapítjuk a két osztályt"))
+//        reset()
+//        saveStep(AugmentingStepType.Nothing("Kiindulunk az üres párosításból"))
         while (augmentMade) {
             findAugmentingPath()
         }
         reset(resetForest = false)
-        saveStep(AugmentingStepType.Nothing("Nincs már javító út, kész a maximális párosítás"))
+        saveStep(StepType.Nothing("Nincs már javító út, kész a maximális párosítás"))
 
         saveStep()
 
-        saveStep(AugmentingStepType.Nothing("Keressünk egy minimális lefogó ponthalmazt!"))
+        saveStep(StepType.Nothing("Keressünk egy minimális lefogó ponthalmazt!"))
         findAugmentingPath(saveSteps = false)
-        saveStep(AugmentingStepType.Nothing("Vizsgáljuk az utolsó fát!"))
+        saveStep(StepType.Nothing("Vizsgáljuk az utolsó fát!"))
         markMinCoverSet()
         saveTreeCoordinates()
 
@@ -199,7 +198,7 @@ class AugmentingPathGraph(
         val pairingSize = minCoverSet.size
 
         saveStep(
-            AugmentingStepType.Nothing(
+            StepType.Nothing(
                 "Találtunk egy $pairingSize elemű párosítást és egy $pairingSize elemű lefogó ponthalmazt, tehát\n$pairingSize <= ν(G) <= τ(G) <= $pairingSize,\nazaz ν(G) = τ(G) = $pairingSize",
             ),
         )
@@ -210,7 +209,7 @@ class AugmentingPathGraph(
         augmentMade = false
 
         if (saveSteps) {
-            saveStep(AugmentingStepType.Nothing("Keressünk javítóutat a gráfban!"))
+            saveStep(StepType.Nothing("Keressünk javítóutat a gráfban!"))
         }
 
         unpairedVertices.addAll(class1.filter { it.pair == null && !it.visited })
@@ -219,7 +218,7 @@ class AugmentingPathGraph(
         treeGrid.last().addAll(unpairedVertices)
         if (saveSteps) {
             saveStep(
-                AugmentingStepType.Nothing(
+                StepType.Nothing(
                     "Elindulunk ez egyik osztálybeli összes párosítatlan csúcsból",
                 ),
             )
@@ -235,7 +234,7 @@ class AugmentingPathGraph(
                 vertex.visited = true
                 activeVertex = vertex
                 if (saveSteps) {
-                    saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
+                    saveStep(StepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
                 }
                 for (neighbour in vertex.neighbours.filter { !it.visited }) {
                     neighbour.parent = vertex
@@ -246,7 +245,7 @@ class AugmentingPathGraph(
                 }
                 if (saveSteps) {
                     saveStep(
-                        AugmentingStepType.Nothing(
+                        StepType.Nothing(
                             "Vegyük be a szomszédait a vizsgálandó csúcsok közé",
                         ),
                     )
@@ -262,19 +261,19 @@ class AugmentingPathGraph(
             for (vertex in pairedCopy) {
                 activeVertex = vertex
                 if (saveSteps) {
-                    saveStep(AugmentingStepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
+                    saveStep(StepType.Nothing("Vizsgáljuk ${vertex.id} csúcsot"))
                 }
                 if (vertex.pair == null) {
                     if (saveSteps) {
-                        saveStep(AugmentingStepType.Nothing("Találtunk egy párosítatlan csúcsot"))
+                        saveStep(StepType.Nothing("Találtunk egy párosítatlan csúcsot"))
                     }
                     markAugmentingPath(vertex)
                     if (saveSteps) {
-                        saveStep(AugmentingStepType.Nothing("Javítsunk a javítóút mentén!"))
+                        saveStep(StepType.AugmentingPathFound("Javítsunk a javítóút mentén!"))
                     }
                     augmentFromVertex(vertex)
                     if (saveSteps) {
-                        saveStep(AugmentingStepType.Nothing("Javítottunk a párosításon"))
+                        saveStep(StepType.Nothing("Javítottunk a párosításon"))
                     }
                     saveTreeCoordinates()
                     augmentMade = true
@@ -286,7 +285,7 @@ class AugmentingPathGraph(
                 treeGrid.last().add(vertex.pair!!)
                 if (saveSteps) {
                     saveStep(
-                        AugmentingStepType.Nothing("Vegyük be a párját a vizsgálandó csúcsok közé"),
+                        StepType.Nothing("Vegyük be a párját a vizsgálandó csúcsok közé"),
                     )
                 }
                 pairedVertices.remove(vertex)
@@ -331,10 +330,10 @@ class AugmentingPathGraph(
 
     private fun markMinCoverSet() {
         minCoverSet.addAll(class1.filter { !it.visited })
-        saveStep(AugmentingStepType.Nothing("Vegyük a fa által nem fedett kék csúcsokat"))
+        saveStep(StepType.Nothing("Vegyük a fa által nem fedett kék csúcsokat"))
         minCoverSet.addAll(class2.filter { it.visited })
-        saveStep(AugmentingStepType.Nothing("És a fa által fedett piros csúcsokat"))
-        saveStep(AugmentingStepType.Nothing("Ezzel megkaptuk a minimális lefogó ponthalmazt"))
+        saveStep(StepType.Nothing("És a fa által fedett piros csúcsokat"))
+        saveStep(StepType.Nothing("Ezzel megkaptuk a minimális lefogó ponthalmazt"))
     }
 
     override fun toGraphicalGraph(stepType: StepType): GraphicalGraph {

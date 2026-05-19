@@ -57,7 +57,7 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         } / vertex.id.size,
     )
 
-    open fun toGraphicalGraph(stepType: StepType = StepType()): GraphicalGraph {
+    open fun toGraphicalGraph(stepType: StepType = StepType.Nothing()): GraphicalGraph {
         val graphicalVertices = vertices.map { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
@@ -78,7 +78,7 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         return GraphicalGraph(
             graphicalVertices = graphicalVertices,
             graphicalEdges = graphicalEdges,
-            stepType = StepType(""),
+            stepType = StepType.Nothing(""),
         )
     }
 

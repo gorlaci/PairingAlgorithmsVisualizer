@@ -29,12 +29,12 @@ class EgervaryGraph(
 
     val steps = mutableListOf<GraphicalGraph>()
 
-    private fun saveStep(stepType: StepType = StepType()) {
+    private fun saveStep(stepType: StepType = StepType.Nothing()) {
         steps.add(toGraphicalGraph(stepType))
     }
 
     private fun saveStep(description: String) {
-        saveStep(StepType(description))
+        saveStep(StepType.Nothing(description))
     }
 
     fun addEdge(

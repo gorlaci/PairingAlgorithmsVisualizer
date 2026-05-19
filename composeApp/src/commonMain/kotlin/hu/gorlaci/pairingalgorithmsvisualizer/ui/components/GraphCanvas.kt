@@ -1,6 +1,8 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.ui.components
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.gestures.detectDragGestures
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
@@ -20,6 +22,10 @@ import hu.gorlaci.pairingalgorithmsvisualizer.util.distanceFromSegment
 @Composable
 fun GraphCanvas(
     graphicalGraph: GraphicalGraph,
+    onTap: (Double, Double) -> Unit = { _, _ -> },
+    onDragStart: (Double, Double) -> Unit = { _, _ -> },
+    onDrag: (Double, Double) -> Unit = { _, _ -> },
+    onDragEnd: () -> Unit = {},
     modifier: Modifier = Modifier,
 ) {
     val vertices = graphicalGraph.graphicalVertices
@@ -45,6 +51,31 @@ fun GraphCanvas(
                     }
                 }
             }
+        }.pointerInput(Unit) {
+            detectTapGestures { offset ->
+                val modelX = offset.x.toDouble() - size.width / 2.0
+                val modelY = size.height / 2.0 - offset.y.toDouble()
+
+                onTap(modelX, modelY)
+            }
+        }.pointerInput(Unit) {
+            detectDragGestures(
+                onDragStart = { offset ->
+                    val modelX = offset.x.toDouble() - size.width / 2.0
+                    val modelY = size.height / 2.0 - offset.y.toDouble()
+
+                    onDragStart(modelX, modelY)
+                },
+                onDrag = { _, offset ->
+                    val modelX = offset.x.toDouble()
+                    val modelY = -offset.y.toDouble()
+
+                    onDrag(modelX, modelY)
+                },
+                onDragEnd = {
+                    onDragEnd()
+                },
+            )
         },
     ) {
         val centerX = size.width / 2.0

@@ -10,7 +10,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 data class GraphicalGraph(
     val graphicalVertices: List<GraphicalVertex> = emptyList(),
     val graphicalEdges: List<GraphicalEdge> = emptyList(),
-    val stepType: StepType = StepType(),
+    val stepType: StepType = StepType.Nothing(),
 ) {
     fun changeInnerColor(
         vertex: Vertex,
