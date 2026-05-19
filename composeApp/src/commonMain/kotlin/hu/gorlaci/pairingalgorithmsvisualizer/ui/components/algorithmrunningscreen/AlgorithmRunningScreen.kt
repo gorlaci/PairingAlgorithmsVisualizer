@@ -5,51 +5,47 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphSelectionDropdown
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.StepSelector
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.run_button
 
 @Composable
 fun AlgorithmRunningScreen(
+    viewModel: AlgorithmRunningViewModel,
     title: String,
-    selectedGraph: Graph<out Vertex, out Edge<out Vertex>>,
-    graphList: List<Graph<out Vertex, out Edge<out Vertex>>>,
-    onGraphIndexSelected: (Int) -> Unit,
-    graphicalGraph: GraphicalGraph,
-    step: Int = 1,
-    maxStep: Int,
-    nextEnabled: Boolean,
-    backEnabled: Boolean,
-    runEnabled: Boolean,
-    skipForwardEnabled: Boolean,
-    skipBackEnabled: Boolean,
-    onNext: () -> Unit,
-    onBack: () -> Unit,
-    onRun: () -> Unit,
-    onSkipForward: () -> Unit,
-    onSkipBackward: () -> Unit,
     onNavigateBack: () -> Unit,
-    onStepChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     legend: @Composable ColumnScope.() -> Unit = { Spacer(modifier = Modifier.height(0.dp)) },
     controls: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {
         GraphCanvas(
-            graphicalGraph = graphicalGraph,
+            graphicalGraph = viewModel.graphicalGraph.value,
+            onTap = viewModel::onTap,
             modifier = Modifier.fillMaxSize(),
         )
     },
 ) {
+    val graphList = viewModel.graphList
+
+    val selectedGraph by viewModel.selectedGraph
+    val graphicalGraph by viewModel.graphicalGraph
+
+    val step by viewModel.step
+    val maxStep by viewModel.maxStep
+
+    val nextEnabled by viewModel.nextEnabled
+    val backEnabled by viewModel.backEnabled
+    val runEnabled by viewModel.runEnabled
+    val skipForwardEnabled by viewModel.skipForwardEnabled
+    val skipBackwardEnabled by viewModel.skipBackwardEnabled
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -69,7 +65,7 @@ fun AlgorithmRunningScreen(
                     GraphSelectionDropdown(
                         selectedGraph = selectedGraph,
                         graphList = graphList,
-                        onGraphSelected = onGraphIndexSelected,
+                        onGraphSelected = viewModel::onGraphSelected,
                     )
                     controls()
                 }
@@ -94,7 +90,7 @@ fun AlgorithmRunningScreen(
                     Spacer(modifier = Modifier.fillMaxHeight(0.1f))
 
                     Button(
-                        onClick = onRun,
+                        onClick = viewModel::onRun,
                         enabled = runEnabled,
                     ) {
                         Text(stringResource(Res.string.run_button))
@@ -105,14 +101,14 @@ fun AlgorithmRunningScreen(
                         modifier = Modifier.fillMaxWidth(0.9f),
                     ) {
                         Button(
-                            onClick = onSkipBackward,
-                            enabled = skipBackEnabled,
+                            onClick = viewModel::onSkipBackward,
+                            enabled = skipBackwardEnabled,
                         ) {
                             Text("Ugrás vissza")
                         }
 
                         Button(
-                            onClick = onSkipForward,
+                            onClick = viewModel::onSkipForward,
                             enabled = skipForwardEnabled,
                         ) {
                             Text("Ugrás előre")
@@ -120,11 +116,11 @@ fun AlgorithmRunningScreen(
                     }
 
                     StepSelector(
-                        value = step,
+                        value = step + 1,
                         maxValue = maxStep,
-                        onValueChange = onStepChange,
-                        onPrevious = onBack,
-                        onNext = onNext,
+                        onValueChange = viewModel::onStepChange,
+                        onPrevious = viewModel::onBack,
+                        onNext = viewModel::onNext,
                         previousEnabled = backEnabled,
                         nextEnabled = nextEnabled,
                         modifier = Modifier.padding(10.dp),

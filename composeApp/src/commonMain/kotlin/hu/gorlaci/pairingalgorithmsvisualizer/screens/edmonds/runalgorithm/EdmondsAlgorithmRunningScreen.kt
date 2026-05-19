@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -31,29 +30,9 @@ fun EdmondsAlgorithmRunningScreen(
         )
     }
 
-    val selectedGraph by viewModel.currentGraph
-
-    val graphicalGraph by viewModel.graphicalGraph
-
-    val step by viewModel.step
-    val maxStep by viewModel.maxStep
-
-    val nextEnabled by viewModel.nextEnabled
-    val backEnabled by viewModel.backEnabled
-    val runEnabled by viewModel.runEnabled
-
     AlgorithmRunningScreen(
+        viewModel = viewModel,
         title = stringResource(Res.string.run_algorithm_screen),
-        selectedGraph = selectedGraph,
-        graphList = viewModel.graphList,
-        onGraphIndexSelected = viewModel::onGraphSelected,
-        graphicalGraph = graphicalGraph,
-        nextEnabled = nextEnabled,
-        backEnabled = backEnabled,
-        runEnabled = runEnabled,
-        onNext = viewModel::onNext,
-        onBack = viewModel::onBack,
-        onRun = viewModel::onRun,
         onNavigateBack = onBack,
         modifier = Modifier.fillMaxSize(),
         legend = {
@@ -65,12 +44,5 @@ fun EdmondsAlgorithmRunningScreen(
                 )
             }
         },
-        step = step + 1,
-        maxStep = maxStep,
-        onStepChange = viewModel::onStepChange,
-        skipForwardEnabled = false,
-        skipBackEnabled = false,
-        onSkipForward = {},
-        onSkipBackward = {},
     )
 }

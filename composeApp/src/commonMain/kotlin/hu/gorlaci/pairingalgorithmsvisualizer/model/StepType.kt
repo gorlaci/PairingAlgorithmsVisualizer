@@ -1,5 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model
 
+import hu.gorlaci.pairingalgorithmsvisualizer.model.SkipPoint as SkipPointInterface
+
 abstract class StepType(
     val description: String = "",
 ) {
@@ -7,7 +9,13 @@ abstract class StepType(
         description: String = "",
     ) : StepType(description)
 
-    class AugmentingPathFound(
+    class SkipPoint(
         description: String = "",
-    ) : StepType(description)
+    ) : StepType(description), SkipPointInterface
+
+    class AlgorithmEnd(
+        description: String = "",
+    ) : StepType(description), SkipPointInterface
 }
+
+interface SkipPoint

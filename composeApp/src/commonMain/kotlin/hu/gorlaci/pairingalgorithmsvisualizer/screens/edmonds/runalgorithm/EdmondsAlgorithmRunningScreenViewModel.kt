@@ -4,42 +4,35 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 open class EdmondsAlgorithmRunningScreenViewModel(
-    protected val graphStorage: GraphStorage,
+    graphStorage: GraphStorage,
     protected val composableCoroutineContext: CoroutineContext,
-) : ViewModel() {
-    val graphList = graphStorage.getAllEdmondsGraphs()
-    protected var selectedGraphIndex = 0
-    val currentGraph = mutableStateOf(graphList[selectedGraphIndex])
+) : AlgorithmRunningViewModel(graphStorage) {
+    override val graphList = graphStorage.getAllEdmondsGraphs()
 
-    protected val steps = mutableStateOf(
+    val currentGraph = mutableStateOf(graphList[selectedGraphIndex.value])
+
+    @Suppress("ktlint:standard:backing-property-naming")
+    protected val _steps = mutableStateOf(
         listOf<Pair<EdmondsGraph, EdmondsStepType>>(
-            currentGraph.value to EdmondsStepType.Nothing(),
+            currentGraph.value to EdmondsStepType.Nothing(initString),
         ),
     )
-    val step = mutableStateOf(0)
-
-    val maxStep = derivedStateOf {
-        steps.value.size
+    override val steps = derivedStateOf {
+        _steps.value.map { it.first.toGraphicalGraph(it.second) }
     }
 
-    val graphicalGraph = mutableStateOf(steps.value[0].first.toGraphicalGraph())
-
-    val nextEnabled = mutableStateOf(false)
-    val backEnabled = mutableStateOf(false)
-    val runEnabled = mutableStateOf(true)
-
-    open fun onNext() {
-        if (step.value < steps.value.size - 1) {
+    override fun onNext() {
+        if (step.value < _steps.value.size - 1) {
             step.value++
 
             setCurrentGraph()
@@ -50,10 +43,9 @@ open class EdmondsAlgorithmRunningScreenViewModel(
                 startBlossomAnimation()
             }
         }
-        setButtons()
     }
 
-    open fun onBack() {
+    override fun onBack() {
         if (step.value > 0) {
             step.value--
             setCurrentGraph()
@@ -64,48 +56,30 @@ open class EdmondsAlgorithmRunningScreenViewModel(
                 setCurrentGraph()
             }
         }
-        setButtons()
     }
 
-    fun onStepChange(newValue: String) {
-        val int = try {
-            newValue.toInt() - 1
-        } catch (_: NumberFormatException) {
-            return
-        }
-
-        if (int < 0) {
-            return
-        }
-        if (int >= steps.value.size) {
-            return
-        }
-        step.value = int
+    override fun onStepChange(newValue: String) {
+        super.onStepChange(newValue)
         setCurrentGraph()
-        setButtons()
     }
 
     protected fun setCurrentGraph() {
-        currentGraph.value = steps.value[step.value].first
+        currentGraph.value = _steps.value[step.value].first
         graphicalGraph.value =
-            steps.value[step.value].first.toGraphicalGraph(steps.value[step.value].second)
+            _steps.value[step.value].first.toGraphicalGraph(_steps.value[step.value].second)
     }
 
-    open fun setButtons() {
-        nextEnabled.value = step.value < steps.value.size - 1
-        backEnabled.value = step.value > 0
-    }
+    override fun onGraphSelected(index: Int) {
+        selectedGraphIndex.value = index
+        currentGraph.value = graphList[selectedGraphIndex.value]
 
-    open fun onGraphSelected(index: Int) {
-        selectedGraphIndex = index
-        currentGraph.value = graphList[selectedGraphIndex]
+        _steps.value = listOf(currentGraph.value to EdmondsStepType.Nothing(initString))
 
-        steps.value = listOf(currentGraph.value to EdmondsStepType.Nothing())
+        graphicalGraph.value =
+            currentGraph.value.toGraphicalGraph(EdmondsStepType.Nothing(initString))
 
-        graphicalGraph.value = currentGraph.value.toGraphicalGraph()
         step.value = 0
         runEnabled.value = true
-        setButtons()
     }
 
     val blossomAnimationProgress = Animatable(0f)
@@ -149,14 +123,13 @@ open class EdmondsAlgorithmRunningScreenViewModel(
         }
     }
 
-    open fun onRun() {
-        val graph = graphList[selectedGraphIndex]
+    override fun onRun() {
+        val graph = graphList[selectedGraphIndex.value]
 
         graph.runEdmondsAlgorithm()
-        steps.value = graph.steps
+        _steps.value = graph.steps
 
         step.value = 0
-        setButtons()
         runEnabled.value = false
     }
 }

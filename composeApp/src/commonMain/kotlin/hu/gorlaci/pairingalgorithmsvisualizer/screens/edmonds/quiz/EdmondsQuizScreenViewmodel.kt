@@ -16,7 +16,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.util.containsSameEdges
 import kotlin.coroutines.CoroutineContext
 import kotlin.random.Random
 
-class QuizScreenViewmodel(
+class EdmondsQuizScreenViewmodel(
     graphStorage: GraphStorage,
     composableCoroutineContext: CoroutineContext,
 ) : EdmondsAlgorithmRunningScreenViewModel(graphStorage, composableCoroutineContext) {
@@ -27,8 +27,11 @@ class QuizScreenViewmodel(
 
     val questionFrequency = mutableStateOf(1f)
 
+    override val nextEnabled = mutableStateOf(false)
+    override val backEnabled = mutableStateOf(false)
+
     override fun onNext() {
-        if (step.value < steps.value.size - 1) {
+        if (step.value < _steps.value.size - 1) {
             step.value++
 
             setCurrentGraph()
@@ -82,6 +85,7 @@ class QuizScreenViewmodel(
         questionMode.value = QuestionMode.NOTHING
 
         super.onBack()
+        setButtons()
     }
 
     override fun onRun() {
@@ -89,12 +93,19 @@ class QuizScreenViewmodel(
         quizStarted.value = true
 
         super.onRun()
+
+        _steps.value =
+            _steps.value.takeWhile { it.second !is EdmondsStepType.MaxPairingFound } +
+            _steps.value.dropWhile { it.second !is EdmondsStepType.MaxPairingFound }
+                .take(2)
+
+        setButtons()
     }
 
-    override fun setButtons() {
+    fun setButtons() {
         nextEnabled.value =
-            step.value < steps.value.size - 1 && questionMode.value == QuestionMode.NOTHING ||
-            questionMode.value == QuestionMode.SHOW_ANSWER
+            (step.value < _steps.value.size - 1 && questionMode.value == QuestionMode.NOTHING) ||
+            (questionMode.value == QuestionMode.SHOW_ANSWER)
         backEnabled.value = step.value > 0
     }
 
@@ -103,6 +114,8 @@ class QuizScreenViewmodel(
         questionMode.value = QuestionMode.NOTHING
 
         super.onGraphSelected(index)
+
+        setButtons()
     }
 
     fun onEdgeTypeAnswer(answer: EdmondsEdgeType) {
@@ -125,10 +138,15 @@ class QuizScreenViewmodel(
         markedVertices.value = listOf()
     }
 
-    fun onClick(
+    override fun onTap(
         x: Double,
         y: Double,
     ) {
+        if (!quizStarted.value) {
+            super.onTap(x, y)
+            return
+        }
+
         val possibleQuestion = graphicalGraph.value.stepType
 
         if (possibleQuestion is EdmondsStepType.MarkAugmentingPath ||
@@ -197,7 +215,7 @@ class QuizScreenViewmodel(
                 EdmondsAnswer.Incorrect(
                     "A javító út a következő élekből áll: ${
                         question.pathEdges.joinToString {
-                            "(${it.fromVertex.id}, ${it.toVertex.id})"
+                            "(${it.fromVertex.name}, ${it.toVertex.name})"
                         }
                     }",
                 )
@@ -215,7 +233,7 @@ class QuizScreenViewmodel(
                 EdmondsAnswer.Incorrect(
                     "A kelyhet a következő élek alkotják: ${
                         question.blossomEdges.joinToString {
-                            "(${it.fromVertex.id}, ${it.toVertex.id})"
+                            "(${it.fromVertex.name}, ${it.toVertex.name})"
                         }
                     }",
                 )
@@ -242,8 +260,10 @@ class QuizScreenViewmodel(
                 .removeAllEdgeHighlights()
                 .addHighlight(
                     edge =
-                        (graphicalGraph.value.stepType as? EdmondsStepType.MarkAugmentingPath)?.currentEdge
-                            ?: (graphicalGraph.value.stepType as? EdmondsStepType.MarkBlossom)?.currentEdge
+                        (graphicalGraph.value.stepType as? EdmondsStepType.MarkAugmentingPath)
+                            ?.currentEdge
+                            ?: (graphicalGraph.value.stepType as? EdmondsStepType.MarkBlossom)
+                                ?.currentEdge
                             ?: return,
                     color = LIGHT_ORANGE,
                 )
@@ -259,10 +279,6 @@ class QuizScreenViewmodel(
         }
         questionMode.value = QuestionMode.SHOW_ANSWER
         setButtons()
-    }
-
-    fun onQuestionFrequencyChange(newFrequency: Float) {
-        questionFrequency.value = newFrequency
     }
 }
 

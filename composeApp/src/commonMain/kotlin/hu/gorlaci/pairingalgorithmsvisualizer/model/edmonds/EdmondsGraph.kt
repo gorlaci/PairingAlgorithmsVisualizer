@@ -118,14 +118,14 @@ class EdmondsGraph(
 
     fun runEdmondsAlgorithm() { // O(m^3*n^2)
         saveStep()
-        saveStep(EdmondsStepType.Nothing("Kiindulunk az üres párosításból"))
+        saveStep(EdmondsStepType.Nothing("Kiindulunk a megadott párosításból"))
         while (edgesLeft) { // O(m^3*n^2)
             buildForest() // O(m^2*n^2)
             saveStep()
         }
         reset() // O(m+n)
         deconstructAllBlossoms()
-        saveStep(EdmondsStepType.Nothing("A megtalált párosításunk maximális"))
+        saveStep(EdmondsStepType.MaxPairingFound("A megtalált párosításunk maximális"))
 
         saveStep()
 
@@ -274,7 +274,7 @@ class EdmondsGraph(
         }
     }
 
-    private fun makePair(
+    fun makePair(
         vertexA: EdmondsVertex,
         vertexB: EdmondsVertex,
     ) { // O(m*n)
@@ -681,6 +681,28 @@ class EdmondsGraph(
             return Color.LightGray
         }
         return Color.Transparent
+    }
+
+    override fun getPair(vertex: Vertex): EdmondsVertex? = (vertex as EdmondsVertex).pair
+
+    override fun pairVertices(
+        vertexA: Vertex,
+        vertexB: Vertex,
+    ) {
+        vertexA as EdmondsVertex
+        vertexB as EdmondsVertex
+        vertexA.pair = vertexB
+        vertexB.pair = vertexA
+    }
+
+    override fun unPairVertices(
+        vertexA: Vertex,
+        vertexB: Vertex,
+    ) {
+        vertexA as EdmondsVertex
+        vertexB as EdmondsVertex
+        vertexA.pair = null
+        vertexB.pair = null
     }
 }
 

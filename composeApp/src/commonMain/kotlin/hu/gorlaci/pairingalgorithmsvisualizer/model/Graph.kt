@@ -110,7 +110,7 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         }
     }
 
-    fun getNeighbours(vertex: VertexType): Set<VertexType> {
+    fun getNeighbours(vertex: Vertex): Set<VertexType> {
         val neighbours = mutableSetOf<VertexType>()
         for (edge in edges) {
             val otherEnd = edge.otherEnd(vertex)
@@ -120,6 +120,20 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         }
         return neighbours
     }
+
+    open fun pairVertices(
+        vertexA: Vertex,
+        vertexB: Vertex,
+    ): Unit = throw UnsupportedOperationException("This graph does not support pairing vertices.")
+
+    open fun unPairVertices(
+        vertexA: Vertex,
+        vertexB: Vertex,
+    ): Unit = throw UnsupportedOperationException("This graph does not support unpairing vertices.")
+
+    open fun getPair(vertex: Vertex): VertexType? = throw UnsupportedOperationException(
+        "This graph does not support getting pairs of vertices.",
+    )
 
     companion object {
         fun getEmpty(name: String = ""): Graph<Vertex, Edge<Vertex>> = Graph(

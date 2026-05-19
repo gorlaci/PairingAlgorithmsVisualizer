@@ -77,7 +77,9 @@ class EgervaryGraph(
         val totalLabels = vertices.sumOf { it.label }
 
         saveStep(
-            "Találtunk egy $totalWeight összsúlyú párosítást és egy $totalLabels összegű címkézést",
+            StepType.AlgorithmEnd(
+                "Találtunk egy $totalWeight összsúlyú párosítást és egy $totalLabels összegű címkézést",
+            ),
         )
 
         saveStep()
@@ -193,7 +195,7 @@ class EgervaryGraph(
                 if (vertex.pair == null) {
                     saveStep("Találtunk egy párosítatlan csúcsot")
                     markAugmentingPath(vertex)
-                    saveStep("Javítsunk a javítóút mentén!")
+                    saveStep(StepType.SkipPoint("Javítsunk a javítóút mentén!"))
                     augmentFromVertex(vertex)
                     saveStep("Bővítettük a párosítást")
                     augmentMade = true
@@ -247,7 +249,7 @@ class EgervaryGraph(
     private val deltaEdges = mutableSetOf<EgervaryEdge>()
 
     private fun adjustLabels() {
-        saveStep("Nem találtunk javítóutat, módosítanunk kell a címkéket")
+        saveStep(StepType.SkipPoint("Nem találtunk javítóutat, módosítanunk kell a címkéket"))
         val u = class1.filter { it.pair == null }
         val tComma = class2.filter { it in visitedVertices }
         val t = tComma.mapNotNull { it.pair }

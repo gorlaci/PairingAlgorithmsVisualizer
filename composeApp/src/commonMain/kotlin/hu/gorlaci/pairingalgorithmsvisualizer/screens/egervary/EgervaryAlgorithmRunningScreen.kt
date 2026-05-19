@@ -20,40 +20,16 @@ fun EgervaryAlgorithmRunningViewScreen(
 ) {
     val viewModel = viewModel { EgervaryAlgorithmRunningViewModel(graphStorage) }
 
-    val selectedGraph by viewModel.selectedGraph
     val graphicalGraph by viewModel.graphicalGraph
-
-    val step by viewModel.step
-    val maxSteps by viewModel.maxSteps
-
-    val nextEnabled by viewModel.nextEnabled
-    val backEnabled by viewModel.backEnabled
-    val runEnabled by viewModel.runEnabled
 
     val class1names by viewModel.class1names
     val classes2names by viewModel.class2names
 
     AlgorithmRunningScreen(
+        viewModel = viewModel,
         title = "Egerváry Algoritmus",
-        selectedGraph = selectedGraph,
-        graphList = viewModel.graphList,
-        onGraphIndexSelected = viewModel::onGraphSelected,
-        graphicalGraph = graphicalGraph,
-        step = step + 1,
-        maxStep = maxSteps,
-        nextEnabled = nextEnabled,
-        backEnabled = backEnabled,
-        runEnabled = runEnabled,
-        onNext = viewModel::onNext,
-        onBack = viewModel::onBack,
-        onRun = viewModel::onRun,
-        onStepChange = viewModel::onStepChange,
         onNavigateBack = onBack,
         modifier = Modifier.fillMaxSize(),
-        skipForwardEnabled = false,
-        skipBackEnabled = false,
-        onSkipForward = {},
-        onSkipBackward = {},
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
             GraphMatrix(

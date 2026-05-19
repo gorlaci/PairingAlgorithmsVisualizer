@@ -1,6 +1,5 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz
 
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -10,7 +9,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
@@ -34,7 +32,8 @@ fun EdmondsQuizScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val viewModel = viewModel { QuizScreenViewmodel(graphStorage, coroutineScope.coroutineContext) }
+    val viewModel =
+        viewModel { EdmondsQuizScreenViewmodel(graphStorage, coroutineScope.coroutineContext) }
 
     val selectedGraph by viewModel.currentGraph
 
@@ -67,17 +66,8 @@ fun EdmondsQuizScreen(
 
                 GraphCanvas(
                     graphicalGraph = graphicalGraph,
-                    modifier =
-                        Modifier
-                            .fillMaxSize()
-                            .pointerInput(Unit) {
-                                detectTapGestures { offset ->
-                                    val modelX = offset.x.toDouble() - size.width / 2.0
-                                    val modelY = size.height / 2.0 - offset.y.toDouble()
-
-                                    viewModel.onClick(modelX, modelY)
-                                }
-                            },
+                    onTap = viewModel::onTap,
+                    modifier = Modifier.fillMaxSize(),
                 )
             }
 

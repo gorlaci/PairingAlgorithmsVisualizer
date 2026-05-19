@@ -183,7 +183,7 @@ class AugmentingPathGraph(
             findAugmentingPath()
         }
         reset(resetForest = false)
-        saveStep(StepType.Nothing("Nincs már javító út, kész a maximális párosítás"))
+        saveStep(StepType.AlgorithmEnd("Nincs már javító út, kész a maximális párosítás"))
 
         saveStep()
 
@@ -269,7 +269,7 @@ class AugmentingPathGraph(
                     }
                     markAugmentingPath(vertex)
                     if (saveSteps) {
-                        saveStep(StepType.AugmentingPathFound("Javítsunk a javítóút mentén!"))
+                        saveStep(StepType.SkipPoint("Javítsunk a javítóút mentén!"))
                     }
                     augmentFromVertex(vertex)
                     if (saveSteps) {
@@ -402,6 +402,25 @@ class AugmentingPathGraph(
             stepType = stepType,
         )
     }
+
+    override fun pairVertices(
+        vertexA: Vertex,
+        vertexB: Vertex,
+    ) {
+        (vertexA as AugmentingPathVertex).pair = vertexB as AugmentingPathVertex
+        vertexB.pair = vertexA
+    }
+
+    override fun unPairVertices(
+        vertexA: Vertex,
+        vertexB: Vertex,
+    ) {
+        (vertexA as AugmentingPathVertex).pair = null
+        (vertexB as AugmentingPathVertex).pair = null
+    }
+
+    override fun getPair(vertex: Vertex): AugmentingPathVertex? =
+        (vertex as AugmentingPathVertex).pair
 }
 
 fun Graph<out Vertex, out Edge<out Vertex>>.toAugmentingPathGraph(): AugmentingPathGraph {

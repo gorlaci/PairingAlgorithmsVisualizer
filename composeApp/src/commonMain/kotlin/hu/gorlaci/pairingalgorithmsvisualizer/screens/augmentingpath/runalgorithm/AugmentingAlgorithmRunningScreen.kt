@@ -25,36 +25,17 @@ fun AugmentingAlgorithmRunningScreen(
 ) {
     val viewModel = viewModel { AugmentingAlgorithmRunningViewModel(graphStorage) }
 
-    val selectedGraph by viewModel.selectedGraph
     val graphicalGraph by viewModel.graphicalGraph
     val tree by viewModel.tree
-
-    val step by viewModel.step
-    val maxSteps by viewModel.maxSteps
 
     val class1Ids by viewModel.class1Ids
     val class2Ids by viewModel.class2Ids
 
-    val nextEnabled by viewModel.nextEnabled
-    val backEnabled by viewModel.backEnabled
-    val runEnabled by viewModel.runEnabled
-    val skipForwardEnabled by viewModel.skipForwardEnabled
-    val skipBackEnabled by viewModel.skipBackwardEnabled
-
     val displayMode by viewModel.graphDisplayMode
 
     AlgorithmRunningScreen(
+        viewModel = viewModel,
         title = stringResource(Res.string.run_algorithm_screen),
-        selectedGraph = selectedGraph,
-        graphList = viewModel.graphList,
-        onGraphIndexSelected = viewModel::onGraphSelected,
-        graphicalGraph = graphicalGraph,
-        nextEnabled = nextEnabled,
-        backEnabled = backEnabled,
-        runEnabled = runEnabled,
-        onNext = viewModel::onNext,
-        onBack = viewModel::onBack,
-        onRun = viewModel::onRun,
         onNavigateBack = onBack,
         modifier = Modifier.fillMaxSize(),
         legend = {
@@ -73,13 +54,6 @@ fun AugmentingAlgorithmRunningScreen(
                 modifier = Modifier.padding(10.dp),
             )
         },
-        step = step + 1,
-        maxStep = maxSteps,
-        onStepChange = viewModel::onStepChange,
-        skipForwardEnabled = skipForwardEnabled,
-        skipBackEnabled = skipBackEnabled,
-        onSkipForward = viewModel::onSkipForward,
-        onSkipBackward = viewModel::onSkipBackward,
     ) {
         Row(
             modifier = Modifier.fillMaxSize(),

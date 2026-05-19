@@ -7,7 +7,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 
 sealed class EdmondsStepType(
     description: String,
-): StepType(description) {
+) : StepType(description) {
     class Nothing(
         description: String = "",
     ) : EdmondsStepType(description)
@@ -22,7 +22,7 @@ sealed class EdmondsStepType(
         description: String,
         val currentEdge: EdmondsEdge,
         val pathEdges: Set<EdmondsEdge>,
-    ) : EdmondsStepType(description)
+    ) : EdmondsStepType(description), hu.gorlaci.pairingalgorithmsvisualizer.model.SkipPoint
 
     class MarkBlossom(
         description: String,
@@ -44,4 +44,8 @@ sealed class EdmondsStepType(
         description: String,
         val blossomVertices: Set<EdmondsVertex>,
     ) : EdmondsStepType(description)
+
+    class MaxPairingFound(
+        description: String = "",
+    ) : EdmondsStepType(description), hu.gorlaci.pairingalgorithmsvisualizer.model.SkipPoint
 }
