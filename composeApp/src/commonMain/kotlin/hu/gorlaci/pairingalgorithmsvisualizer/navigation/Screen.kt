@@ -44,6 +44,9 @@ object Screen {
     object Egervary {
         @Serializable
         object RunAlgorithm
+
+        @Serializable
+        object Menu
     }
 
     @Serializable

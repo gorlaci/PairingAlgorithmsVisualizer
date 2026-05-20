@@ -6,16 +6,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.menu.AugmentingMenu
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.AugmentingMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.runalgorithm.AugmentingAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.GraphDrawingMenu
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartite.MatrixBipartiteGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartiteweighted.MatrixBipartiteWeightedGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.visual.GraphDrawingScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.edmodsmenu.EdmondsMenuScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.EdmondsMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz.EdmondsQuizScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.runalgorithm.EdmondsAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.EgervaryAlgorithmRunningViewScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.EgervaryMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.MainMenuScreen
 
 @Composable
@@ -43,6 +44,9 @@ fun NavGraph(
 
         composable<Screen.Edmonds.Menu> {
             EdmondsMenuScreen(
+                onDrawGraphClick = {
+                    navHostController.navigate(Screen.DrawGraph.Visual)
+                },
                 onRunAlgorithmClick = {
                     navHostController.navigate(Screen.Edmonds.RunAlgorithm)
                 },
@@ -68,13 +72,13 @@ fun NavGraph(
                     navHostController.navigate(Screen.AugmentingPath.RunAlgorithm)
                 },
                 onEgervaryClick = {
-                    navHostController.navigate(Screen.Egervary.RunAlgorithm)
+                    navHostController.navigate(Screen.Egervary.Menu)
                 },
             )
         }
 
         composable<Screen.AugmentingPath.Menu> {
-            AugmentingMenu(
+            AugmentingMenuScreen(
                 onRunAlgorithm = { navHostController.navigate(Screen.AugmentingPath.RunAlgorithm) },
                 onBack = { navHostController.popBackStack() },
             )
@@ -117,6 +121,18 @@ fun NavGraph(
         composable<Screen.DrawGraph.MatrixBipartiteWeighted> {
             MatrixBipartiteWeightedGraphMakerScreen(
                 graphStorage = graphStorage,
+                onBack = { navHostController.popBackStack() },
+            )
+        }
+
+        composable<Screen.Egervary.Menu> {
+            EgervaryMenuScreen(
+                onDrawGraphClick = {
+                    navHostController.navigate(Screen.DrawGraph.MatrixBipartiteWeighted)
+                },
+                onRunAlgorithmClick = {
+                    navHostController.navigate(Screen.Egervary.RunAlgorithm)
+                },
                 onBack = { navHostController.popBackStack() },
             )
         }
