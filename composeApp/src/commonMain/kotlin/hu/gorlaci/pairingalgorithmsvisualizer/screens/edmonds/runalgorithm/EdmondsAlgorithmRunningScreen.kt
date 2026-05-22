@@ -14,7 +14,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.EdmondsLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
-import pairingalgorithmsvisualizer.composeapp.generated.resources.run_algorithm_screen
+import pairingalgorithmsvisualizer.composeapp.generated.resources.edmonds_algorithm
 
 @Composable
 fun EdmondsAlgorithmRunningScreen(
@@ -32,7 +32,7 @@ fun EdmondsAlgorithmRunningScreen(
 
     AlgorithmRunningScreen(
         viewModel = viewModel,
-        title = stringResource(Res.string.run_algorithm_screen),
+        title = stringResource(Res.string.edmonds_algorithm),
         onNavigateBack = onBack,
         modifier = Modifier.fillMaxSize(),
         legend = {

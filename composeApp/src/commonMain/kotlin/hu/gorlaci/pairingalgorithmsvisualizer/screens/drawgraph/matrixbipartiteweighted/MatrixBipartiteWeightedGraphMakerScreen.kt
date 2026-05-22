@@ -19,6 +19,9 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.IntInput
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextFieldCell
+import org.jetbrains.compose.resources.stringResource
+import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
+import pairingalgorithmsvisualizer.composeapp.generated.resources.draw_matrix_weighted_screen
 
 @Composable
 fun MatrixBipartiteWeightedGraphMakerScreen(
@@ -36,7 +39,7 @@ fun MatrixBipartiteWeightedGraphMakerScreen(
     Scaffold(
         topBar = {
             SimpleTopAppbar(
-                title = "Páros gráf megadása",
+                title = stringResource(Res.string.draw_matrix_weighted_screen),
                 onBack = onBack,
             )
         },

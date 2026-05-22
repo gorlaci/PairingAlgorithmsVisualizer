@@ -33,7 +33,7 @@ fun GraphDrawingScreen(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             SimpleTopAppbar(
-                title = stringResource(Res.string.draw_custom_screen),
+                title = stringResource(Res.string.draw_visual_screen),
                 onBack = onBack,
             )
         },

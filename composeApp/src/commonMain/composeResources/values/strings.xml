@@ -1,6 +1,6 @@
 <resources>
-    <string name="draw_custom_screen">Saját gráf rajzolása</string>
-    <string name="run_algorithm_screen">Algoritmus futtatása</string>
+    <string name="draw_menu_screen">Saját gráf megadása</string>
+    <string name="run_algorithm_button">Algoritmus futtatása</string>
     <string name="quiz_screen">Kikérdező</string>
     <string name="run_button">Futtatás</string>
     <string name="next_button">Következő</string>
@@ -11,4 +11,10 @@
     <string name="add_edge_button">Él hozzáadása</string>
     <string name="save_button">Mentés</string>
     <string name="custom_graph_default_name">Saját gráf</string>
+    <string name="draw_visual_screen">Gráf rajzolása</string>
+    <string name="draw_matrix_screen">Páros gráf táblázattal</string>
+    <string name="draw_matrix_weighted_screen">Súlyozott páros gráf táblázattal</string>
+    <string name="augmenting_path_algorithm">Javítóutas algoritmus</string>
+    <string name="edmonds_algorithm">Edmonds algoritmus</string>
+    <string name="egervary_algorithm">Egerváry algoritmus</string>
 </resources>

@@ -10,8 +10,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
 import org.jetbrains.compose.resources.stringResource
-import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
-import pairingalgorithmsvisualizer.composeapp.generated.resources.draw_custom_screen
+import pairingalgorithmsvisualizer.composeapp.generated.resources.*
 
 @Composable
 fun GraphDrawingMenu(
@@ -23,7 +22,7 @@ fun GraphDrawingMenu(
     Scaffold(
         topBar = {
             SimpleTopAppbar(
-                title = stringResource(Res.string.draw_custom_screen),
+                title = stringResource(Res.string.draw_menu_screen),
                 onBack = onBack,
             )
         },
@@ -35,19 +34,19 @@ fun GraphDrawingMenu(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
         ) {
             Button(onClick = onVisual) {
-                Text("Gráf rajzolása")
+                Text(stringResource(Res.string.draw_visual_screen))
             }
 
             Spacer(modifier = Modifier.padding(50.dp))
 
             Button(onClick = onMatrixBipartite) {
-                Text("Páros gráf táblázattal")
+                Text(stringResource(Res.string.draw_matrix_screen))
             }
 
             Spacer(modifier = Modifier.padding(50.dp))
 
             Button(onClick = onMatrixBipartiteWeighted) {
-                Text("Súlyozott páros gráf táblázattal")
+                Text(stringResource(Res.string.draw_matrix_weighted_screen))
             }
         }
     }

@@ -16,7 +16,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.AugmentingLeg
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
-import pairingalgorithmsvisualizer.composeapp.generated.resources.run_algorithm_screen
+import pairingalgorithmsvisualizer.composeapp.generated.resources.augmenting_path_algorithm
 
 @Composable
 fun AugmentingAlgorithmRunningScreen(
@@ -35,7 +35,7 @@ fun AugmentingAlgorithmRunningScreen(
 
     AlgorithmRunningScreen(
         viewModel = viewModel,
-        title = stringResource(Res.string.run_algorithm_screen),
+        title = stringResource(Res.string.augmenting_path_algorithm),
         onNavigateBack = onBack,
         modifier = Modifier.fillMaxSize(),
         legend = {

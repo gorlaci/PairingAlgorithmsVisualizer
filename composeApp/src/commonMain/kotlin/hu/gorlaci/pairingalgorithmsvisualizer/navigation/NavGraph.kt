@@ -69,7 +69,7 @@ fun NavGraph(
                 onDrawGraphClick = { navHostController.navigate(Screen.DrawGraph.Menu) },
                 onEdmondsClick = { navHostController.navigate(Screen.Edmonds.Menu) },
                 onAugmentingPathClick = {
-                    navHostController.navigate(Screen.AugmentingPath.RunAlgorithm)
+                    navHostController.navigate(Screen.AugmentingPath.Menu)
                 },
                 onEgervaryClick = {
                     navHostController.navigate(Screen.Egervary.Menu)
@@ -79,6 +79,10 @@ fun NavGraph(
 
         composable<Screen.AugmentingPath.Menu> {
             AugmentingMenuScreen(
+                onDrawVisualClick = { navHostController.navigate(Screen.DrawGraph.Visual) },
+                onDrawMatrixClick = {
+                    navHostController.navigate(Screen.DrawGraph.MatrixBipartite)
+                },
                 onRunAlgorithm = { navHostController.navigate(Screen.AugmentingPath.RunAlgorithm) },
                 onBack = { navHostController.popBackStack() },
             )

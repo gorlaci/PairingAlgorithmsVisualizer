@@ -60,7 +60,7 @@ fun Legend(
 
 @Composable
 fun EdmondsLegend(modifier: Modifier = Modifier) {
-    val legends =
+    val items =
         listOf(
             "Gyökér csúcs" to GraphicalVertex(
                 highlight = LIGHT_GREEN,
@@ -115,14 +115,14 @@ fun EdmondsLegend(modifier: Modifier = Modifier) {
             ),
         )
     Legend(
-        items = legends,
+        items = items,
         modifier = modifier,
     )
 }
 
 @Composable
 fun AugmentingLegend(modifier: Modifier = Modifier) {
-    val legends = listOf(
+    val items = listOf(
         "Az A osztályba tartozó csúcs" to GraphicalVertex(
             innerColor = LIGHT_BLUE,
         ),
@@ -162,5 +162,53 @@ fun AugmentingLegend(modifier: Modifier = Modifier) {
             highlight = DARK_GREEN,
         ),
     )
-    Legend(items = legends, modifier = modifier)
+    Legend(items = items, modifier = modifier)
+}
+
+@Composable
+fun EgervaryLegend(modifier: Modifier = Modifier) {
+    val items = listOf(
+        "Vizsgálandó A-beli csúcs" to GraphicalVertex(
+            highlight = LIGHT_RED,
+        ),
+        "Vizsgálandó B-beli csúcs" to GraphicalVertex(
+            highlight = LIGHT_BLUE,
+        ),
+        "Aktuálisan vizsgált csúcs" to GraphicalVertex(
+            highlight = LIGHT_ORANGE,
+        ),
+        "Már vizsgált csúcs" to GraphicalVertex(
+            highlight = GRAY,
+        ),
+        "Párosításbeli él" to GraphicalEdge(
+            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
+            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            selected = true,
+        ),
+        "e=(u,v) él, amire c(u)+c(v)=w(e)" to GraphicalEdge(
+            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
+            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            color = RED,
+        ),
+        "Javító út" to GraphicalEdge(
+            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
+            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            highlight = LIGHT_YELLOW,
+        ),
+        "U-beli csúcs" to GraphicalVertex(
+            innerColor = RED,
+        ),
+        "T'-beli csúcs" to GraphicalVertex(
+            innerColor = BLUE,
+        ),
+        "T-beli csúcs" to GraphicalVertex(
+            innerColor = PURPLE,
+        ),
+        "Él, amin δ felveszi a minimális értékét" to GraphicalEdge(
+            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
+            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            highlight = LIGHT_PINK,
+        ),
+    )
+    Legend(items = items, modifier = modifier)
 }

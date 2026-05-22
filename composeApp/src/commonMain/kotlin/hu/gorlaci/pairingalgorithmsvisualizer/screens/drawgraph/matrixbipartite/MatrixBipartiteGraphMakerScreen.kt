@@ -16,6 +16,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
+import org.jetbrains.compose.resources.stringResource
+import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
+import pairingalgorithmsvisualizer.composeapp.generated.resources.draw_matrix_screen
 
 @Composable
 fun MatrixBipartiteGraphMakerScreen(
@@ -33,7 +36,7 @@ fun MatrixBipartiteGraphMakerScreen(
     Scaffold(
         topBar = {
             SimpleTopAppbar(
-                title = "Páros gráf megadása",
+                title = stringResource(Res.string.draw_matrix_screen),
                 onBack = onBack,
             )
         },

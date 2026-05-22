@@ -191,6 +191,7 @@ class EgervaryGraph(
 
             val pairedCopy = pairedVertices.toSet()
             for (vertex in pairedCopy) {
+                activeVertex = vertex
                 saveStep("Vizsgáljuk meg a(z) ${vertex.name} csúcsot")
                 if (vertex.pair == null) {
                     saveStep("Találtunk egy párosítatlan csúcsot")
@@ -208,6 +209,7 @@ class EgervaryGraph(
                     saveStep("Vegyük be a párját a vizsgálandó csúcsok közé")
                 }
                 pairedVertices.remove(vertex)
+                activeVertex = null
             }
         }
     }

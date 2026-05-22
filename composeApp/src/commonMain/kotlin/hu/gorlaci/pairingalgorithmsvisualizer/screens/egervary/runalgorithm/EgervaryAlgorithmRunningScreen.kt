@@ -3,6 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.runalgorithm
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -12,6 +13,11 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphMatrix
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.EgervaryLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
+import org.jetbrains.compose.resources.stringResource
+import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
+import pairingalgorithmsvisualizer.composeapp.generated.resources.egervary_algorithm
 
 @Composable
 fun EgervaryAlgorithmRunningViewScreen(
@@ -27,9 +33,18 @@ fun EgervaryAlgorithmRunningViewScreen(
 
     AlgorithmRunningScreen(
         viewModel = viewModel,
-        title = "Egerváry Algoritmus",
+        title = stringResource(Res.string.egervary_algorithm),
         onNavigateBack = onBack,
         modifier = Modifier.fillMaxSize(),
+        legend = {
+            OpenableLegend(
+                modifier = Modifier.fillMaxSize().weight(1f),
+            ) {
+                EgervaryLegend(
+                    modifier = Modifier.padding(10.dp).size(200.dp, 500.dp).weight(1f),
+                )
+            }
+        },
     ) {
         Row(modifier = Modifier.fillMaxSize()) {
             GraphMatrix(
