@@ -248,16 +248,38 @@ class EgervaryGraph(
 
     private val deltaEdges = mutableSetOf<EgervaryEdge>()
 
+    private val setU = mutableSetOf<EgervaryVertex>()
+    private val setT = mutableSetOf<EgervaryVertex>()
+    private val setTComma = mutableSetOf<EgervaryVertex>()
+
     private fun adjustLabels() {
         saveStep(StepType.SkipPoint("Nem találtunk javítóutat, módosítanunk kell a címkéket"))
-        val u = class1.filter { it.pair == null }
-        val tComma = class2.filter { it in visitedVertices }
-        val t = tComma.mapNotNull { it.pair }
-        filteredClass1.addAll(t)
-        filteredClass1.addAll(u)
-        filteredClass2.addAll(class2 - tComma.toSet())
+        setU.addAll(class1.filter { it.pair == null })
+        saveStep(
+            "Vegyük a következő halmazokat!\n" +
+                "U: az A-beli párosítatlan csúcsok\n" +
+                " \n" +
+                " ",
+        )
+        setTComma.addAll(class2.filter { it in visitedVertices })
+        saveStep(
+            "Vegyük a következő halmazokat!\n" +
+                "U: az A-beli párosítatlan csúcsok\n" +
+                "T': a B-beli U-ból alternáló úton elérhető csúcsok\n" +
+                " ",
+        )
+        setT.addAll(setTComma.mapNotNull { it.pair })
+        saveStep(
+            "Vegyük a következő halmazokat!\n" +
+                "U: az A-beli párosítatlan csúcsok\n" +
+                "T': a B-beli U-ból alternáló úton elérhető csúcsok\n" +
+                "T: a T'-beli csúcsok párjai",
+        )
+        filteredClass1.addAll(setT)
+        filteredClass1.addAll(setU)
+        filteredClass2.addAll(class2 - setTComma)
 
-        saveStep("Vegyük a T+U és B-T' közti éleket")
+        saveStep("Vegyük a T+U és a B-T' közti éleket")
 
         val delta =
             edges.filter {
@@ -276,28 +298,37 @@ class EgervaryGraph(
         saveStep("δ = $delta")
 
         deltaEdges.clear()
-        for (vertex in (t + u)) {
+        for (vertex in (setT + setU)) {
             vertex.label -= delta
         }
-        for (vertex in tComma) {
+        for (vertex in setTComma) {
             vertex.label += delta
         }
         saveStep("Módosítottuk a címkéket")
 
         filteredClass1.clear()
         filteredClass2.clear()
+
+        setU.clear()
+        setT.clear()
+        setTComma.clear()
     }
 
     var drawRed = false
 
     override fun toGraphicalGraph(stepType: StepType): GraphicalGraph {
+        val drawVertexLabels = vertices.any { it.label != 0 }
         val graphicalVerticesMap = vertices.associateWith { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
                 x = coordinates.first,
                 y = coordinates.second,
                 name = vertex.name,
-                label = vertex.label.toString(),
+                label = if (drawVertexLabels) {
+                    vertex.label.toString()
+                } else {
+                    null
+                },
                 highlight = when (vertex) {
                     activeVertex -> LIGHT_ORANGE
                     in unpairedVertices -> LIGHT_RED
@@ -305,10 +336,20 @@ class EgervaryGraph(
                     in visitedVertices -> GRAY
                     else -> Color.Transparent
                 },
-                innerColor = if (vertex in filteredClass1 || vertex in filteredClass2) {
-                    LIGHT_GREEN
-                } else {
-                    Color.White
+                innerColor = when (vertex) {
+                    in filteredClass1, in filteredClass2 -> {
+                        LIGHT_GREEN
+                    }
+
+                    in setU -> RED
+
+                    in setTComma -> BLUE
+
+                    in setT -> PURPLE
+
+                    else -> {
+                        Color.White
+                    }
                 },
             )
         }
