@@ -37,7 +37,10 @@ fun MatrixBipartiteGraphMakerScreen(
         topBar = {
             SimpleTopAppbar(
                 title = stringResource(Res.string.draw_matrix_screen),
-                onBack = onBack,
+                onBack = {
+                    viewmodel.saveGraph()
+                    onBack()
+                },
             )
         },
         modifier = Modifier.fillMaxSize(),

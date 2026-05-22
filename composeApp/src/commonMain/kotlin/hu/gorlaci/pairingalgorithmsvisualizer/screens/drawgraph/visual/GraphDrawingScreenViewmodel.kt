@@ -10,7 +10,12 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 class GraphDrawingScreenViewmodel(
     private val graphStorage: GraphStorage,
 ) : ViewModel() {
-    private var graph = Graph.getEmpty("Saját Gráf")
+
+    companion object {
+        private const val DEFAULT_GRAPH_NAME = "Saját Gráf"
+    }
+
+    private var graph = Graph.getEmpty(DEFAULT_GRAPH_NAME)
 
     val graphicalGraph = mutableStateOf(graph.toGraphicalGraph())
 
@@ -118,16 +123,21 @@ class GraphDrawingScreenViewmodel(
     }
 
     fun saveGraph() {
-        if (!graphStorage.getAllGraphs().contains(graph)) {
-            graphStorage.addGraph(graph)
-            graph = Graph.getEmpty("Saját Gráf")
-            graphicalGraph.value = graph.toGraphicalGraph()
-            graphName.value = "Saját Gráf"
-            nextID = "A"
+        if (graph.vertices.isEmpty() || graph.vertices.isEmpty()) {
+            return
         }
+
+        if (graphStorage.getAllGraphs().contains(graph)) {
+            return
+        }
+        graphStorage.addGraph(graph)
+        graph = Graph.getEmpty(DEFAULT_GRAPH_NAME)
+        graphicalGraph.value = graph.toGraphicalGraph()
+        graphName.value = DEFAULT_GRAPH_NAME
+        nextID = "A"
     }
 
-    val graphName = mutableStateOf("Saját Gráf")
+    val graphName = mutableStateOf(DEFAULT_GRAPH_NAME)
 
     fun onNameChange(newName: String) {
         graphName.value = newName

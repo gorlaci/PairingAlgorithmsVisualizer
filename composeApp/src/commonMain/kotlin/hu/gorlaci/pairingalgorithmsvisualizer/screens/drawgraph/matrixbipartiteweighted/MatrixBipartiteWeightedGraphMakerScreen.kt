@@ -40,7 +40,10 @@ fun MatrixBipartiteWeightedGraphMakerScreen(
         topBar = {
             SimpleTopAppbar(
                 title = stringResource(Res.string.draw_matrix_weighted_screen),
-                onBack = onBack,
+                onBack = {
+                    viewmodel.saveGraph()
+                    onBack()
+                },
             )
         },
         modifier = Modifier.fillMaxSize(),

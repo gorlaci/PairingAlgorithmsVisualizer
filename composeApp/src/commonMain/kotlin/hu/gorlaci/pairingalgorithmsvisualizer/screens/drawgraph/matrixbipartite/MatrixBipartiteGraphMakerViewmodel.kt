@@ -10,12 +10,17 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 class MatrixBipartiteGraphMakerViewmodel(
     private val graphStorage: GraphStorage,
 ) : ViewModel() {
+
+    companion object {
+        private const val DEFAULT_GRAPH_NAME = "Saját Páros Gráf"
+    }
+
     val rows = mutableStateOf(3)
     val columns = mutableStateOf(3)
 
     val adjacencyMatrix = mutableStateOf(List(3) { List(3) { false } })
 
-    val name = mutableStateOf("Saját Páros Gráf")
+    val name = mutableStateOf(DEFAULT_GRAPH_NAME)
 
     fun setRows(newString: String) {
         val newValue = try {
@@ -111,11 +116,21 @@ class MatrixBipartiteGraphMakerViewmodel(
     }
 
     fun saveGraph() {
-        graphStorage.addGraph(getGraph())
+        val graph = getGraph()
+
+        if (graph.vertices.isEmpty()) {
+            return
+        }
+
+        if (graphStorage.getAllGraphs().contains(graph)) {
+            return
+        }
+
+        graphStorage.addGraph(graph)
 
         rows.value = 3
         columns.value = 3
         adjacencyMatrix.value = List(3) { List(3) { false } }
-        name.value = "Saját Páros Gráf"
+        name.value = DEFAULT_GRAPH_NAME
     }
 }

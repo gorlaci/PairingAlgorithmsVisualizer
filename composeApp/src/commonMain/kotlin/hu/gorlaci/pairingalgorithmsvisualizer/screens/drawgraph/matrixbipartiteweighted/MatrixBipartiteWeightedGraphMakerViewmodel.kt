@@ -118,7 +118,17 @@ class MatrixBipartiteWeightedGraphMakerViewmodel(
     }
 
     fun saveGraph() {
-        graphStorage.addGraph(getGraph())
+        val graph = getGraph()
+
+        if (graph.edges.isEmpty()) {
+            return
+        }
+
+        if (graphStorage.getAllGraphs().contains(graph)) {
+            return
+        }
+
+        graphStorage.addGraph(graph)
 
         rows.value = 3
         columns.value = 3

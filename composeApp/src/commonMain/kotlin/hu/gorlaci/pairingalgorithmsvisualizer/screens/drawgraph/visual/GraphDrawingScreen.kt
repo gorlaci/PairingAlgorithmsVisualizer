@@ -34,7 +34,10 @@ fun GraphDrawingScreen(
         topBar = {
             SimpleTopAppbar(
                 title = stringResource(Res.string.draw_visual_screen),
-                onBack = onBack,
+                onBack = {
+                    viewModel.saveGraph()
+                    onBack()
+                },
             )
         },
     ) { paddingValues ->
