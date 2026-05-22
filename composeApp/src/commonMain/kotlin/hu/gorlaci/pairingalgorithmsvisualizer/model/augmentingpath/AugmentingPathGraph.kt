@@ -177,8 +177,8 @@ class AugmentingPathGraph(
         saveStep()
         createClasses()
         saveStep(StepType.Nothing("Megállapítjuk a két osztályt"))
-//        reset()
-//        saveStep(AugmentingStepType.Nothing("Kiindulunk az üres párosításból"))
+        reset()
+        saveStep(StepType.Nothing("Kiindulunk a megadott párosításból"))
         while (augmentMade) {
             findAugmentingPath()
         }

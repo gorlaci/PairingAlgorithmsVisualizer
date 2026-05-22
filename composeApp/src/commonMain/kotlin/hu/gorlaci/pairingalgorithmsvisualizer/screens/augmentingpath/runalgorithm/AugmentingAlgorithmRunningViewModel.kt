@@ -46,7 +46,9 @@ class AugmentingAlgorithmRunningViewModel(
                     AugmentingPathGraph(),
             )
 
-        runEnabled.value = true
+        graphicalGraph.value = steps.value[0]
+
+        inSetup.value = true
     }
 
     private fun getClasses() {
@@ -64,7 +66,9 @@ class AugmentingAlgorithmRunningViewModel(
 
         step.value = 0
         getClasses()
-        runEnabled.value = false
+        inSetup.value = false
+
+        graphicalGraph.value = steps.value[0]
     }
 
     val graphDisplayMode = mutableStateOf(GraphDisplayMode.BOTH)

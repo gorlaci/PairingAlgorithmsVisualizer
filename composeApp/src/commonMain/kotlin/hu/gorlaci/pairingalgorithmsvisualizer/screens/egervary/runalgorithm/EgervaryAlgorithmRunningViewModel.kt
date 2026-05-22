@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary
+package hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.runalgorithm
 
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -31,7 +31,7 @@ class EgervaryAlgorithmRunningViewModel(
         selectedGraphIndex.value = index
         _steps.value = listOf(selectedGraph.value.toGraphicalGraph())
         step.value = 0
-        runEnabled.value = true
+        inSetup.value = true
         selectedGraph.value.createClasses()
     }
 
@@ -47,7 +47,7 @@ class EgervaryAlgorithmRunningViewModel(
         _steps.value = graph.steps
         step.value = 0
 
-        runEnabled.value = false
+        inSetup.value = false
     }
 
     val class1names = derivedStateOf {

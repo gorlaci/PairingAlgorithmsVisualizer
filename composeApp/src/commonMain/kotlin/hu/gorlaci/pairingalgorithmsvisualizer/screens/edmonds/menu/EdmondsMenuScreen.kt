@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds
+package hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.menu
 
 import androidx.compose.runtime.Composable
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MenuItem
@@ -16,7 +16,7 @@ fun EdmondsMenuScreen(
     onBack: () -> Unit,
 ) {
     MenuScreen(
-        title = "Blossom algoritmus",
+        title = "Edmonds algoritmus",
         items = listOf(
             MenuItem("Saját gráf rajzolása", onDrawGraphClick),
             MenuItem(stringResource(Res.string.run_algorithm_screen), onRunAlgorithmClick),

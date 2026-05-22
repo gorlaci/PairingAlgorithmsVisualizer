@@ -6,17 +6,17 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.AugmentingMenuScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.menu.AugmentingMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.runalgorithm.AugmentingAlgorithmRunningScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.GraphDrawingMenu
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartite.MatrixBipartiteGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartiteweighted.MatrixBipartiteWeightedGraphMakerScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.menu.GraphDrawingMenu
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.visual.GraphDrawingScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.EdmondsMenuScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.menu.EdmondsMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz.EdmondsQuizScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.runalgorithm.EdmondsAlgorithmRunningScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.EgervaryAlgorithmRunningViewScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.EgervaryMenuScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.menu.EgervaryMenuScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.runalgorithm.EgervaryAlgorithmRunningViewScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.MainMenuScreen
 
 @Composable

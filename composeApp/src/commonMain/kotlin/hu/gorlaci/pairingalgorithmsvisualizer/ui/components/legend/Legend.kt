@@ -16,7 +16,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 
 @Composable
 fun Legend(
-    legends: Map<String, Any>,
+    items: List<Pair<String, Any>>,
     modifier: Modifier = Modifier,
 ) {
     val textMeasurer = rememberTextMeasurer()
@@ -24,7 +24,7 @@ fun Legend(
     LazyColumn(
         modifier = modifier,
     ) {
-        legends.forEach { (text, graphicalElement) ->
+        items.forEach { (text, graphicalElement) ->
             item {
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
@@ -61,7 +61,7 @@ fun Legend(
 @Composable
 fun EdmondsLegend(modifier: Modifier = Modifier) {
     val legends =
-        mapOf(
+        listOf(
             "Gyökér csúcs" to GraphicalVertex(
                 highlight = LIGHT_GREEN,
                 highlightType = HighlightType.DOUBLE_CIRCLE,
@@ -115,14 +115,14 @@ fun EdmondsLegend(modifier: Modifier = Modifier) {
             ),
         )
     Legend(
-        legends = legends,
+        items = legends,
         modifier = modifier,
     )
 }
 
 @Composable
 fun AugmentingLegend(modifier: Modifier = Modifier) {
-    val legends = mapOf(
+    val legends = listOf(
         "Az A osztályba tartozó csúcs" to GraphicalVertex(
             innerColor = LIGHT_BLUE,
         ),
@@ -162,5 +162,5 @@ fun AugmentingLegend(modifier: Modifier = Modifier) {
             highlight = DARK_GREEN,
         ),
     )
-    Legend(legends = legends, modifier = modifier)
+    Legend(items = legends, modifier = modifier)
 }

@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath
+package hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.menu
 
 import androidx.compose.runtime.Composable
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MenuItem

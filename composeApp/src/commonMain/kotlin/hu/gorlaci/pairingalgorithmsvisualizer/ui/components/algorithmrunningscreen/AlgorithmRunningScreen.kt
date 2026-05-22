@@ -42,7 +42,7 @@ fun AlgorithmRunningScreen(
 
     val nextEnabled by viewModel.nextEnabled
     val backEnabled by viewModel.backEnabled
-    val runEnabled by viewModel.runEnabled
+    val runEnabled by viewModel.inSetup
     val skipForwardEnabled by viewModel.skipForwardEnabled
     val skipBackwardEnabled by viewModel.skipBackwardEnabled
 

@@ -56,10 +56,14 @@ class MatrixBipartiteWeightedGraphMakerViewmodel(
         columnIndex: Int,
         newValue: String,
     ) {
-        val newWeight = try {
-            newValue.toInt()
-        } catch (_: NumberFormatException) {
-            return
+        val newWeight = if (newValue.isBlank()) {
+            0
+        } else {
+            try {
+                newValue.toInt()
+            } catch (_: NumberFormatException) {
+                return
+            }
         }
         if (newWeight < 0) {
             return

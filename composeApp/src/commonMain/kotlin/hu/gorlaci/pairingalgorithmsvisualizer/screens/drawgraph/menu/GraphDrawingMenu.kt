@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph
+package hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.menu
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button

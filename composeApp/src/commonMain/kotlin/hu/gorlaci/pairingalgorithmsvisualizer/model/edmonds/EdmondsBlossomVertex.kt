@@ -1,6 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds
 
-class BlossomVertex(
+class EdmondsBlossomVertex(
     id: List<String>,
     type: EdmondsVertexType = EdmondsVertexType.NONE,
     pair: EdmondsVertex? = null,
@@ -9,23 +9,7 @@ class BlossomVertex(
     val previousStructureEdges: Set<EdmondsEdge>,
 ) : EdmondsVertex(id, type, pair, parent) {
 
-    constructor(
-        id: String,
-        type: EdmondsVertexType = EdmondsVertexType.NONE,
-        pair: EdmondsVertex? = null,
-        parent: EdmondsVertex? = null,
-        previousStructureVertices: List<EdmondsVertex>,
-        previousStructureEdges: Set<EdmondsEdge>,
-    ) : this(
-        id = listOf(id),
-        type = type,
-        pair = pair,
-        parent = parent,
-        previousStructureVertices = previousStructureVertices,
-        previousStructureEdges = previousStructureEdges,
-    )
-
-    override fun copy(): EdmondsVertex = BlossomVertex(
+    override fun copy(): EdmondsVertex = EdmondsBlossomVertex(
         id = this.id,
         type = this.type,
         pair = this.pair,

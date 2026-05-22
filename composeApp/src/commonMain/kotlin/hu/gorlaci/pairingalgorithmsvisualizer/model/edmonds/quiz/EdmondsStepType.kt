@@ -1,7 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz
 
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.BlossomVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsBlossomVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 
@@ -32,7 +32,7 @@ sealed class EdmondsStepType(
 
     class DeconstructBlossom(
         description: String,
-        val blossomVertex: BlossomVertex,
+        val blossomVertex: EdmondsBlossomVertex,
     ) : EdmondsStepType(description)
 
     class BlossomInAnimation(

@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary
+package hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.menu
 
 import androidx.compose.runtime.Composable
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MenuItem

@@ -79,7 +79,7 @@ open class EdmondsAlgorithmRunningScreenViewModel(
             currentGraph.value.toGraphicalGraph(EdmondsStepType.Nothing(initString))
 
         step.value = 0
-        runEnabled.value = true
+        inSetup.value = true
     }
 
     val blossomAnimationProgress = Animatable(0f)
@@ -130,6 +130,6 @@ open class EdmondsAlgorithmRunningScreenViewModel(
         _steps.value = graph.steps
 
         step.value = 0
-        runEnabled.value = false
+        inSetup.value = false
     }
 }

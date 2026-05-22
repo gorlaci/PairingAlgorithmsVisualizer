@@ -49,7 +49,7 @@ abstract class AlgorithmRunningViewModel(
         step.value > 0
     }
 
-    val runEnabled = mutableStateOf(true)
+    val inSetup = mutableStateOf(true)
 
     open val skipForwardEnabled = derivedStateOf {
         nextEnabled.value
@@ -121,6 +121,8 @@ abstract class AlgorithmRunningViewModel(
         x: Double,
         y: Double,
     ) {
+        if (!inSetup.value) return
+
         val graph = selectedGraph.value
         val clickedVertex = graph.getVertexByCoordinates(x, y) ?: return
         if (selectedVertex == null) {

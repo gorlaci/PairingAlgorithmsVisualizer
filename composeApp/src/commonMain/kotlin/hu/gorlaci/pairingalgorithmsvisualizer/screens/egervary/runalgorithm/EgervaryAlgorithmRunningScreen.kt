@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary
+package hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.runalgorithm
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
