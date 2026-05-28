@@ -38,6 +38,8 @@ class AugmentingAlgorithmRunningViewModel(
     override fun onGraphSelected(index: Int) {
         selectedGraphIndex.value = index
 
+        selectedGraph.value.resetAlgorithm()
+
         step.value = 0
 
         _steps.value =

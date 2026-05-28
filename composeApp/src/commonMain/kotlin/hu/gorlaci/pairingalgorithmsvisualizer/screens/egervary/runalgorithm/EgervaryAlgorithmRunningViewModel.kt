@@ -29,6 +29,9 @@ class EgervaryAlgorithmRunningViewModel(
 
     override fun onGraphSelected(index: Int) {
         selectedGraphIndex.value = index
+
+        selectedGraph.value.resetAlgorithm()
+
         _steps.value = listOf(selectedGraph.value.toGraphicalGraph())
         step.value = 0
         inSetup.value = true

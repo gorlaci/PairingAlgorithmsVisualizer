@@ -388,4 +388,14 @@ class EgervaryGraph(
             stepType,
         )
     }
+
+    override fun resetAlgorithm() {
+        for (vertex in vertices) {
+            vertex.label = 0
+            vertex.parentEdge = null
+        }
+        for (edge in edges) {
+            edge.selected = false
+        }
+    }
 }

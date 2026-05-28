@@ -135,6 +135,8 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         "This graph does not support getting pairs of vertices.",
     )
 
+    open fun resetAlgorithm(): Unit = throw NotImplementedError("This graph does not support resetting the algorithm.")
+
     companion object {
         fun getEmpty(name: String = ""): Graph<Vertex, Edge<Vertex>> = Graph(
             name = name,

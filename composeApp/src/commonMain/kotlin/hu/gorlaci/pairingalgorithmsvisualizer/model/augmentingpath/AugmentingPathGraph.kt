@@ -421,6 +421,21 @@ class AugmentingPathGraph(
 
     override fun getPair(vertex: Vertex): AugmentingPathVertex? =
         (vertex as AugmentingPathVertex).pair
+
+    override fun resetAlgorithm() {
+        for (vertex in vertices) {
+            vertex.visited = false
+            vertex.parent = null
+            vertex.pair = null
+        }
+        unpairedVertices.clear()
+        pairedVertices.clear()
+        activeVertex = null
+        augmentingPathVertices.clear()
+        minCoverSet.clear()
+        class1.clear()
+        class2.clear()
+    }
 }
 
 fun Graph<out Vertex, out Edge<out Vertex>>.toAugmentingPathGraph(): AugmentingPathGraph {

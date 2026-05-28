@@ -73,6 +73,8 @@ open class EdmondsAlgorithmRunningScreenViewModel(
         selectedGraphIndex.value = index
         currentGraph.value = graphList[selectedGraphIndex.value]
 
+        currentGraph.value.resetAlgorithm()
+
         _steps.value = listOf(currentGraph.value to EdmondsStepType.Nothing(initString))
 
         graphicalGraph.value =
