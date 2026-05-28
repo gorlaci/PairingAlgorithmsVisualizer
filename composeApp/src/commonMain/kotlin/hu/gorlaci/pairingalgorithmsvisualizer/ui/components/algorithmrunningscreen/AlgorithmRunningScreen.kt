@@ -59,7 +59,7 @@ fun AlgorithmRunningScreen(
             modifier = Modifier.fillMaxSize().padding(paddingValues),
         ) {
             Column(
-                modifier = Modifier.fillMaxHeight().fillMaxWidth(0.8f),
+                modifier = Modifier.fillMaxSize().weight(1f),
             ) {
                 Row {
                     GraphSelectionDropdown(
@@ -75,7 +75,7 @@ fun AlgorithmRunningScreen(
 
             Column(
                 verticalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxHeight().width(350.dp),
             ) {
                 legend()
 

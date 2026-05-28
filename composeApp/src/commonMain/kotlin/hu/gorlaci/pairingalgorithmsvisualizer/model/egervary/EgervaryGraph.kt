@@ -242,6 +242,8 @@ class EgervaryGraph(
         unpairedVertices.clear()
         visitedVertices.clear()
 
+        activeVertex = null
+
         augmentingPathEdges.clear()
     }
 

@@ -80,6 +80,8 @@ open class EdmondsAlgorithmRunningScreenViewModel(
 
         step.value = 0
         inSetup.value = true
+
+        selectedVertex = null
     }
 
     val blossomAnimationProgress = Animatable(0f)
@@ -131,5 +133,7 @@ open class EdmondsAlgorithmRunningScreenViewModel(
 
         step.value = 0
         inSetup.value = false
+
+        selectedVertex = null
     }
 }

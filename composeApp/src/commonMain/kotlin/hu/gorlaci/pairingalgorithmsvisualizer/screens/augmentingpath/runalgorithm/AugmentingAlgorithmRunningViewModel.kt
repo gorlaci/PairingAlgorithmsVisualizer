@@ -48,6 +48,8 @@ class AugmentingAlgorithmRunningViewModel(
 
         graphicalGraph.value = steps.value[0]
 
+        selectedVertex = null
+
         inSetup.value = true
     }
 
@@ -67,6 +69,8 @@ class AugmentingAlgorithmRunningViewModel(
         step.value = 0
         getClasses()
         inSetup.value = false
+
+        selectedVertex = null
 
         graphicalGraph.value = steps.value[0]
     }
