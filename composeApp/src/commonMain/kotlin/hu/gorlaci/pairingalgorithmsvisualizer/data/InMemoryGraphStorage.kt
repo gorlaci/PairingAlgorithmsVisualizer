@@ -67,7 +67,6 @@ class InMemoryGraphStorage : GraphStorage {
                         "I" to Pair(100.0, -200.0),
                     ),
                 name = "Példa Gráf 1",
-                newVertex = { Vertex(it) },
                 newEdge = { from, to -> Edge(from, to) },
             )
 
@@ -113,7 +112,6 @@ class InMemoryGraphStorage : GraphStorage {
                         "G" to Pair(100.0, -150.0),
                     ),
                 name = "Példa Gráf 2",
-                newVertex = { Vertex(it) },
                 newEdge = { from, to -> Edge(from, to) },
             )
 
@@ -157,7 +155,6 @@ class InMemoryGraphStorage : GraphStorage {
                     "G" to Pair(150.0, 100.0),
                 ),
             name = "Példa Páros Gráf 1",
-            newVertex = { Vertex(it) },
             newEdge = { from, to -> Edge(from, to) },
         )
         addGraph(graph)
@@ -180,7 +177,6 @@ class InMemoryGraphStorage : GraphStorage {
             vertices = vertices,
             edges = mutableSetOf(),
             idCoordinatesMap = coordinates,
-            newVertex = { Vertex(it) },
             newEdge = { from, to -> Edge(from, to) },
         )
         graph.addEdge("A", "1")

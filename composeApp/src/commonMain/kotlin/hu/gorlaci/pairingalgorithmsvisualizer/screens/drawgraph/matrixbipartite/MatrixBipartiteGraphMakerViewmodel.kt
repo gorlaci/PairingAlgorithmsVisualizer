@@ -108,7 +108,6 @@ class MatrixBipartiteGraphMakerViewmodel(
             vertices = vertices,
             edges = edges,
             idCoordinatesMap = coordinateMap,
-            newVertex = { Vertex(it) },
             newEdge = { a, b -> Edge(a, b) },
         )
 

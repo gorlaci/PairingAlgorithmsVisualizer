@@ -9,7 +9,6 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
     open val vertices: MutableSet<VertexType> = mutableSetOf(),
     open val edges: MutableSet<EdgeType> = mutableSetOf(),
     val idCoordinatesMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
-    private val newVertex: (String) -> VertexType,
     private val newEdge: (VertexType, VertexType) -> EdgeType,
 ) {
     val isBipartite: Boolean
@@ -78,24 +77,17 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         return GraphicalGraph(
             graphicalVertices = graphicalVertices,
             graphicalEdges = graphicalEdges,
-            stepType = StepType.Nothing(""),
         )
     }
 
     fun getVertexByCoordinates(
         x: Double,
         y: Double,
-    ): VertexType? {
-        try {
-            return vertices.last { vertex ->
-                val coordinates = getVertexCoordinates(vertex)
-                val dx = coordinates.first - x
-                val dy = coordinates.second - y
-                return@last dx * dx + dy * dy <= 400.0
-            }
-        } catch (_: NoSuchElementException) {
-            return null
-        }
+    ): VertexType? = vertices.lastOrNull { vertex ->
+        val coordinates = getVertexCoordinates(vertex)
+        val dx = coordinates.first - x
+        val dy = coordinates.second - y
+        return@lastOrNull dx * dx + dy * dy <= 400.0
     }
 
     fun addEdge(
@@ -135,12 +127,13 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         "This graph does not support getting pairs of vertices.",
     )
 
-    open fun resetAlgorithm(): Unit = throw NotImplementedError("This graph does not support resetting the algorithm.")
+    open fun resetAlgorithm(): Unit = throw NotImplementedError(
+        "This graph does not support resetting the algorithm.",
+    )
 
     companion object {
         fun getEmpty(name: String = ""): Graph<Vertex, Edge<Vertex>> = Graph(
             name = name,
-            newVertex = { Vertex(it) },
             newEdge = { from, to -> Edge(from, to) },
         )
     }

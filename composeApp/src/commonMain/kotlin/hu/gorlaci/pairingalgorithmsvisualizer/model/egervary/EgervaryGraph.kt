@@ -18,7 +18,6 @@ class EgervaryGraph(
     vertices = vertices,
     edges = edges,
     idCoordinatesMap = idCoordinateMap,
-    newVertex = { EgervaryVertex(it) },
     newEdge = { from, to ->
         val edge = EgervaryEdge(from, to, weight = 1)
         from.edges.add(edge)
@@ -257,7 +256,7 @@ class EgervaryGraph(
     private val setTComma = mutableSetOf<EgervaryVertex>()
 
     private fun adjustLabels() {
-        saveStep(StepType.SkipPoint("Nem találtunk javítóutat, módosítanunk kell a címkéket"))
+        saveStep(StepType.Nothing("Nem találtunk javítóutat, módosítanunk kell a címkéket"))
         setU.addAll(class1.filter { it.pair == null })
         saveStep(
             "Vegyük a következő halmazokat!\n" +
@@ -299,7 +298,7 @@ class EgervaryGraph(
             }.filter { it.fromVertex.label + it.toVertex.label - it.weight == delta },
         )
 
-        saveStep("δ = $delta")
+        saveStep(StepType.SkipPoint("δ = $delta"))
 
         deltaEdges.clear()
         for (vertex in (setT + setU)) {

@@ -1,5 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz
 
+import hu.gorlaci.pairingalgorithmsvisualizer.model.SkipPoint as SkipPointInterface
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsBlossomVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
@@ -22,13 +23,13 @@ sealed class EdmondsStepType(
         description: String,
         val currentEdge: EdmondsEdge,
         val pathEdges: Set<EdmondsEdge>,
-    ) : EdmondsStepType(description), hu.gorlaci.pairingalgorithmsvisualizer.model.SkipPoint
+    ) : EdmondsStepType(description), SkipPointInterface
 
     class MarkBlossom(
         description: String,
         val currentEdge: EdmondsEdge,
         val blossomEdges: Set<EdmondsEdge>,
-    ) : EdmondsStepType(description)
+    ) : EdmondsStepType(description), SkipPointInterface
 
     class DeconstructBlossom(
         description: String,
@@ -47,5 +48,5 @@ sealed class EdmondsStepType(
 
     class MaxPairingFound(
         description: String = "",
-    ) : EdmondsStepType(description), hu.gorlaci.pairingalgorithmsvisualizer.model.SkipPoint
+    ) : EdmondsStepType(description), SkipPointInterface
 }

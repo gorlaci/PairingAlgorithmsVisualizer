@@ -31,7 +31,6 @@ class EdmondsGraph(
     vertices = vertices,
     edges = edges,
     idCoordinatesMap = idCoordinatesMap,
-    newVertex = { EdmondsVertex(it) },
     newEdge = { from, to -> EdmondsEdge(from, to) },
 ) {
 

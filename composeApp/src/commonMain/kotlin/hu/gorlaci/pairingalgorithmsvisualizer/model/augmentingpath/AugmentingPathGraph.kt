@@ -17,7 +17,6 @@ class AugmentingPathGraph(
     vertices = vertices,
     edges = mutableSetOf(),
     idCoordinatesMap = idCoordinatesMap,
-    newVertex = { AugmentingPathVertex(it) },
     newEdge = { from, to -> Edge(from, to) },
 ) {
 
@@ -66,8 +65,6 @@ class AugmentingPathGraph(
     private fun saveStep(stepType: StepType = StepType.Nothing()) {
         steps.add(toGraphicalGraph(stepType) to getTree())
     }
-
-    private var augmentMade = true
 
     fun getTree(): AugmentingPathGraph {
         val treeVertices =
@@ -173,6 +170,8 @@ class AugmentingPathGraph(
         }
     }
 
+    private var augmentMade = true
+
     fun runAlgorithm() {
         saveStep()
         createClasses()
@@ -219,7 +218,7 @@ class AugmentingPathGraph(
         if (saveSteps) {
             saveStep(
                 StepType.Nothing(
-                    "Elindulunk ez egyik osztálybeli összes párosítatlan csúcsból",
+                    "Elindulunk ez A-beli összes párosítatlan csúcsból",
                 ),
             )
         }
@@ -300,10 +299,10 @@ class AugmentingPathGraph(
             for (vertex in vertices) {
                 vertex.visited = false
                 vertex.parent = null
-                unpairedVertices.clear()
-                pairedVertices.clear()
-                treeGrid.clear()
             }
+            unpairedVertices.clear()
+            pairedVertices.clear()
+            treeGrid.clear()
         }
         activeVertex = null
         augmentingPathVertices.clear()
