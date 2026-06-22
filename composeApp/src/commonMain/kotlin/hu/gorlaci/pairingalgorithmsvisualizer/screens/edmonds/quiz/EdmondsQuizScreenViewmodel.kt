@@ -125,7 +125,7 @@ class EdmondsQuizScreenViewmodel(
             if (answer == question.edgeType) {
                 EdmondsAnswer.Correct
             } else {
-                EdmondsAnswer.Incorrect("Ez egy ${question.edgeType.toHungarian()} él.")
+                EdmondsAnswer.Incorrect("Ez egy ${question.edgeType} él.")
             }
 
         showAnswer()

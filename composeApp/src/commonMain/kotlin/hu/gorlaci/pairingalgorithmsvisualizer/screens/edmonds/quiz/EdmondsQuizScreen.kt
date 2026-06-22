@@ -111,7 +111,7 @@ fun EdmondsQuizScreen(
                             Question(
                                 question = "Milyen típusú él ez?",
                                 answers = EdmondsEdgeType.entries,
-                                toString = { it.toHungarian() },
+                                toString = { it.toString() },
                                 onAnswer = { viewModel.onEdgeTypeAnswer(it) },
                             )
                         }

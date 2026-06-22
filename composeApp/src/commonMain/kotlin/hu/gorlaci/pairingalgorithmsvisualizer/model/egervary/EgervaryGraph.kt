@@ -111,12 +111,12 @@ class EgervaryGraph(
 
     private fun completeGraph() {
         while (class1.size < class2.size) {
-            val newVertex = EgervaryVertex("")
+            val newVertex = EgervaryVertex("A${class1.size + 1}")
             class1.add(newVertex)
             vertices.add(newVertex)
         }
         while (class2.size < class1.size) {
-            val newVertex = EgervaryVertex("")
+            val newVertex = EgervaryVertex("B${class2.size + 1}")
             class2.add(newVertex)
             vertices.add(newVertex)
         }

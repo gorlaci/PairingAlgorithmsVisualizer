@@ -115,7 +115,7 @@ abstract class AlgorithmRunningViewModel(
 
     abstract fun onRun()
 
-    var selectedVertex: Vertex? = null
+    protected var selectedVertex: Vertex? = null
 
     open fun onTap(
         x: Double,

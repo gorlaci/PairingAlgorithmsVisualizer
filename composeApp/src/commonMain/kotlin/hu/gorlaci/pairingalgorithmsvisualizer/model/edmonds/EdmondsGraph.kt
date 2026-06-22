@@ -273,7 +273,7 @@ class EdmondsGraph(
         }
     }
 
-    fun makePair(
+    private fun makePair(
         vertexA: EdmondsVertex,
         vertexB: EdmondsVertex,
     ) {

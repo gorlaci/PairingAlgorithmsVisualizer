@@ -6,16 +6,15 @@ enum class EdmondsEdgeType {
     CLEARING_CLEARING,
     CLEARING_INNER,
     INNER_INNER,
-    OUTER_INNER;
+    OUTER_INNER,
+    ;
 
-    fun toHungarian(): String {
-        return when (this) {
-            OUTER_OUTER -> "Külső-külső"
-            OUTER_CLEARING -> "Külső-tisztás"
-            CLEARING_CLEARING -> "Tisztás-tisztás"
-            CLEARING_INNER -> "Tisztás-belső"
-            INNER_INNER -> "Belső-belső"
-            OUTER_INNER -> "Külső-belső"
-        }
+    override fun toString(): String = when (this) {
+        OUTER_OUTER -> "Külső-külső"
+        OUTER_CLEARING -> "Külső-tisztás"
+        CLEARING_CLEARING -> "Tisztás-tisztás"
+        CLEARING_INNER -> "Tisztás-belső"
+        INNER_INNER -> "Belső-belső"
+        OUTER_INNER -> "Külső-belső"
     }
 }
