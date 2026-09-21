@@ -17,4 +17,6 @@
     <string name="augmenting_path_algorithm">Javítóutas algoritmus</string>
     <string name="edmonds_algorithm">Edmonds algoritmus</string>
     <string name="egervary_algorithm">Egerváry algoritmus</string>
+    <string name="bfs_algorithm">Szélességi bejárás</string>
+    <string name="dfs_algorithm">Mélységi bejárás</string>
 </resources>

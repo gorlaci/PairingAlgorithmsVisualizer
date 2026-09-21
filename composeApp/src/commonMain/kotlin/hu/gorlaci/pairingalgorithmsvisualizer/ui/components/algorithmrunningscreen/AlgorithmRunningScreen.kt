@@ -22,6 +22,7 @@ fun AlgorithmRunningScreen(
     title: String,
     onNavigateBack: () -> Unit,
     modifier: Modifier = Modifier,
+    skipButtonsShown: Boolean = true,
     legend: @Composable ColumnScope.() -> Unit = { Spacer(modifier = Modifier.height(0.dp)) },
     controls: @Composable () -> Unit = {},
     content: @Composable () -> Unit = {
@@ -96,22 +97,24 @@ fun AlgorithmRunningScreen(
                         Text(stringResource(Res.string.run_button))
                     }
 
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth(0.9f),
-                    ) {
-                        Button(
-                            onClick = viewModel::onSkipBackward,
-                            enabled = skipBackwardEnabled,
+                    if (skipButtonsShown) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier.fillMaxWidth(0.9f),
                         ) {
-                            Text("Ugrás vissza")
-                        }
+                            Button(
+                                onClick = viewModel::onSkipBackward,
+                                enabled = skipBackwardEnabled,
+                            ) {
+                                Text("Ugrás vissza")
+                            }
 
-                        Button(
-                            onClick = viewModel::onSkipForward,
-                            enabled = skipForwardEnabled,
-                        ) {
-                            Text("Ugrás előre")
+                            Button(
+                                onClick = viewModel::onSkipForward,
+                                enabled = skipForwardEnabled,
+                            ) {
+                                Text("Ugrás előre")
+                            }
                         }
                     }
 

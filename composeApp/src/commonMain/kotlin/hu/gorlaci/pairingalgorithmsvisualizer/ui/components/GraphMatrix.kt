@@ -76,9 +76,9 @@ fun GraphMatrix(
 @Composable
 fun TextCell(
     text: String,
+    modifier: Modifier = Modifier,
     fontWeight: FontWeight = FontWeight.Normal,
     color: Color = Color.Black,
-    modifier: Modifier = Modifier,
 ) {
     Text(
         text = text,

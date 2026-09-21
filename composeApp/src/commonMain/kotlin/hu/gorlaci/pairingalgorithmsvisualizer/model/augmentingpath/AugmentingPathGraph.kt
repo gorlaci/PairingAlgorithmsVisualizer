@@ -204,7 +204,7 @@ class AugmentingPathGraph(
         saveStep()
     }
 
-    fun findAugmentingPath(saveSteps: Boolean = true) {
+    private fun findAugmentingPath(saveSteps: Boolean = true) {
         augmentMade = false
 
         if (saveSteps) {
@@ -455,6 +455,6 @@ fun Graph<out Vertex, out Edge<out Vertex>>.toAugmentingPathGraph(): AugmentingP
     return AugmentingPathGraph(
         vertices = augmentingPathVertices,
         name = name,
-        idCoordinatesMap = idCoordinatesMap,
+        idCoordinatesMap = idCoordinatesMap.toMutableMap(),
     )
 }

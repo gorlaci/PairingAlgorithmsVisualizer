@@ -1,6 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -8,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.menu.AugmentingMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.runalgorithm.AugmentingAlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartite.MatrixBipartiteGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartiteweighted.MatrixBipartiteWeightedGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.menu.GraphDrawingMenu
@@ -17,7 +19,19 @@ import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz.EdmondsQuizSc
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.runalgorithm.EdmondsAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.menu.EgervaryMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.runalgorithm.EgervaryAlgorithmRunningViewScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.MainMenuItem
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.MainMenuScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.NewMainMenuScreen
+import org.jetbrains.compose.resources.imageResource
+import org.jetbrains.compose.resources.stringResource
+import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
+import pairingalgorithmsvisualizer.composeapp.generated.resources.augmenting
+import pairingalgorithmsvisualizer.composeapp.generated.resources.augmenting_path_algorithm
+import pairingalgorithmsvisualizer.composeapp.generated.resources.bfs_algorithm
+import pairingalgorithmsvisualizer.composeapp.generated.resources.edmonds
+import pairingalgorithmsvisualizer.composeapp.generated.resources.edmonds_algorithm
+import pairingalgorithmsvisualizer.composeapp.generated.resources.egervary
+import pairingalgorithmsvisualizer.composeapp.generated.resources.egervary_algorithm
 
 @Composable
 fun NavGraph(
@@ -26,7 +40,7 @@ fun NavGraph(
 ) {
     NavHost(
         navController = navHostController,
-        startDestination = Screen.MainMenu,
+        startDestination = Screen.NewMainMenu,
     ) {
         composable<Screen.DrawGraph.Visual> {
             GraphDrawingScreen(
@@ -137,6 +151,51 @@ fun NavGraph(
                 onRunAlgorithmClick = {
                     navHostController.navigate(Screen.Egervary.RunAlgorithm)
                 },
+                onBack = { navHostController.popBackStack() },
+            )
+        }
+
+        composable<Screen.NewMainMenu> {
+            val menuItems = listOf(
+                MainMenuItem(
+                    algorithmName = stringResource(Res.string.bfs_algorithm),
+                    algorithmImage = ImageBitmap(200, 200),
+                    onRunAlgorithm = {
+                        navHostController.navigate(Screen.BreadthFirstSearch.RunAlgorithm)
+                    },
+                ),
+                MainMenuItem(
+                    algorithmName = stringResource(Res.string.augmenting_path_algorithm),
+                    algorithmImage = imageResource(Res.drawable.augmenting),
+                    onRunAlgorithm = {
+                        navHostController.navigate(Screen.AugmentingPath.RunAlgorithm)
+                    },
+                ),
+                MainMenuItem(
+                    algorithmName = stringResource(Res.string.edmonds_algorithm),
+                    algorithmImage = imageResource(Res.drawable.edmonds),
+                    onRunAlgorithm = {
+                        navHostController.navigate(Screen.Edmonds.RunAlgorithm)
+                    },
+                    onQuiz = {
+                        navHostController.navigate(Screen.Edmonds.Quiz)
+                    },
+                ),
+                MainMenuItem(
+                    algorithmName = stringResource(Res.string.egervary_algorithm),
+                    algorithmImage = imageResource(Res.drawable.egervary),
+                    onRunAlgorithm = {
+                        navHostController.navigate(Screen.Egervary.RunAlgorithm)
+                    },
+                ),
+            )
+
+            NewMainMenuScreen(menuItems = menuItems)
+        }
+
+        composable<Screen.BreadthFirstSearch.RunAlgorithm> {
+            BreadthFirstSearchAlgorithmRunningScreen(
+                graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
             )
         }

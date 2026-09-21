@@ -51,4 +51,13 @@ object Screen {
 
     @Serializable
     object MainMenu
+
+    @Serializable
+    object NewMainMenu
+
+    object BreadthFirstSearch {
+
+        @Serializable
+        object RunAlgorithm
+    }
 }
