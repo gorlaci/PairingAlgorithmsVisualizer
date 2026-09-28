@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs
+package hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -13,15 +13,15 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
-import pairingalgorithmsvisualizer.composeapp.generated.resources.bfs_algorithm
+import pairingalgorithmsvisualizer.composeapp.generated.resources.dfs_algorithm
 
 @Composable
-fun BreadthFirstSearchAlgorithmRunningScreen(
+fun DepthFirstSearchAlgorithmRunningScreen(
     graphStorage: GraphStorage,
     onBack: () -> Unit,
     onNewGraph: () -> Unit,
 ) {
-    val viewModel = viewModel { BreadthFirstSearchAlgorithmRunningViewModel(graphStorage) }
+    val viewModel = viewModel { DepthFirstSearchAlgorithmRunningViewModel(graphStorage) }
 
     val graphicalGraph by viewModel.graphicalGraph
     val tree by viewModel.tree
@@ -31,7 +31,7 @@ fun BreadthFirstSearchAlgorithmRunningScreen(
 
     AlgorithmRunningScreen(
         viewModel = viewModel,
-        title = stringResource(Res.string.bfs_algorithm),
+        title = stringResource(Res.string.dfs_algorithm),
         onNavigateBack = onBack,
         onNewGraph = onNewGraph,
         modifier = Modifier.fillMaxSize(),
@@ -73,12 +73,25 @@ fun BreadthFirstSearchAlgorithmRunningScreen(
 
                             Row {
                                 TextCell(
-                                    text = "táv(v)",
+                                    text = "mszám(v)",
                                     modifier = firstCellSizeModifier,
                                 )
                                 for (vertex in graph.vertices) {
                                     TextCell(
-                                        text = vertex.distance?.toString() ?: "∞",
+                                        text = vertex.reachedNumber?.toString() ?: " ",
+                                        modifier = cellSizeModifier,
+                                    )
+                                }
+                            }
+
+                            Row {
+                                TextCell(
+                                    text = "bszám(v)",
+                                    modifier = firstCellSizeModifier,
+                                )
+                                for (vertex in graph.vertices) {
+                                    TextCell(
+                                        text = vertex.finishedNumber?.toString() ?: " ",
                                         modifier = cellSizeModifier,
                                     )
                                 }

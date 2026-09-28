@@ -21,6 +21,7 @@ fun AlgorithmRunningScreen(
     viewModel: AlgorithmRunningViewModel,
     title: String,
     onNavigateBack: () -> Unit,
+    onNewGraph: () -> Unit,
     modifier: Modifier = Modifier,
     skipButtonsShown: Boolean = true,
     legend: @Composable ColumnScope.() -> Unit = { Spacer(modifier = Modifier.height(0.dp)) },
@@ -67,6 +68,7 @@ fun AlgorithmRunningScreen(
                         selectedGraph = selectedGraph,
                         graphList = graphList,
                         onGraphSelected = viewModel::onGraphSelected,
+                        onNewGraph = onNewGraph,
                     )
                     controls()
                 }

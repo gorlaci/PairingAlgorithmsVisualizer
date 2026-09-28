@@ -1,7 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -10,6 +9,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.menu.AugmentingMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.runalgorithm.AugmentingAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs.DepthFirstSearchAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartite.MatrixBipartiteGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartiteweighted.MatrixBipartiteWeightedGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.menu.GraphDrawingMenu
@@ -24,14 +24,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.MainMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.NewMainMenuScreen
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.stringResource
-import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
-import pairingalgorithmsvisualizer.composeapp.generated.resources.augmenting
-import pairingalgorithmsvisualizer.composeapp.generated.resources.augmenting_path_algorithm
-import pairingalgorithmsvisualizer.composeapp.generated.resources.bfs_algorithm
-import pairingalgorithmsvisualizer.composeapp.generated.resources.edmonds
-import pairingalgorithmsvisualizer.composeapp.generated.resources.edmonds_algorithm
-import pairingalgorithmsvisualizer.composeapp.generated.resources.egervary
-import pairingalgorithmsvisualizer.composeapp.generated.resources.egervary_algorithm
+import pairingalgorithmsvisualizer.composeapp.generated.resources.*
 
 @Composable
 fun NavGraph(
@@ -53,6 +46,9 @@ fun NavGraph(
             EdmondsAlgorithmRunningScreen(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
+                onNewGraph = {
+                    navHostController.navigate(Screen.DrawGraph.Visual)
+                },
             )
         }
 
@@ -75,6 +71,9 @@ fun NavGraph(
             EdmondsQuizScreen(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
+                onNewGraph = {
+                    navHostController.navigate(Screen.DrawGraph.Visual)
+                },
             )
         }
 
@@ -106,6 +105,9 @@ fun NavGraph(
             AugmentingAlgorithmRunningScreen(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
+                onNewGraph = {
+                    navHostController.navigate(Screen.AugmentingPath.Menu)
+                },
             )
         }
 
@@ -133,6 +135,9 @@ fun NavGraph(
             EgervaryAlgorithmRunningViewScreen(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
+                onNewGraph = {
+                    navHostController.navigate(Screen.DrawGraph.MatrixBipartiteWeighted)
+                },
             )
         }
 
@@ -159,9 +164,16 @@ fun NavGraph(
             val menuItems = listOf(
                 MainMenuItem(
                     algorithmName = stringResource(Res.string.bfs_algorithm),
-                    algorithmImage = ImageBitmap(200, 200),
+                    algorithmImage = imageResource(Res.drawable.bfs),
                     onRunAlgorithm = {
                         navHostController.navigate(Screen.BreadthFirstSearch.RunAlgorithm)
+                    },
+                ),
+                MainMenuItem(
+                    algorithmName = stringResource(Res.string.dfs_algorithm),
+                    algorithmImage = imageResource(Res.drawable.dfs),
+                    onRunAlgorithm = {
+                        navHostController.navigate(Screen.DepthFirstSearch.RunAlgorithm)
                     },
                 ),
                 MainMenuItem(
@@ -197,6 +209,19 @@ fun NavGraph(
             BreadthFirstSearchAlgorithmRunningScreen(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
+                onNewGraph = {
+                    navHostController.navigate(Screen.DrawGraph.Visual)
+                },
+            )
+        }
+
+        composable<Screen.DepthFirstSearch.RunAlgorithm> {
+            DepthFirstSearchAlgorithmRunningScreen(
+                graphStorage = graphStorage,
+                onBack = { navHostController.popBackStack() },
+                onNewGraph = {
+                    navHostController.navigate(Screen.DrawGraph.Visual)
+                },
             )
         }
     }

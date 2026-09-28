@@ -60,4 +60,10 @@ object Screen {
         @Serializable
         object RunAlgorithm
     }
+
+    object DepthFirstSearch {
+
+        @Serializable
+        object RunAlgorithm
+    }
 }

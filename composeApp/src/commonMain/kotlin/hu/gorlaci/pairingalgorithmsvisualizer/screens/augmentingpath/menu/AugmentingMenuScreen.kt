@@ -7,7 +7,6 @@ import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.draw_matrix_screen
 import pairingalgorithmsvisualizer.composeapp.generated.resources.draw_visual_screen
-import pairingalgorithmsvisualizer.composeapp.generated.resources.run_algorithm_button
 
 @Composable
 fun AugmentingMenuScreen(
@@ -21,7 +20,7 @@ fun AugmentingMenuScreen(
         items = listOf(
             MenuItem(stringResource(Res.string.draw_visual_screen), onDrawVisualClick),
             MenuItem(stringResource(Res.string.draw_matrix_screen), onDrawMatrixClick),
-            MenuItem(stringResource(Res.string.run_algorithm_button), onRunAlgorithm),
+//            MenuItem(stringResource(Res.string.run_algorithm_button), onRunAlgorithm),
         ),
         onBack = onBack,
     )

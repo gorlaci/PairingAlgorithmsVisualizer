@@ -19,4 +19,5 @@
     <string name="egervary_algorithm">Egerváry algoritmus</string>
     <string name="bfs_algorithm">Szélességi bejárás</string>
     <string name="dfs_algorithm">Mélységi bejárás</string>
+    <string name="new_graph_button">Új gráf</string>
 </resources>

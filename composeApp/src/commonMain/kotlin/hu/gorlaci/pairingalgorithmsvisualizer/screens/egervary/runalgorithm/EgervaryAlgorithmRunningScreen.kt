@@ -23,6 +23,7 @@ import pairingalgorithmsvisualizer.composeapp.generated.resources.egervary_algor
 fun EgervaryAlgorithmRunningViewScreen(
     graphStorage: GraphStorage,
     onBack: () -> Unit,
+    onNewGraph: () -> Unit,
 ) {
     val viewModel = viewModel { EgervaryAlgorithmRunningViewModel(graphStorage) }
 
@@ -35,6 +36,7 @@ fun EgervaryAlgorithmRunningViewScreen(
         viewModel = viewModel,
         title = stringResource(Res.string.egervary_algorithm),
         onNavigateBack = onBack,
+        onNewGraph = onNewGraph,
         modifier = Modifier.fillMaxSize(),
         legend = {
             OpenableLegend(

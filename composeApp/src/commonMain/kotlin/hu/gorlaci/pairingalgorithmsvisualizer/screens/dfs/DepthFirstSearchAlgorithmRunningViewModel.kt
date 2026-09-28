@@ -1,21 +1,21 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs
+package hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs
 
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchVertex
-import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.toBreadthFirstSearchGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.DepthFirstSearchGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.DepthFirstSearchVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.toDepthFirstSearchGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
 
-class BreadthFirstSearchAlgorithmRunningViewModel(
+class DepthFirstSearchAlgorithmRunningViewModel(
     graphsStorage: GraphStorage,
 ) : AlgorithmRunningViewModel(graphsStorage) {
 
-    override val graphList = graphsStorage.getAllGraphs().map { it.toBreadthFirstSearchGraph() }
+    override val graphList = graphsStorage.getAllGraphs().map { it.toDepthFirstSearchGraph() }
     override val selectedGraph = derivedStateOf {
         graphList[selectedGraphIndex.value]
     }
@@ -24,10 +24,10 @@ class BreadthFirstSearchAlgorithmRunningViewModel(
 
     private val _steps = mutableStateOf(
         listOf(
-            Triple<BreadthFirstSearchGraph, StepType, BreadthFirstSearchGraph>(
+            Triple<DepthFirstSearchGraph, StepType, DepthFirstSearchGraph>(
                 selectedGraph.value,
                 StepType.Nothing(initString),
-                BreadthFirstSearchGraph(),
+                DepthFirstSearchGraph(),
             ),
         ),
     )
@@ -55,7 +55,7 @@ class BreadthFirstSearchAlgorithmRunningViewModel(
             Triple(
                 selectedGraph.value,
                 StepType.Nothing(initString),
-                BreadthFirstSearchGraph(),
+                DepthFirstSearchGraph(),
             ),
         )
 
@@ -67,7 +67,7 @@ class BreadthFirstSearchAlgorithmRunningViewModel(
     override fun onRun() {
         val graph = selectedGraph.value
 
-        graph.runAlgorithm(selectedVertex as? BreadthFirstSearchVertex)
+        graph.runAlgorithm(selectedVertex as? DepthFirstSearchVertex)
 
         _steps.value = graph.steps
 
@@ -87,6 +87,15 @@ class BreadthFirstSearchAlgorithmRunningViewModel(
         val graph = currentGraph.value
         val clickedVertex = graph.getVertexByCoordinates(x, y) ?: return
 
+        if (selectedVertex == clickedVertex) {
+            selectedVertex = null
+            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+                clickedVertex,
+                Color.White,
+            )
+            return
+        }
+
         selectedVertex?.let {
             graphicalGraph.value = graphicalGraph.value.changeInnerColor(
                 it,
@@ -94,14 +103,11 @@ class BreadthFirstSearchAlgorithmRunningViewModel(
             )
         }
 
-        if (selectedVertex == clickedVertex) {
-            selectedVertex = null
-            return
-        }
         selectedVertex = clickedVertex
         graphicalGraph.value = graphicalGraph.value.changeInnerColor(
             clickedVertex,
             LIGHT_ORANGE,
         )
+        return
     }
 }

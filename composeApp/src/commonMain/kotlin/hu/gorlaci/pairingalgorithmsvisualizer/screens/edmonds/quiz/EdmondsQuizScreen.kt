@@ -29,6 +29,7 @@ import pairingalgorithmsvisualizer.composeapp.generated.resources.*
 fun EdmondsQuizScreen(
     graphStorage: GraphStorage,
     onBack: () -> Unit,
+    onNewGraph: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -62,6 +63,7 @@ fun EdmondsQuizScreen(
                     selectedGraph = selectedGraph,
                     graphList = viewModel.graphList,
                     onGraphSelected = viewModel::onGraphSelected,
+                    onNewGraph = onNewGraph,
                 )
 
                 GraphCanvas(

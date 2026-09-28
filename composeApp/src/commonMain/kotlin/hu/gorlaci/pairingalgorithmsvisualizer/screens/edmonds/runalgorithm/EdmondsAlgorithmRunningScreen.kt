@@ -20,6 +20,7 @@ import pairingalgorithmsvisualizer.composeapp.generated.resources.edmonds_algori
 fun EdmondsAlgorithmRunningScreen(
     graphStorage: GraphStorage,
     onBack: () -> Unit,
+    onNewGraph: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
 
@@ -34,6 +35,7 @@ fun EdmondsAlgorithmRunningScreen(
         viewModel = viewModel,
         title = stringResource(Res.string.edmonds_algorithm),
         onNavigateBack = onBack,
+        onNewGraph = onNewGraph,
         modifier = Modifier.fillMaxSize(),
         legend = {
             OpenableLegend(

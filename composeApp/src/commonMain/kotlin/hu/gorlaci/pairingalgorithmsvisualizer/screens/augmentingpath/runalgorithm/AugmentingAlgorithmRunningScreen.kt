@@ -22,6 +22,7 @@ import pairingalgorithmsvisualizer.composeapp.generated.resources.augmenting_pat
 fun AugmentingAlgorithmRunningScreen(
     graphStorage: GraphStorage,
     onBack: () -> Unit,
+    onNewGraph: () -> Unit,
 ) {
     val viewModel = viewModel { AugmentingAlgorithmRunningViewModel(graphStorage) }
 
@@ -37,6 +38,7 @@ fun AugmentingAlgorithmRunningScreen(
         viewModel = viewModel,
         title = stringResource(Res.string.augmenting_path_algorithm),
         onNavigateBack = onBack,
+        onNewGraph = onNewGraph,
         modifier = Modifier.fillMaxSize(),
         legend = {
             OpenableLegend(
