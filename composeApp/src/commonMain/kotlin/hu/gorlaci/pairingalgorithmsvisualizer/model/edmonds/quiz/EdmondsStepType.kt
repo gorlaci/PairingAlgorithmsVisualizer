@@ -1,10 +1,10 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz
 
-import hu.gorlaci.pairingalgorithmsvisualizer.model.SkipPoint as SkipPointInterface
-import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsBlossomVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.SkipPoint as SkipPointInterface
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 
 sealed class EdmondsStepType(
     description: String,

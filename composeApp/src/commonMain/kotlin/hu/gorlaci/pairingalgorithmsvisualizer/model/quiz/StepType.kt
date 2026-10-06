@@ -1,6 +1,6 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.model
+package hu.gorlaci.pairingalgorithmsvisualizer.model.quiz
 
-import hu.gorlaci.pairingalgorithmsvisualizer.model.SkipPoint as SkipPointInterface
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.SkipPoint as SkipPointInterface
 
 abstract class StepType(
     val description: String = "",

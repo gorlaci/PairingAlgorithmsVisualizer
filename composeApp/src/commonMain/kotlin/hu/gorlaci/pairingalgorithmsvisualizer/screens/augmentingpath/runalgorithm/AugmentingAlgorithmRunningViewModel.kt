@@ -4,9 +4,9 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
-import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.PairingAlgorithmRunningViewModel
 

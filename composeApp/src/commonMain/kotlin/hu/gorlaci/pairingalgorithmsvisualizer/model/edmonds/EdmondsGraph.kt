@@ -3,6 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.*
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_GREEN
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_PINK

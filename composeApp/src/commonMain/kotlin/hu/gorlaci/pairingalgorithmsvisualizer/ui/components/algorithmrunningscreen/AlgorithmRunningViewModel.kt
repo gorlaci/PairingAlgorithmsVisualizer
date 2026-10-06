@@ -7,6 +7,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.*
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.SkipPoint
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 

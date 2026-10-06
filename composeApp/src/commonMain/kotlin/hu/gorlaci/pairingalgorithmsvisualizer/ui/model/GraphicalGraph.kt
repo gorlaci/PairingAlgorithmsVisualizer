@@ -2,10 +2,10 @@ package hu.gorlaci.pairingalgorithmsvisualizer.ui.model
 
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
-import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 
 data class GraphicalGraph(
     val graphicalVertices: List<GraphicalVertex> = emptyList(),

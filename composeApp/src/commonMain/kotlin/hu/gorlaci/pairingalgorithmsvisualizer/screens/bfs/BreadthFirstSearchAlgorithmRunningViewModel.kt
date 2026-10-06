@@ -5,14 +5,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
-import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.toBreadthFirstSearchGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
 
-class BreadthFirstSearchAlgorithmRunningViewModel(
+open class BreadthFirstSearchAlgorithmRunningViewModel(
     graphsStorage: GraphStorage,
 ) : AlgorithmRunningViewModel<
     BreadthFirstSearchGraph,
@@ -72,7 +72,7 @@ class BreadthFirstSearchAlgorithmRunningViewModel(
     override fun onRun() {
         val graph = selectedGraph.value
 
-        graph.runAlgorithm(selectedVertex as? BreadthFirstSearchVertex)
+        graph.runAlgorithm(selectedVertex)
 
         _steps.value = graph.steps
 

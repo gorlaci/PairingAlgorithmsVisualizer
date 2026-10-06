@@ -1,5 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model
 
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex

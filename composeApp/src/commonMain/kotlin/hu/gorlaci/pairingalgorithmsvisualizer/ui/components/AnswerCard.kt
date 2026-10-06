@@ -10,11 +10,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsAnswer
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.Answer
 
 @Composable
 fun AnswerCard(
-    answer: EdmondsAnswer,
+    answer: Answer,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -25,8 +25,8 @@ fun AnswerCard(
         ) {
             val title =
                 when (answer) {
-                    EdmondsAnswer.Correct -> "Helyes válasz!"
-                    is EdmondsAnswer.Incorrect -> "Helytelen válasz"
+                    Answer.Correct -> "Helyes válasz!"
+                    is Answer.Incorrect -> "Helytelen válasz"
                 }
 
             Text(
@@ -38,7 +38,7 @@ fun AnswerCard(
                 modifier = Modifier.padding(10.dp).fillMaxWidth(),
             )
 
-            if (answer is EdmondsAnswer.Incorrect) {
+            if (answer is Answer.Incorrect) {
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(

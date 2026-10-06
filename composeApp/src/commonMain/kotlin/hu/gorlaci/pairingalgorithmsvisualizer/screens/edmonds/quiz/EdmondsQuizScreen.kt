@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsEdgeType
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz.QuestionMode.*
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz.EdmondsQuizScreenViewmodel.QuestionMode.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.AnswerCard
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphSelectionDropdown

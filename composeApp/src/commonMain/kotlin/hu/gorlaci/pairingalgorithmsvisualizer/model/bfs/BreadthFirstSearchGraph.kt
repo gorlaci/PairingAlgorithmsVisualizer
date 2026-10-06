@@ -2,6 +2,9 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.bfs
 
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.*
+import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.BreadthFirstSearchStepType
+import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.NeighbourStatus
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
@@ -236,19 +239,31 @@ class BreadthFirstSearchGraph(
                     addToTreeGrid(it)
                 }
                 saveStep(
-                    "A vizsgálandó csúcsok listája üres, járjuk be a komponenst ${activeVertex?.name} csúcsból",
+                    BreadthFirstSearchStepType.SelectedVertex(
+                        description =
+                            "A vizsgálandó csúcsok listája üres, járjuk be a komponenst ${activeVertex?.name} csúcsból",
+                        vertex = activeVertex!!,
+                    ),
                 )
             } else {
                 activeVertex = queue.removeFirst()
-                saveStep("A listában a következő csúcs: ${activeVertex?.name}")
+                saveStep(
+                    BreadthFirstSearchStepType.SelectedVertex(
+                        description = "A listában a következő csúcs: ${activeVertex?.name}",
+                        vertex = activeVertex!!,
+                    ),
+                )
             }
-            saveStep(
-                "Vegyük be a vizsgálandó csúcsok közé a kiválasztott csúcs még nem vizsgált szomszédait",
-            )
             activeVertex?.let { vertex ->
                 vertex.neighbours.sortedBy { it.name }.forEach { neighbour ->
                     activeNeighbour = neighbour
-                    if (neighbour !in processedVertices && neighbour !in queue) {
+                    val neighbourStatus =
+                        if (neighbour !in processedVertices && neighbour !in queue) {
+                            NeighbourStatus.ADDED
+                        } else {
+                            NeighbourStatus.SKIPPED
+                        }
+                    if (neighbourStatus == NeighbourStatus.ADDED) {
                         neighbour.distance = vertex.distance?.plus(1)
                         neighbour.row = vertex.row + 1
                         neighbour.parent = vertex
@@ -256,7 +271,13 @@ class BreadthFirstSearchGraph(
                         addToTreeGrid(neighbour)
                     }
                     saveStep(
-                        "Vegyük be a vizsgálandó csúcsok közé a kiválasztott csúcs még nem vizsgált szomszédait",
+                        BreadthFirstSearchStepType.SelectedNeighbour(
+                            description =
+                                "Vizsgáljuk meg a ${vertex.name} csúcs ${neighbour.name} szomszédját",
+                            vertex = vertex,
+                            neighbour = neighbour,
+                            neighbourStatus = neighbourStatus,
+                        ),
                     )
                 }
                 activeNeighbour = null

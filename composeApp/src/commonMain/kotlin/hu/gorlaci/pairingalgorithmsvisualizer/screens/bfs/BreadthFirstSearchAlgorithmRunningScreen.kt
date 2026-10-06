@@ -8,9 +8,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.bfs_algorithm
@@ -37,64 +39,81 @@ fun BreadthFirstSearchAlgorithmRunningScreen(
         modifier = Modifier.fillMaxSize(),
         skipButtonsShown = false,
     ) {
-        Row(modifier = Modifier.fillMaxSize()) {
+        BreadthFirstSearchScreenContent(
+            viewModel = viewModel,
+            graphicalGraph = graphicalGraph,
+            tree = tree,
+            graph = graph,
+            inSetup = inSetup,
+        )
+    }
+}
+
+@Composable
+fun BreadthFirstSearchScreenContent(
+    viewModel: BreadthFirstSearchAlgorithmRunningViewModel,
+    graphicalGraph: GraphicalGraph,
+    tree: GraphicalGraph,
+    graph: BreadthFirstSearchGraph,
+    inSetup: Boolean,
+) {
+    Row(modifier = Modifier.fillMaxSize()) {
+        GraphCanvas(
+            graphicalGraph = graphicalGraph,
+            modifier = Modifier.fillMaxSize().weight(1f),
+            onTap = viewModel::onTap,
+        )
+        Column(
+            modifier = Modifier.fillMaxSize().weight(1f),
+        ) {
             GraphCanvas(
-                graphicalGraph = graphicalGraph,
-                modifier = Modifier.fillMaxSize().weight(1f),
-                onTap = viewModel::onTap,
+                graphicalGraph = tree,
+                modifier = Modifier.fillMaxSize().weight(2f),
             )
-            Column(
-                modifier = Modifier.fillMaxSize().weight(1f),
-            ) {
-                GraphCanvas(
-                    graphicalGraph = tree,
-                    modifier = Modifier.fillMaxSize().weight(2f),
-                )
 
-                if (!inSetup) {
-                    val cellSizeModifier = Modifier.size(40.dp, 25.dp)
-                    val firstCellSizeModifier = Modifier.size(80.dp, 25.dp)
+            if (!inSetup) {
+                val cellSizeModifier = Modifier.size(40.dp, 25.dp)
+                val firstCellSizeModifier = Modifier.size(80.dp, 25.dp)
 
-                    Box(
-                        modifier = Modifier.fillMaxSize().weight(1f),
+                Box(
+                    modifier = Modifier.fillMaxSize().weight(1f),
+                ) {
+                    Column(
+                        modifier = Modifier.align(Alignment.Center),
                     ) {
-                        Column(
-                            modifier = Modifier.align(Alignment.Center),
-                        ) {
-                            Row {
-                                Spacer(modifier = firstCellSizeModifier)
-                                for (vertex in graph.vertices) {
-                                    TextCell(
-                                        text = vertex.name,
-                                        modifier = cellSizeModifier,
-                                    )
-                                }
-                            }
-
-                            Row {
+                        Row {
+                            Spacer(modifier = firstCellSizeModifier)
+                            for (vertex in graph.vertices) {
                                 TextCell(
-                                    text = "táv(v)",
-                                    modifier = firstCellSizeModifier,
+                                    text = vertex.name,
+                                    modifier = cellSizeModifier,
                                 )
-                                for (vertex in graph.vertices) {
-                                    TextCell(
-                                        text = vertex.distance?.toString() ?: "∞",
-                                        modifier = cellSizeModifier,
-                                    )
-                                }
                             }
+                        }
 
-                            Row {
+                        Row {
+                            TextCell(
+                                text = "táv(v)",
+                                modifier = firstCellSizeModifier,
+                            )
+                            for (vertex in graph.vertices) {
                                 TextCell(
-                                    text = "előző(v)",
-                                    modifier = firstCellSizeModifier,
+                                    text = vertex.distance?.toString() ?: "∞",
+                                    modifier = cellSizeModifier,
                                 )
-                                for (vertex in graph.vertices) {
-                                    TextCell(
-                                        text = vertex.parent?.name ?: "*",
-                                        modifier = cellSizeModifier,
-                                    )
-                                }
+                            }
+                        }
+
+                        Row {
+                            TextCell(
+                                text = "előző(v)",
+                                modifier = firstCellSizeModifier,
+                            )
+                            for (vertex in graph.vertices) {
+                                TextCell(
+                                    text = vertex.parent?.name ?: "*",
+                                    modifier = cellSizeModifier,
+                                )
                             }
                         }
                     }

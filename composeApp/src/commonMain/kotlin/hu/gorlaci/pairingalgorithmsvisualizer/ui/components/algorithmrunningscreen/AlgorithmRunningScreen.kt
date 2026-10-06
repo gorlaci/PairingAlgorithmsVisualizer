@@ -33,6 +33,7 @@ fun <
     skipButtonsShown: Boolean = true,
     legend: @Composable ColumnScope.() -> Unit = { Spacer(modifier = Modifier.height(0.dp)) },
     controls: @Composable () -> Unit = {},
+    description: (@Composable ColumnScope.() -> Unit)? = null,
     content: @Composable () -> Unit = {
         GraphCanvas(
             graphicalGraph = viewModel.graphicalGraph.value,
@@ -93,10 +94,14 @@ fun <
                     modifier = Modifier,
                     verticalArrangement = Arrangement.Bottom,
                 ) {
-                    Text(
-                        text = graphicalGraph.stepType.description,
-                        modifier = Modifier.fillMaxWidth().padding(20.dp),
-                    )
+                    if (description != null) {
+                        description()
+                    } else {
+                        Text(
+                            text = graphicalGraph.stepType.description,
+                            modifier = Modifier.fillMaxWidth().padding(20.dp),
+                        )
+                    }
                     Spacer(modifier = Modifier.fillMaxHeight(0.1f))
 
                     Button(

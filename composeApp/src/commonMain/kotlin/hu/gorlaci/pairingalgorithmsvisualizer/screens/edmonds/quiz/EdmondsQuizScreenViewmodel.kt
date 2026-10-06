@@ -5,9 +5,9 @@ import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsAnswer
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsEdgeType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
+import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.Answer
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.runalgorithm.EdmondsAlgorithmRunningScreenViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
@@ -23,7 +23,7 @@ class EdmondsQuizScreenViewmodel(
     val quizStarted = mutableStateOf(false)
 
     val questionMode = mutableStateOf(QuestionMode.NOTHING)
-    val lastAnswer = mutableStateOf<EdmondsAnswer>(EdmondsAnswer.Correct)
+    val lastAnswer = mutableStateOf<Answer>(Answer.Correct)
 
     val questionFrequency = mutableStateOf(1f)
 
@@ -123,9 +123,9 @@ class EdmondsQuizScreenViewmodel(
 
         lastAnswer.value =
             if (answer == question.edgeType) {
-                EdmondsAnswer.Correct
+                Answer.Correct
             } else {
-                EdmondsAnswer.Incorrect("Ez egy ${question.edgeType} él.")
+                Answer.Incorrect("Ez egy ${question.edgeType} él.")
             }
 
         showAnswer()
@@ -210,9 +210,9 @@ class EdmondsQuizScreenViewmodel(
 
         lastAnswer.value =
             if (containsSameEdges(getMarkedEdges(), question.pathEdges)) {
-                EdmondsAnswer.Correct
+                Answer.Correct
             } else {
-                EdmondsAnswer.Incorrect(
+                Answer.Incorrect(
                     "A javító út a következő élekből áll: ${
                         question.pathEdges.joinToString {
                             "(${it.fromVertex.name}, ${it.toVertex.name})"
@@ -228,9 +228,9 @@ class EdmondsQuizScreenViewmodel(
 
         lastAnswer.value =
             if (containsSameEdges(getMarkedEdges(), question.blossomEdges)) {
-                EdmondsAnswer.Correct
+                Answer.Correct
             } else {
-                EdmondsAnswer.Incorrect(
+                Answer.Incorrect(
                     "A kelyhet a következő élek alkotják: ${
                         question.blossomEdges.joinToString {
                             "(${it.fromVertex.name}, ${it.toVertex.name})"
@@ -280,12 +280,12 @@ class EdmondsQuizScreenViewmodel(
         questionMode.value = QuestionMode.SHOW_ANSWER
         setButtons()
     }
-}
 
-enum class QuestionMode {
-    NOTHING,
-    SHOW_ANSWER,
-    EDGE_TYPE,
-    MARK_AUGMENTING_PATH,
-    MARK_BLOSSOM,
+    enum class QuestionMode {
+        NOTHING,
+        SHOW_ANSWER,
+        EDGE_TYPE,
+        MARK_AUGMENTING_PATH,
+        MARK_BLOSSOM,
+    }
 }
