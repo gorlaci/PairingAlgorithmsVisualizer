@@ -1,7 +1,12 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.dfs
 
 import androidx.compose.ui.graphics.Color
-import hu.gorlaci.pairingalgorithmsvisualizer.model.*
+import hu.gorlaci.pairingalgorithmsvisualizer.model.AlgorithmRunningGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.quiz.DepthFirstSearchStepType
+import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.quiz.NeighbourStatus
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
@@ -206,14 +211,26 @@ class DepthFirstSearchGraph(
                 neighbour.row = vertex.row + 1
                 addToTreeGrid(neighbour)
                 saveStep(
-                    "A ${vertex.name} csúcs szomszédja a ${neighbour.name} csúcs, amit még nem vizsgáltunk, így bejárjuk",
+                    DepthFirstSearchStepType.SelectedNeighbour(
+                        description =
+                            "A ${vertex.name} csúcs szomszédja a ${neighbour.name} csúcs, amit még nem vizsgáltunk, így bejárjuk",
+                        vertex = vertex,
+                        neighbour = neighbour,
+                        neighbourStatus = NeighbourStatus.VISIT,
+                    ),
                 )
                 activeNeighbour = null
                 expand(neighbour)
                 activeVertex = vertex
             } else {
                 saveStep(
-                    "A ${vertex.name} csúcs szomszédja a ${neighbour.name} csúcs, amit már vizsgáltunk, így nem járjuk be újra",
+                    DepthFirstSearchStepType.SelectedNeighbour(
+                        description =
+                            "A ${vertex.name} csúcs szomszédja a ${neighbour.name} csúcs, amit már vizsgáltunk, így nem járjuk be újra",
+                        vertex = vertex,
+                        neighbour = neighbour,
+                        neighbourStatus = NeighbourStatus.SKIP,
+                    ),
                 )
             }
         }
@@ -246,7 +263,11 @@ class DepthFirstSearchGraph(
                     addToTreeGrid(it)
                 }
                 saveStep(
-                    "A vizsgálandó csúcsok listája üres, járjuk be a komponenst a ${activeVertex?.name} csúcsból",
+                    DepthFirstSearchStepType.SelectedVertex(
+                        description =
+                            "A vizsgálandó csúcsok listája üres, járjuk be a komponenst a ${activeVertex?.name} csúcsból",
+                        vertex = activeVertex!!,
+                    ),
                 )
             }
             expand(activeVertex!!)
@@ -325,6 +346,8 @@ class DepthFirstSearchGraph(
         treeGrid.clear()
         startingVertex = null
         activeNeighbour = null
+        finished = 0
+        reached = 0
 
         vertices.forEach { vertex ->
             vertex.row = -1

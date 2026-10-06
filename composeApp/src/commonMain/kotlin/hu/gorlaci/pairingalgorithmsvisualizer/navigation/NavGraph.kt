@@ -11,6 +11,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.runalgorith
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.quiz.BreadthFirstSearchQuizScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs.DepthFirstSearchAlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs.quiz.DepthFirstSearchQuizScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartite.MatrixBipartiteGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartiteweighted.MatrixBipartiteWeightedGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.menu.GraphDrawingMenu
@@ -179,6 +180,9 @@ fun NavGraph(
                     onRunAlgorithm = {
                         navHostController.navigate(Screen.DepthFirstSearch.RunAlgorithm)
                     },
+                    onQuiz = {
+                        navHostController.navigate(Screen.DepthFirstSearch.Quiz)
+                    },
                 ),
                 MainMenuItem(
                     algorithmName = stringResource(Res.string.augmenting_path_algorithm),
@@ -231,6 +235,16 @@ fun NavGraph(
 
         composable<Screen.BreadthFirstSearch.Quiz> {
             BreadthFirstSearchQuizScreen(
+                graphStorage = graphStorage,
+                onBack = { navHostController.popBackStack() },
+                onNewGraph = {
+                    navHostController.navigate(Screen.DrawGraph.Visual)
+                },
+            )
+        }
+
+        composable<Screen.DepthFirstSearch.Quiz> {
+            DepthFirstSearchQuizScreen(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
                 onNewGraph = {

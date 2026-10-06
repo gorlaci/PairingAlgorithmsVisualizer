@@ -12,7 +12,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
 
-class DepthFirstSearchAlgorithmRunningViewModel(
+open class DepthFirstSearchAlgorithmRunningViewModel(
     graphsStorage: GraphStorage,
 ) : AlgorithmRunningViewModel<
     DepthFirstSearchGraph,

@@ -68,5 +68,8 @@ object Screen {
 
         @Serializable
         object RunAlgorithm
+
+        @Serializable
+        object Quiz
     }
 }
