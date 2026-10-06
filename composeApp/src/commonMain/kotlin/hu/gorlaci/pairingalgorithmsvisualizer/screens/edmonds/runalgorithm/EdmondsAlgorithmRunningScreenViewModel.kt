@@ -6,9 +6,11 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.PairingAlgorithmRunningViewModel
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -16,7 +18,11 @@ import kotlinx.coroutines.withContext
 open class EdmondsAlgorithmRunningScreenViewModel(
     graphStorage: GraphStorage,
     protected val composableCoroutineContext: CoroutineContext,
-) : AlgorithmRunningViewModel(graphStorage) {
+) : PairingAlgorithmRunningViewModel<
+    EdmondsGraph,
+    EdmondsVertex,
+    EdmondsEdge,
+    >(graphStorage) {
     override val graphList = graphStorage.getAllEdmondsGraphs()
 
     val currentGraph = mutableStateOf(graphList[selectedGraphIndex.value])

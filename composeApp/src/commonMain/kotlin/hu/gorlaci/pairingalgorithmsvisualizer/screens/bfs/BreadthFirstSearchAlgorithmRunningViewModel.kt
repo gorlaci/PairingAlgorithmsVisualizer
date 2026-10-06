@@ -4,6 +4,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchVertex
@@ -13,7 +14,11 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscre
 
 class BreadthFirstSearchAlgorithmRunningViewModel(
     graphsStorage: GraphStorage,
-) : AlgorithmRunningViewModel(graphsStorage) {
+) : AlgorithmRunningViewModel<
+    BreadthFirstSearchGraph,
+    BreadthFirstSearchVertex,
+    Edge<BreadthFirstSearchVertex>,
+    >(graphsStorage) {
 
     override val graphList = graphsStorage.getAllGraphs().map { it.toBreadthFirstSearchGraph() }
     override val selectedGraph = derivedStateOf {

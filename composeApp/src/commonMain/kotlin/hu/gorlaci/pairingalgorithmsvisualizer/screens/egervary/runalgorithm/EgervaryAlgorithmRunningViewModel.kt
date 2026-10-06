@@ -3,11 +3,18 @@ package hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.runalgorithm
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
 
 class EgervaryAlgorithmRunningViewModel(
     graphStorage: GraphStorage,
-) : AlgorithmRunningViewModel(graphStorage) {
+) : AlgorithmRunningViewModel<
+    EgervaryGraph,
+    EgervaryVertex,
+    EgervaryEdge,
+    >(graphStorage) {
 
     override val initString = ""
 

@@ -1,10 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.dfs
 
 import androidx.compose.ui.graphics.Color
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
@@ -24,7 +21,8 @@ class DepthFirstSearchGraph(
     edges = mutableSetOf(),
     idCoordinatesMap = idCoordinatesMap,
     newEdge = { from, to -> Edge(from, to) },
-) {
+),
+    AlgorithmRunningGraph {
     private constructor(
         vertices: MutableSet<DepthFirstSearchVertex> = mutableSetOf(),
         name: String = "",

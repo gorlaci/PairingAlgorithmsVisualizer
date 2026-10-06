@@ -18,7 +18,9 @@ class AugmentingPathGraph(
     edges = mutableSetOf(),
     idCoordinatesMap = idCoordinatesMap,
     newEdge = { from, to -> Edge(from, to) },
-) {
+),
+    PairableGraph<AugmentingPathVertex, Edge<AugmentingPathVertex>>,
+    AlgorithmRunningGraph {
 
     override val edges: MutableSet<Edge<AugmentingPathVertex>>
         get() {
@@ -403,23 +405,22 @@ class AugmentingPathGraph(
     }
 
     override fun pairVertices(
-        vertexA: Vertex,
-        vertexB: Vertex,
+        vertexA: AugmentingPathVertex,
+        vertexB: AugmentingPathVertex,
     ) {
-        (vertexA as AugmentingPathVertex).pair = vertexB as AugmentingPathVertex
+        vertexA.pair = vertexB
         vertexB.pair = vertexA
     }
 
-    override fun unPairVertices(
-        vertexA: Vertex,
-        vertexB: Vertex,
+    override fun unpairVertices(
+        vertexA: AugmentingPathVertex,
+        vertexB: AugmentingPathVertex,
     ) {
-        (vertexA as AugmentingPathVertex).pair = null
-        (vertexB as AugmentingPathVertex).pair = null
+        vertexA.pair = null
+        vertexB.pair = null
     }
 
-    override fun getPair(vertex: Vertex): AugmentingPathVertex? =
-        (vertex as AugmentingPathVertex).pair
+    override fun getPair(vertex: AugmentingPathVertex): AugmentingPathVertex? = vertex.pair
 
     override fun resetAlgorithm() {
         for (vertex in vertices) {

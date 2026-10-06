@@ -6,19 +6,21 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.model.SkipPoint
-import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 
-abstract class AlgorithmRunningViewModel(
+abstract class AlgorithmRunningViewModel<
+    GraphType : Graph<VertexType, EdgeType>,
+    VertexType : Vertex,
+    EdgeType : Edge<VertexType>,
+    >(
     graphStorage: GraphStorage,
 ) : ViewModel() {
 
     protected open val initString = "Jelöld ki a kiinduló párosítást!"
 
-    open val graphList = graphStorage.getAllGraphs()
+    abstract val graphList: List<GraphType>
 
     protected val selectedGraphIndex = mutableStateOf(0)
 
@@ -115,7 +117,7 @@ abstract class AlgorithmRunningViewModel(
 
     abstract fun onRun()
 
-    protected var selectedVertex: Vertex? = null
+    protected open var selectedVertex: VertexType? = null
 
     open fun onTap(
         x: Double,
@@ -125,39 +127,22 @@ abstract class AlgorithmRunningViewModel(
 
         val graph = selectedGraph.value
         val clickedVertex = graph.getVertexByCoordinates(x, y) ?: return
-        if (selectedVertex == null) {
+
+        selectedVertex?.let {
+            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+                it,
+                Color.White,
+            )
+        }
+
+        if (clickedVertex != selectedVertex) {
             selectedVertex = clickedVertex
             graphicalGraph.value = graphicalGraph.value.changeInnerColor(
                 clickedVertex,
                 LIGHT_ORANGE,
             )
-            return
-        }
-        if (selectedVertex == clickedVertex) {
+        } else {
             selectedVertex = null
-            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
-                clickedVertex,
-                Color.White,
-            )
-            return
-        }
-        selectedVertex?.let { selectedVertexNotNull ->
-            if (graph.getPair(clickedVertex) == selectedVertexNotNull) {
-                graph.unPairVertices(clickedVertex, selectedVertexNotNull)
-                selectedVertex = null
-                graphicalGraph.value = graph.toGraphicalGraph(StepType.Nothing(initString))
-                return
-            }
-            if (
-                selectedVertexNotNull in graph.getNeighbours(clickedVertex) &&
-                graph.getPair(clickedVertex) == null &&
-                graph.getPair(selectedVertexNotNull) == null
-            ) {
-                graph.pairVertices(clickedVertex, selectedVertexNotNull)
-                selectedVertex = null
-                graphicalGraph.value = graph.toGraphicalGraph(StepType.Nothing(initString))
-                return
-            }
         }
     }
 }

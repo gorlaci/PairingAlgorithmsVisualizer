@@ -1,10 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds
 
 import androidx.compose.ui.graphics.Color
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.*
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_GREEN
@@ -32,7 +29,9 @@ class EdmondsGraph(
     edges = edges,
     idCoordinatesMap = idCoordinatesMap,
     newEdge = { from, to -> EdmondsEdge(from, to) },
-) {
+),
+    PairableGraph<EdmondsVertex, EdmondsEdge>,
+    AlgorithmRunningGraph {
 
     fun copy(): EdmondsGraph {
         val vertexMap = mutableMapOf<EdmondsVertex, EdmondsVertex>()
@@ -679,24 +678,20 @@ class EdmondsGraph(
         return Color.Transparent
     }
 
-    override fun getPair(vertex: Vertex): EdmondsVertex? = (vertex as EdmondsVertex).pair
+    override fun getPair(vertex: EdmondsVertex): EdmondsVertex? = vertex.pair
 
     override fun pairVertices(
-        vertexA: Vertex,
-        vertexB: Vertex,
+        vertexA: EdmondsVertex,
+        vertexB: EdmondsVertex,
     ) {
-        vertexA as EdmondsVertex
-        vertexB as EdmondsVertex
         vertexA.pair = vertexB
         vertexB.pair = vertexA
     }
 
-    override fun unPairVertices(
-        vertexA: Vertex,
-        vertexB: Vertex,
+    override fun unpairVertices(
+        vertexA: EdmondsVertex,
+        vertexB: EdmondsVertex,
     ) {
-        vertexA as EdmondsVertex
-        vertexB as EdmondsVertex
         vertexA.pair = null
         vertexB.pair = null
     }

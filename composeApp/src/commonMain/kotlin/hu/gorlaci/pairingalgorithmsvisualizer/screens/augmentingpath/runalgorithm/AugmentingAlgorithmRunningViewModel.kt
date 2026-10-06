@@ -3,14 +3,22 @@ package hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.runalgorit
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayMode
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.PairingAlgorithmRunningViewModel
 
 class AugmentingAlgorithmRunningViewModel(
     graphStorage: GraphStorage,
-) : AlgorithmRunningViewModel(graphStorage) {
+) : PairingAlgorithmRunningViewModel<
+    AugmentingPathGraph,
+    AugmentingPathVertex,
+    Edge<AugmentingPathVertex>,
+    >(
+    graphStorage,
+) {
 
     override val graphList = graphStorage.getAllAugmentingPathGraphs()
 

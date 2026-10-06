@@ -1,6 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.egervary
 
 import androidx.compose.ui.graphics.Color
+import hu.gorlaci.pairingalgorithmsvisualizer.model.AlgorithmRunningGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.BipartiteGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
@@ -24,7 +25,8 @@ class EgervaryGraph(
         to.edges.add(edge)
         edge
     },
-) {
+),
+    AlgorithmRunningGraph {
 
     val steps = mutableListOf<GraphicalGraph>()
 

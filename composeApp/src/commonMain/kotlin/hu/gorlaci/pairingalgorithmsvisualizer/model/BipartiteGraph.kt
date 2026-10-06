@@ -13,6 +13,7 @@ abstract class BipartiteGraph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
     idCoordinatesMap,
     newEdge,
 ) {
+
     val class1 = mutableSetOf<VertexType>()
     val class2 = mutableSetOf<VertexType>()
 

@@ -8,6 +8,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphSelectionDropdown
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
@@ -17,8 +20,12 @@ import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.run_button
 
 @Composable
-fun AlgorithmRunningScreen(
-    viewModel: AlgorithmRunningViewModel,
+fun <
+    GraphType : Graph<VertexType, EdgeType>,
+    VertexType : Vertex,
+    EdgeType : Edge<VertexType>,
+    > AlgorithmRunningScreen(
+    viewModel: AlgorithmRunningViewModel<GraphType, VertexType, EdgeType>,
     title: String,
     onNavigateBack: () -> Unit,
     onNewGraph: () -> Unit,
