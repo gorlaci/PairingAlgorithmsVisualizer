@@ -95,14 +95,12 @@ fun <
                     modifier = Modifier,
                     verticalArrangement = Arrangement.Bottom,
                 ) {
-                    if (description != null) {
-                        description()
-                    } else {
-                        Text(
+                    description?.invoke(this)
+                        ?: Text(
                             text = graphicalGraph.stepType.description,
                             modifier = Modifier.fillMaxWidth().padding(20.dp),
                         )
-                    }
+
                     Spacer(modifier = Modifier.fillMaxHeight(0.1f))
 
                     Button(

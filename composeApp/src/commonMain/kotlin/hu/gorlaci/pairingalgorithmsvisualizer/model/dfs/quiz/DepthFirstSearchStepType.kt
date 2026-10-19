@@ -19,7 +19,23 @@ sealed class DepthFirstSearchStepType(
         description: String,
         val vertex: DepthFirstSearchVertex,
         val neighbour: DepthFirstSearchVertex,
+    ) : DepthFirstSearchStepType(description)
+
+    class NeighbourEvaluated(
+        description: String,
+        val vertex: DepthFirstSearchVertex,
+        val neighbour: DepthFirstSearchVertex,
         val neighbourStatus: NeighbourStatus,
+    ) : DepthFirstSearchStepType(description)
+
+    class Backtracking(
+        description: String,
+        val vertex: DepthFirstSearchVertex,
+    ) : DepthFirstSearchStepType(description)
+
+    class VertexActive(
+        description: String,
+        val vertex: DepthFirstSearchVertex,
     ) : DepthFirstSearchStepType(description)
 }
 

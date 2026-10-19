@@ -13,10 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.NeighbourStatus
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.quiz.BreadthFirstSearchQuizScreenViewModel.QuestionMode.*
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.AnswerCard
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextFieldCell
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.SearchLegend
@@ -24,8 +21,6 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.Question
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.QuestionText
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
-import pairingalgorithmsvisualizer.composeapp.generated.resources.back_button
-import pairingalgorithmsvisualizer.composeapp.generated.resources.next_button
 import pairingalgorithmsvisualizer.composeapp.generated.resources.quiz_screen
 
 @Composable
@@ -52,20 +47,15 @@ fun BreadthFirstSearchQuizScreen(
             }
         },
         stepSelector = {
-            Row {
-                Button(
-                    onClick = viewModel::onBack,
-                    enabled = viewModel.backEnabled.value,
-                ) {
-                    Text(stringResource(Res.string.back_button))
-                }
-                Button(
-                    onClick = viewModel::onNext,
-                    enabled = viewModel.nextEnabled.value,
-                ) {
-                    Text(stringResource(Res.string.next_button))
-                }
-            }
+            val nextEnabled by viewModel.nextEnabled
+            val backEnabled by viewModel.backEnabled
+
+            SimpleStepSelector(
+                onNext = viewModel::onNext,
+                onBack = viewModel::onBack,
+                nextEnabled = nextEnabled,
+                backEnabled = backEnabled,
+            )
         },
         description = {
             val questionMode by viewModel.questionMode

@@ -22,11 +22,11 @@ fun StepSelector(
     value: Int,
     maxValue: Int,
     onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
     onPrevious: () -> Unit = { onValueChange((value - 1).toString()) },
     onNext: () -> Unit = { onValueChange((value + 1).toString()) },
     previousEnabled: Boolean = true,
     nextEnabled: Boolean = true,
-    modifier: Modifier = Modifier,
 ) {
     val textFieldState = rememberTextFieldState(initialText = value.toString())
 

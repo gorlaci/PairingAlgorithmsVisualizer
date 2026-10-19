@@ -203,17 +203,29 @@ class DepthFirstSearchGraph(
     private fun expand(vertex: DepthFirstSearchVertex) {
         activeVertex = vertex
         vertex.reachedNumber = ++reached
-        saveStep("Vizsgáljuk a ${vertex.name} csúcsot")
+        saveStep(
+            DepthFirstSearchStepType.VertexActive(
+                description = "Vizsgáljuk a ${vertex.name} csúcsot",
+                vertex = vertex,
+            ),
+        )
         for (neighbour in vertex.neighbours.sortedBy { it.name }) {
             activeNeighbour = neighbour
+            saveStep(
+                DepthFirstSearchStepType.SelectedNeighbour(
+                    description = "Vizsgáljuk a ${vertex.name} csúcs szomszédját, a ${neighbour.name} csúcsot",
+                    vertex = vertex,
+                    neighbour = neighbour,
+                ),
+            )
             if (neighbour.reachedNumber == null) {
                 neighbour.parent = vertex
                 neighbour.row = vertex.row + 1
                 addToTreeGrid(neighbour)
                 saveStep(
-                    DepthFirstSearchStepType.SelectedNeighbour(
+                    DepthFirstSearchStepType.NeighbourEvaluated(
                         description =
-                            "A ${vertex.name} csúcs szomszédja a ${neighbour.name} csúcs, amit még nem vizsgáltunk, így bejárjuk",
+                            "A ${neighbour.name} csúcsot még nem vizsgáltunk, így bejárjuk",
                         vertex = vertex,
                         neighbour = neighbour,
                         neighbourStatus = NeighbourStatus.VISIT,
@@ -224,9 +236,9 @@ class DepthFirstSearchGraph(
                 activeVertex = vertex
             } else {
                 saveStep(
-                    DepthFirstSearchStepType.SelectedNeighbour(
+                    DepthFirstSearchStepType.NeighbourEvaluated(
                         description =
-                            "A ${vertex.name} csúcs szomszédja a ${neighbour.name} csúcs, amit már vizsgáltunk, így nem járjuk be újra",
+                            "A ${neighbour.name} csúcsot már vizsgáltunk, így nem járjuk be újra",
                         vertex = vertex,
                         neighbour = neighbour,
                         neighbourStatus = NeighbourStatus.SKIP,
@@ -237,7 +249,10 @@ class DepthFirstSearchGraph(
         activeNeighbour = null
         vertex.finishedNumber = ++finished
         saveStep(
-            "A ${vertex.name} csúcs összes szomszédját megvizsgáltuk, így visszalépünk",
+            DepthFirstSearchStepType.Backtracking(
+                description = "A ${vertex.name} csúcs összes szomszédját megvizsgáltuk, így visszalépünk",
+                vertex = vertex,
+            ),
         )
         activeVertex = null
     }

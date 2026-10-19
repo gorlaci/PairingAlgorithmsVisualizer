@@ -12,6 +12,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.Answer
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.RED
 
 class BreadthFirstSearchQuizScreenViewModel(
     graphStorage: GraphStorage,
@@ -196,6 +197,14 @@ class BreadthFirstSearchQuizScreenViewModel(
                 Answer.Incorrect(explanation)
             }
         setGraphicalGraph()
+        graphicalGraph.value = graphicalGraph.value.apply {
+            addEdge(
+                question.vertex,
+                question.neighbour,
+                selected = true,
+                color = RED,
+            )
+        }
         showAnswer()
     }
 
@@ -239,7 +248,7 @@ class BreadthFirstSearchQuizScreenViewModel(
         if (tableParentContent.value[question.neighbour.name] != correctParents[question.neighbour.name]) {
             lastAnswer.value =
                 Answer.Incorrect(
-                    "A ${question.neighbour.name} csúcs szülője ${question.neighbour.parent?.name ?: "*"}.",
+                    "A ${question.neighbour.name} csúcs előzője ${question.neighbour.parent?.name ?: "*"}.",
                 )
             showAnswer()
             return

@@ -172,4 +172,50 @@ data class GraphicalGraph(
     }
 
     fun removeEdge(edge: Edge<out Vertex>) = removeEdge(edge.fromVertex, edge.toVertex)
+
+    fun addEdge(
+        fromVertex: Vertex,
+        toVertex: Vertex,
+        selected: Boolean = false,
+        highlight: Color = Color.Transparent,
+        color: Color = Color.Black,
+        label: String? = null,
+    ): GraphicalGraph {
+        val startGraphicalVertex = graphicalVertices.find { it.name == fromVertex.name } ?: return this
+        val endGraphicalVertex = graphicalVertices.find { it.name == toVertex.name } ?: return this
+        val newGraphicalEdge = GraphicalEdge(
+            startGraphicalVertex = startGraphicalVertex,
+            endGraphicalVertex = endGraphicalVertex,
+            selected = selected,
+            highlight = highlight,
+            color = color,
+            label = label,
+        )
+        val newGraphicalEdges = graphicalEdges + newGraphicalEdge
+        return this.copy(graphicalEdges = newGraphicalEdges)
+    }
+
+    fun changeEdge(
+        fromVertex: Vertex,
+        toVertex: Vertex,
+        selected: Boolean? = null,
+        highlight: Color? = null,
+        color: Color? = null,
+        label: String? = null,
+    ): GraphicalGraph {
+        val graphicalEdge =
+            graphicalEdges.find {
+                (it.startGraphicalVertex.name == fromVertex.name && it.endGraphicalVertex.name == toVertex.name) ||
+                    (it.startGraphicalVertex.name == toVertex.name && it.endGraphicalVertex.name == fromVertex.name)
+            } ?: return this
+        val newGraphicalEdge =
+            graphicalEdge.copy(
+                selected = selected ?: graphicalEdge.selected,
+                highlight = highlight ?: graphicalEdge.highlight,
+                color = color ?: graphicalEdge.color,
+                label = label ?: graphicalEdge.label,
+            )
+        val newGraphicalEdges = graphicalEdges - graphicalEdge + newGraphicalEdge
+        return this.copy(graphicalEdges = newGraphicalEdges)
+    }
 }
