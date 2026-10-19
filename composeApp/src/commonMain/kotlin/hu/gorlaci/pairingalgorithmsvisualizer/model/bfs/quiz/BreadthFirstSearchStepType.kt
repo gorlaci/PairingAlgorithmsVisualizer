@@ -19,7 +19,19 @@ sealed class BreadthFirstSearchStepType(
         description: String,
         val vertex: BreadthFirstSearchVertex,
         val neighbour: BreadthFirstSearchVertex,
+    ) : BreadthFirstSearchStepType(description)
+
+    class NeighbourEvaluated(
+        description: String,
+        val vertex: BreadthFirstSearchVertex,
+        val neighbour: BreadthFirstSearchVertex,
         val neighbourStatus: NeighbourStatus,
+    ) : BreadthFirstSearchStepType(description)
+
+    class FillTable(
+        description: String,
+        val vertex: BreadthFirstSearchVertex,
+        val neighbour: BreadthFirstSearchVertex,
     ) : BreadthFirstSearchStepType(description)
 }
 

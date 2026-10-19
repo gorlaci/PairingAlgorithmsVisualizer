@@ -12,6 +12,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.DepthFirstSearchGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.SearchLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
@@ -38,6 +40,15 @@ fun DepthFirstSearchAlgorithmRunningScreen(
         onNewGraph = onNewGraph,
         modifier = Modifier.fillMaxSize(),
         skipButtonsShown = false,
+        legend = {
+            OpenableLegend(
+                modifier = Modifier.fillMaxSize().weight(1f),
+            ) {
+                SearchLegend(
+                    modifier = Modifier.padding(10.dp).size(200.dp, 250.dp).weight(1f),
+                )
+            }
+        },
     ) {
         DepthFirstSearchScreenContent(
             viewModel = viewModel,

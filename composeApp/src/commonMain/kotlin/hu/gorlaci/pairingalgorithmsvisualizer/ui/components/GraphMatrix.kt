@@ -159,6 +159,7 @@ fun TextFieldCell(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     BasicTextField(
         value = value,
@@ -173,6 +174,7 @@ fun TextFieldCell(
                 innerTextField()
             }
         },
+        enabled = enabled,
     )
 }
 

@@ -33,7 +33,7 @@ abstract class PairingAlgorithmRunningViewModel<
         val clickedVertex = graph.getVertexByCoordinates(x, y) ?: return
         if (selectedVertex == null) {
             selectedVertex = clickedVertex
-            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
                 clickedVertex,
                 LIGHT_ORANGE,
             )
@@ -41,7 +41,7 @@ abstract class PairingAlgorithmRunningViewModel<
         }
         if (selectedVertex == clickedVertex) {
             selectedVertex = null
-            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
                 clickedVertex,
                 Color.White,
             )

@@ -94,7 +94,7 @@ open class DepthFirstSearchAlgorithmRunningViewModel(
 
         if (selectedVertex == clickedVertex) {
             selectedVertex = null
-            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
                 clickedVertex,
                 Color.White,
             )
@@ -102,14 +102,14 @@ open class DepthFirstSearchAlgorithmRunningViewModel(
         }
 
         selectedVertex?.let {
-            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
                 it,
                 Color.White,
             )
         }
 
         selectedVertex = clickedVertex
-        graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+        graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
             clickedVertex,
             LIGHT_ORANGE,
         )

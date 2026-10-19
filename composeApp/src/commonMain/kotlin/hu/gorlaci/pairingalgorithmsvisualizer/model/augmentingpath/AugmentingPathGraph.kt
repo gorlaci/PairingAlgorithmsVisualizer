@@ -175,7 +175,7 @@ class AugmentingPathGraph(
 
     private var augmentMade = true
 
-    fun runAlgorithm() {
+    override fun runAlgorithm() {
         saveStep()
         createClasses()
         saveStep(StepType.Nothing("Megállapítjuk a két osztályt"))

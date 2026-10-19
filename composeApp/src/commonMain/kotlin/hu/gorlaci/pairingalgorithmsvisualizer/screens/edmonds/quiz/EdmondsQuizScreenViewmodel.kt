@@ -62,7 +62,7 @@ class EdmondsQuizScreenViewmodel(
                         graphicalGraph.value =
                             graphicalGraph.value
                                 .removeAllEdgeHighlights()
-                                .addHighlight(possibleQuestion.currentEdge, LIGHT_ORANGE)
+                                .addEdgeHighlight(possibleQuestion.currentEdge, LIGHT_ORANGE)
                     }
 
                     is EdmondsStepType.MarkBlossom -> {
@@ -71,7 +71,7 @@ class EdmondsQuizScreenViewmodel(
                         graphicalGraph.value =
                             graphicalGraph.value
                                 .removeAllEdgeHighlights()
-                                .addHighlight(possibleQuestion.currentEdge, LIGHT_ORANGE)
+                                .addEdgeHighlight(possibleQuestion.currentEdge, LIGHT_ORANGE)
                     }
 
                     else -> {}
@@ -160,12 +160,12 @@ class EdmondsQuizScreenViewmodel(
                     markedVertices.value = markedVertices.value.dropLast(1)
                     graphicalGraph.value =
                         graphicalGraph.value
-                            .changeInnerColor(clickedVertex, Color.White)
+                            .changeVertexInnerColor(clickedVertex, Color.White)
                 } else {
                     markedVertices.value += clickedVertex
                     graphicalGraph.value =
                         graphicalGraph.value
-                            .changeInnerColor(clickedVertex, LIGHT_ORANGE)
+                            .changeVertexInnerColor(clickedVertex, LIGHT_ORANGE)
                 }
             }
         }
@@ -247,7 +247,7 @@ class EdmondsQuizScreenViewmodel(
         var newGraphicalGraph = graphicalGraph.value
         for (edge in getMarkedEdges()) {
             newGraphicalGraph =
-                newGraphicalGraph.addHighlight(edge, if (augmentingPath) LIGHT_BLUE else LIGHT_PINK)
+                newGraphicalGraph.addEdgeHighlight(edge, if (augmentingPath) LIGHT_BLUE else LIGHT_PINK)
         }
         graphicalGraph.value = newGraphicalGraph
 
@@ -258,7 +258,7 @@ class EdmondsQuizScreenViewmodel(
         graphicalGraph.value =
             graphicalGraph.value
                 .removeAllEdgeHighlights()
-                .addHighlight(
+                .addEdgeHighlight(
                     edge =
                         (graphicalGraph.value.stepType as? EdmondsStepType.MarkAugmentingPath)
                             ?.currentEdge

@@ -6,7 +6,9 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.model.*
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.SkipPoint
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
@@ -63,7 +65,7 @@ abstract class AlgorithmRunningViewModel<
         backEnabled.value
     }
 
-    private fun setGraphicalGraph() {
+    protected open fun setGraphicalGraph() {
         graphicalGraph.value = steps.value[step.value]
     }
 
@@ -131,7 +133,7 @@ abstract class AlgorithmRunningViewModel<
         val clickedVertex = graph.getVertexByCoordinates(x, y) ?: return
 
         selectedVertex?.let {
-            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
                 it,
                 Color.White,
             )
@@ -139,7 +141,7 @@ abstract class AlgorithmRunningViewModel<
 
         if (clickedVertex != selectedVertex) {
             selectedVertex = clickedVertex
-            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
                 clickedVertex,
                 LIGHT_ORANGE,
             )

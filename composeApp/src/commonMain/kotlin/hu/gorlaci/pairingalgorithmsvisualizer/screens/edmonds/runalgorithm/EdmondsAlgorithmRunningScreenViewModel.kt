@@ -136,7 +136,7 @@ open class EdmondsAlgorithmRunningScreenViewModel(
     override fun onRun() {
         val graph = graphList[selectedGraphIndex.value]
 
-        graph.runEdmondsAlgorithm()
+        graph.runAlgorithm()
         _steps.value = graph.steps
 
         step.value = 0

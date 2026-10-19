@@ -1,5 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
@@ -11,6 +12,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.toBreadthFirstSearchGrap
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 
 open class BreadthFirstSearchAlgorithmRunningViewModel(
     graphsStorage: GraphStorage,
@@ -27,7 +29,8 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
 
     override val initString = "Jelöld ki a kezdő csúcsot!"
 
-    private val _steps = mutableStateOf(
+    @Suppress("ktlint:standard:backing-property-naming")
+    protected val _steps = mutableStateOf(
         listOf(
             Triple<BreadthFirstSearchGraph, StepType, BreadthFirstSearchGraph>(
                 selectedGraph.value,
@@ -45,7 +48,7 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
         _steps.value[step.value].first
     }
 
-    val tree = derivedStateOf {
+    open val tree: State<GraphicalGraph> = derivedStateOf {
         _steps.value[step.value].third.toGraphicalGraph()
     }
 
@@ -93,7 +96,7 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
         val clickedVertex = graph.getVertexByCoordinates(x, y) ?: return
 
         selectedVertex?.let {
-            graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
                 it,
                 Color.White,
             )
@@ -104,7 +107,7 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
             return
         }
         selectedVertex = clickedVertex
-        graphicalGraph.value = graphicalGraph.value.changeInnerColor(
+        graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
             clickedVertex,
             LIGHT_ORANGE,
         )

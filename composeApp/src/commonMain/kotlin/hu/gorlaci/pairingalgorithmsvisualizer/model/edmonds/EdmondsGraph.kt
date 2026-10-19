@@ -115,7 +115,7 @@ class EdmondsGraph(
 
     private var edgesLeft = true
 
-    fun runEdmondsAlgorithm() {
+    override fun runAlgorithm() {
         saveStep()
         saveStep(EdmondsStepType.Nothing("Kiindulunk a megadott párosításból"))
         while (edgesLeft) {

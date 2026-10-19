@@ -3,16 +3,18 @@ package hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextFieldCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.SearchLegend
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.bfs_algorithm
@@ -38,13 +40,18 @@ fun BreadthFirstSearchAlgorithmRunningScreen(
         onNewGraph = onNewGraph,
         modifier = Modifier.fillMaxSize(),
         skipButtonsShown = false,
+        legend = {
+            OpenableLegend(
+                modifier = Modifier.fillMaxSize().weight(1f),
+            ) {
+                SearchLegend(
+                    modifier = Modifier.padding(10.dp).size(200.dp, 250.dp).weight(1f),
+                )
+            }
+        },
     ) {
         BreadthFirstSearchScreenContent(
             viewModel = viewModel,
-            graphicalGraph = graphicalGraph,
-            tree = tree,
-            graph = graph,
-            inSetup = inSetup,
         )
     }
 }
@@ -52,11 +59,13 @@ fun BreadthFirstSearchAlgorithmRunningScreen(
 @Composable
 fun BreadthFirstSearchScreenContent(
     viewModel: BreadthFirstSearchAlgorithmRunningViewModel,
-    graphicalGraph: GraphicalGraph,
-    tree: GraphicalGraph,
-    graph: BreadthFirstSearchGraph,
-    inSetup: Boolean,
+    tableEditable: Boolean = false,
 ) {
+    val graphicalGraph by viewModel.graphicalGraph
+    val tree by viewModel.tree
+    val currentGraph by viewModel.currentGraph
+    val inSetup by viewModel.inSetup
+
     Row(modifier = Modifier.fillMaxSize()) {
         GraphCanvas(
             graphicalGraph = graphicalGraph,
@@ -83,7 +92,7 @@ fun BreadthFirstSearchScreenContent(
                     ) {
                         Row {
                             Spacer(modifier = firstCellSizeModifier)
-                            for (vertex in graph.vertices) {
+                            for (vertex in currentGraph.vertices) {
                                 TextCell(
                                     text = vertex.name,
                                     modifier = cellSizeModifier,
@@ -96,11 +105,22 @@ fun BreadthFirstSearchScreenContent(
                                 text = "táv(v)",
                                 modifier = firstCellSizeModifier,
                             )
-                            for (vertex in graph.vertices) {
-                                TextCell(
-                                    text = vertex.distance?.toString() ?: "∞",
-                                    modifier = cellSizeModifier,
-                                )
+                            for (vertex in currentGraph.vertices) {
+                                if (tableEditable) {
+                                    val text = mutableStateOf(vertex.distance?.toString() ?: "∞")
+                                    TextFieldCell(
+                                        value = text.value,
+                                        onValueChange = {
+                                            text.value = it
+                                        },
+                                        modifier = cellSizeModifier,
+                                    )
+                                } else {
+                                    TextCell(
+                                        text = vertex.distance?.toString() ?: "∞",
+                                        modifier = cellSizeModifier,
+                                    )
+                                }
                             }
                         }
 
@@ -109,11 +129,22 @@ fun BreadthFirstSearchScreenContent(
                                 text = "előző(v)",
                                 modifier = firstCellSizeModifier,
                             )
-                            for (vertex in graph.vertices) {
-                                TextCell(
-                                    text = vertex.parent?.name ?: "*",
-                                    modifier = cellSizeModifier,
-                                )
+                            for (vertex in currentGraph.vertices) {
+                                if (tableEditable) {
+                                    val text = mutableStateOf(vertex.parent?.name ?: "*")
+                                    TextFieldCell(
+                                        value = text.value,
+                                        onValueChange = {
+                                            text.value = it
+                                        },
+                                        modifier = cellSizeModifier,
+                                    )
+                                } else {
+                                    TextCell(
+                                        text = vertex.parent?.name ?: "*",
+                                        modifier = cellSizeModifier,
+                                    )
+                                }
                             }
                         }
                     }

@@ -1,7 +1,10 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model.bfs
 
 import androidx.compose.ui.graphics.Color
-import hu.gorlaci.pairingalgorithmsvisualizer.model.*
+import hu.gorlaci.pairingalgorithmsvisualizer.model.AlgorithmRunningGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.BreadthFirstSearchStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.NeighbourStatus
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
@@ -217,6 +220,10 @@ class BreadthFirstSearchGraph(
 
     private var startingVertex: BreadthFirstSearchVertex? = null
 
+    override fun runAlgorithm() {
+        runAlgorithm(null)
+    }
+
     fun runAlgorithm(startingVertex: BreadthFirstSearchVertex? = null) {
         this.startingVertex = startingVertex
 
@@ -257,28 +264,47 @@ class BreadthFirstSearchGraph(
             activeVertex?.let { vertex ->
                 vertex.neighbours.sortedBy { it.name }.forEach { neighbour ->
                     activeNeighbour = neighbour
-                    val neighbourStatus =
-                        if (neighbour !in processedVertices && neighbour !in queue) {
-                            NeighbourStatus.ADDED
-                        } else {
-                            NeighbourStatus.SKIPPED
-                        }
-                    if (neighbourStatus == NeighbourStatus.ADDED) {
-                        neighbour.distance = vertex.distance?.plus(1)
-                        neighbour.row = vertex.row + 1
-                        neighbour.parent = vertex
-                        queue.add(neighbour)
-                        addToTreeGrid(neighbour)
-                    }
                     saveStep(
                         BreadthFirstSearchStepType.SelectedNeighbour(
                             description =
                                 "Vizsgáljuk meg a ${vertex.name} csúcs ${neighbour.name} szomszédját",
                             vertex = vertex,
                             neighbour = neighbour,
-                            neighbourStatus = neighbourStatus,
                         ),
                     )
+                    if (neighbour !in processedVertices && neighbour !in queue) {
+                        neighbour.row = vertex.row + 1
+                        queue.add(neighbour)
+                        addToTreeGrid(neighbour)
+                        saveStep(
+                            BreadthFirstSearchStepType.NeighbourEvaluated(
+                                description =
+                                    "A ${neighbour.name} csúcsot még nem vizsgáltuk, hozzáadjuk a vizsgálandó csúcsokhoz",
+                                vertex = vertex,
+                                neighbour = neighbour,
+                                neighbourStatus = NeighbourStatus.ADDED,
+                            ),
+                        )
+                        neighbour.distance = vertex.distance?.plus(1)
+                        neighbour.parent = vertex
+                        saveStep(
+                            BreadthFirstSearchStepType.FillTable(
+                                description = "Kitöltjük a táblázatot a ${neighbour.name} csúcs adataival",
+                                vertex = vertex,
+                                neighbour = neighbour,
+                            ),
+                        )
+                    } else {
+                        saveStep(
+                            BreadthFirstSearchStepType.NeighbourEvaluated(
+                                description =
+                                    "A ${neighbour.name} csúcsot már vizsgáltuk, vagy szerepel a listában, kihagyjuk",
+                                vertex = vertex,
+                                neighbour = neighbour,
+                                neighbourStatus = NeighbourStatus.SKIPPED,
+                            ),
+                        )
+                    }
                 }
                 activeNeighbour = null
                 saveStep("Megvizsgáltuk a csúcs összes szomszédját")

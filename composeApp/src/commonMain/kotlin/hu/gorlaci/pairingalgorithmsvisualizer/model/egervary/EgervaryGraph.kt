@@ -59,7 +59,7 @@ class EgervaryGraph(
         addEdge(fromVertex, toVertex, weight)
     }
 
-    fun runAlgorithm() {
+    override fun runAlgorithm() {
         saveStep()
 
         init()

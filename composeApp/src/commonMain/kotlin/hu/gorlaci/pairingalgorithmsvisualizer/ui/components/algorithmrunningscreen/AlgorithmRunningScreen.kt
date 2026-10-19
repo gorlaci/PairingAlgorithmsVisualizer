@@ -34,6 +34,7 @@ fun <
     legend: @Composable ColumnScope.() -> Unit = { Spacer(modifier = Modifier.height(0.dp)) },
     controls: @Composable () -> Unit = {},
     description: (@Composable ColumnScope.() -> Unit)? = null,
+    stepSelector: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit = {
         GraphCanvas(
             graphicalGraph = viewModel.graphicalGraph.value,
@@ -132,7 +133,7 @@ fun <
                         }
                     }
 
-                    StepSelector(
+                    stepSelector?.invoke() ?: StepSelector(
                         value = step + 1,
                         maxValue = maxStep,
                         onValueChange = viewModel::onStepChange,

@@ -68,7 +68,7 @@ class GraphDrawingScreenViewmodel(
                     if (firstVertexForEdge == null) {
                         firstVertexForEdge = clickedVertex
                         graphicalGraph.value =
-                            graphicalGraph.value.changeInnerColor(clickedVertex, LIGHT_ORANGE)
+                            graphicalGraph.value.changeVertexInnerColor(clickedVertex, LIGHT_ORANGE)
                     } else {
                         if (firstVertexForEdge != clickedVertex) {
                             val clickedEdge = graph.edges.find {

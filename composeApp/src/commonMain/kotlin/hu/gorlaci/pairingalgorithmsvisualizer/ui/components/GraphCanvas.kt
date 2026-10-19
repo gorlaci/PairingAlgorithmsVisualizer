@@ -22,11 +22,11 @@ import hu.gorlaci.pairingalgorithmsvisualizer.util.distanceFromSegment
 @Composable
 fun GraphCanvas(
     graphicalGraph: GraphicalGraph,
+    modifier: Modifier = Modifier,
     onTap: (Double, Double) -> Unit = { _, _ -> },
     onDragStart: (Double, Double) -> Unit = { _, _ -> },
     onDrag: (Double, Double) -> Unit = { _, _ -> },
     onDragEnd: () -> Unit = {},
-    modifier: Modifier = Modifier,
 ) {
     val vertices = graphicalGraph.graphicalVertices
     val edges = graphicalGraph.graphicalEdges

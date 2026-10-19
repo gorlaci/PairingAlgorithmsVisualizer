@@ -242,6 +242,10 @@ class DepthFirstSearchGraph(
         activeVertex = null
     }
 
+    override fun runAlgorithm() {
+        runAlgorithm(null)
+    }
+
     fun runAlgorithm(startingVertex: DepthFirstSearchVertex? = null) {
         this.startingVertex = startingVertex
 

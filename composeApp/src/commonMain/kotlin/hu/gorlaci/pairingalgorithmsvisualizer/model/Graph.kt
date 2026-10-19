@@ -103,7 +103,7 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         }
     }
 
-    fun getNeighbours(vertex: Vertex): Set<VertexType> {
+    open fun getNeighbours(vertex: Vertex): Set<VertexType> {
         val neighbours = mutableSetOf<VertexType>()
         for (edge in edges) {
             val otherEnd = edge.otherEnd(vertex)
