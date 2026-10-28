@@ -3,7 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.ui
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 
-fun DrawScope.drawEdge(
+fun DrawScope.drawUndirectedEdge(
     edge: GraphicalEdge,
     centerX: Double = 0.0,
     centerY: Double = 0.0,

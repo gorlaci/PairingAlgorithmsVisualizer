@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphMatrix
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.EgervaryLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
@@ -56,7 +56,7 @@ fun EgervaryAlgorithmRunningViewScreen(
                 modifier = Modifier.padding(30.dp),
             )
 
-            GraphCanvas(
+            UndirectedGraphCanvas(
                 graphicalGraph = graphicalGraph,
                 modifier = Modifier.fillMaxSize(),
             )

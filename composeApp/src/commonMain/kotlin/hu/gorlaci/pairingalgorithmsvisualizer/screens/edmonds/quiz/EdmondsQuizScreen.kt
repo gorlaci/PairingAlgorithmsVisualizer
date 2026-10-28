@@ -15,9 +15,9 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsEdgeType
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz.EdmondsQuizScreenViewmodel.QuestionMode.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.AnswerCard
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphSelectionDropdown
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.EdmondsLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.Question
@@ -66,7 +66,7 @@ fun EdmondsQuizScreen(
                     onNewGraph = onNewGraph,
                 )
 
-                GraphCanvas(
+                UndirectedGraphCanvas(
                     graphicalGraph = graphicalGraph,
                     onTap = viewModel::onTap,
                     modifier = Modifier.fillMaxSize(),

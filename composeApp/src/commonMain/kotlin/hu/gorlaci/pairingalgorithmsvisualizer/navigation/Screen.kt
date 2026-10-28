@@ -7,7 +7,10 @@ object Screen {
     object DrawGraph {
 
         @Serializable
-        object Visual
+        object VisualUndirected
+
+        @Serializable
+        object VisualDirected
 
         @Serializable
         object MatrixBipartite
@@ -72,4 +75,7 @@ object Screen {
         @Serializable
         object Quiz
     }
+
+    @Serializable
+    object Test
 }

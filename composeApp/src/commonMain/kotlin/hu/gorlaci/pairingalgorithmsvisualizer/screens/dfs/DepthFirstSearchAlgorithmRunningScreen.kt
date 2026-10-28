@@ -9,8 +9,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.DepthFirstSearchGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.SearchLegend
@@ -69,7 +69,7 @@ fun DepthFirstSearchScreenContent(
     inSetup: Boolean,
 ) {
     Row(modifier = Modifier.fillMaxSize()) {
-        GraphCanvas(
+        UndirectedGraphCanvas(
             graphicalGraph = graphicalGraph,
             modifier = Modifier.fillMaxSize().weight(1f),
             onTap = viewModel::onTap,
@@ -77,7 +77,7 @@ fun DepthFirstSearchScreenContent(
         Column(
             modifier = Modifier.fillMaxSize().weight(1f),
         ) {
-            GraphCanvas(
+            UndirectedGraphCanvas(
                 graphicalGraph = tree,
                 modifier = Modifier.fillMaxSize().weight(2f),
             )

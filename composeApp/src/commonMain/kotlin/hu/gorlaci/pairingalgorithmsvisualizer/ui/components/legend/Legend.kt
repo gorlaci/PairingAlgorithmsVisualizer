@@ -42,7 +42,7 @@ fun Legend(
                         Canvas(
                             modifier = Modifier.size(50.dp),
                         ) {
-                            drawEdge(
+                            drawUndirectedEdge(
                                 edge = graphicalElement,
                                 centerX = this.center.x.toDouble(),
                                 centerY = this.center.y.toDouble(),

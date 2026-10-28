@@ -8,20 +8,27 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.TextMeasurer
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawDirectedEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawUndirectedEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.util.distanceFromSegment
 
 @Composable
 fun GraphCanvas(
     graphicalGraph: GraphicalGraph,
+    drawVertex: DrawScope.(GraphicalVertex, Offset, TextMeasurer) -> Unit,
+    drawEdge: DrawScope.(GraphicalEdge, Double, Double) -> Unit,
     modifier: Modifier = Modifier,
     onTap: (Double, Double) -> Unit = { _, _ -> },
     onDragStart: (Double, Double) -> Unit = { _, _ -> },
@@ -145,4 +152,53 @@ fun GraphCanvas(
             }
         }
     }
+}
+
+@Composable
+fun UndirectedGraphCanvas(
+    graphicalGraph: GraphicalGraph,
+    modifier: Modifier = Modifier,
+    onTap: (Double, Double) -> Unit = { _, _ -> },
+    onDragStart: (Double, Double) -> Unit = { _, _ -> },
+    onDrag: (Double, Double) -> Unit = { _, _ -> },
+    onDragEnd: () -> Unit = {},
+) {
+    GraphCanvas(
+        graphicalGraph = graphicalGraph,
+        drawVertex = { vertex, centerOffset, textMeasurer ->
+            drawVertex(vertex, centerOffset, textMeasurer)
+        },
+        drawEdge = { edge, centerX, centerY ->
+            drawUndirectedEdge(edge, centerX, centerY)
+        },
+        modifier = modifier,
+        onTap = onTap,
+        onDragStart = onDragStart,
+        onDrag = onDrag,
+        onDragEnd = onDragEnd,
+    )
+}
+
+@Composable fun DirectedGraphCanvas(
+    graphicalGraph: GraphicalGraph,
+    modifier: Modifier = Modifier,
+    onTap: (Double, Double) -> Unit = { _, _ -> },
+    onDragStart: (Double, Double) -> Unit = { _, _ -> },
+    onDrag: (Double, Double) -> Unit = { _, _ -> },
+    onDragEnd: () -> Unit = {},
+) {
+    GraphCanvas(
+        graphicalGraph = graphicalGraph,
+        drawVertex = { vertex, centerOffset, textMeasurer ->
+            drawVertex(vertex, centerOffset, textMeasurer)
+        },
+        drawEdge = { edge, centerX, centerY ->
+            drawDirectedEdge(edge, centerX, centerY)
+        },
+        modifier = modifier,
+        onTap = onTap,
+        onDragStart = onDragStart,
+        onDrag = onDrag,
+        onDragEnd = onDragEnd,
+    )
 }

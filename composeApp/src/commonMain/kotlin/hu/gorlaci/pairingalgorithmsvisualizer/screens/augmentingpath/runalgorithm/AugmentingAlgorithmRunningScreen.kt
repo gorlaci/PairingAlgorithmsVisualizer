@@ -7,10 +7,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayModeSwitch
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphMatrix
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.AugmentingLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
@@ -65,7 +65,7 @@ fun AugmentingAlgorithmRunningScreen(
             ) {
                 when (displayMode) {
                     GraphDisplayMode.BOTH -> {
-                        GraphCanvas(
+                        UndirectedGraphCanvas(
                             graphicalGraph = graphicalGraph,
                             onTap = viewModel::onTap,
                             modifier = Modifier.fillMaxWidth().fillMaxHeight(.5f),
@@ -79,7 +79,7 @@ fun AugmentingAlgorithmRunningScreen(
                     }
 
                     GraphDisplayMode.GRAPHICAL -> {
-                        GraphCanvas(
+                        UndirectedGraphCanvas(
                             graphicalGraph = graphicalGraph,
                             onTap = viewModel::onTap,
                             modifier = Modifier.fillMaxSize(),
@@ -97,7 +97,7 @@ fun AugmentingAlgorithmRunningScreen(
                 }
             }
 
-            GraphCanvas(
+            UndirectedGraphCanvas(
                 graphicalGraph = tree,
                 modifier = Modifier.fillMaxSize(),
             )

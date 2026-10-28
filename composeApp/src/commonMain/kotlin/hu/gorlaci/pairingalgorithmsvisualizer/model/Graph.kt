@@ -95,12 +95,17 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         fromId: String,
         toId: String,
     ) {
-        val fromVertex = vertices.find { it.name == fromId }
-        val toVertex = vertices.find { it.name == toId }
-        if (fromVertex != null && toVertex != null) {
-            val newEdge = newEdge(fromVertex, toVertex)
-            edges.add(newEdge)
-        }
+        val fromVertex = vertices.find { it.name == fromId } ?: return
+        val toVertex = vertices.find { it.name == toId } ?: return
+        addEdge(fromVertex, toVertex)
+    }
+
+    fun addEdge(
+        fromVertex: VertexType,
+        toVertex: VertexType,
+    ) {
+        val newEdge = newEdge(fromVertex, toVertex)
+        edges.add(newEdge)
     }
 
     open fun getNeighbours(vertex: Vertex): Set<VertexType> {

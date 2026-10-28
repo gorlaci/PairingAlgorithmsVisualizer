@@ -11,10 +11,10 @@ import androidx.compose.ui.unit.dp
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphSelectionDropdown
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.StepSelector
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.composeapp.generated.resources.Res
 import pairingalgorithmsvisualizer.composeapp.generated.resources.run_button
@@ -36,7 +36,7 @@ fun <
     description: (@Composable ColumnScope.() -> Unit)? = null,
     stepSelector: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit = {
-        GraphCanvas(
+        UndirectedGraphCanvas(
             graphicalGraph = viewModel.graphicalGraph.value,
             onTap = viewModel::onTap,
             modifier = Modifier.fillMaxSize(),

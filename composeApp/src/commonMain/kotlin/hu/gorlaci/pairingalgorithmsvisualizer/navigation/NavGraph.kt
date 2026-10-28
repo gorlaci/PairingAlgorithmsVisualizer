@@ -1,11 +1,13 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.TestScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.menu.AugmentingMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.runalgorithm.AugmentingAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningScreen
@@ -16,6 +18,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartite.
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.matrixbipartiteweighted.MatrixBipartiteWeightedGraphMakerScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.menu.GraphDrawingMenu
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.visual.GraphDrawingScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.drawgraph.visualdirected.VisualDirectedGraphDrawingScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.menu.EdmondsMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz.EdmondsQuizScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.runalgorithm.EdmondsAlgorithmRunningScreen
@@ -37,7 +40,7 @@ fun NavGraph(
         navController = navHostController,
         startDestination = Screen.NewMainMenu,
     ) {
-        composable<Screen.DrawGraph.Visual> {
+        composable<Screen.DrawGraph.VisualUndirected> {
             GraphDrawingScreen(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
@@ -49,7 +52,7 @@ fun NavGraph(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
                 onNewGraph = {
-                    navHostController.navigate(Screen.DrawGraph.Visual)
+                    navHostController.navigate(Screen.DrawGraph.VisualUndirected)
                 },
             )
         }
@@ -57,7 +60,7 @@ fun NavGraph(
         composable<Screen.Edmonds.Menu> {
             EdmondsMenuScreen(
                 onDrawGraphClick = {
-                    navHostController.navigate(Screen.DrawGraph.Visual)
+                    navHostController.navigate(Screen.DrawGraph.VisualUndirected)
                 },
                 onRunAlgorithmClick = {
                     navHostController.navigate(Screen.Edmonds.RunAlgorithm)
@@ -74,7 +77,7 @@ fun NavGraph(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
                 onNewGraph = {
-                    navHostController.navigate(Screen.DrawGraph.Visual)
+                    navHostController.navigate(Screen.DrawGraph.VisualUndirected)
                 },
             )
         }
@@ -94,7 +97,7 @@ fun NavGraph(
 
         composable<Screen.AugmentingPath.Menu> {
             AugmentingMenuScreen(
-                onDrawVisualClick = { navHostController.navigate(Screen.DrawGraph.Visual) },
+                onDrawVisualClick = { navHostController.navigate(Screen.DrawGraph.VisualUndirected) },
                 onDrawMatrixClick = {
                     navHostController.navigate(Screen.DrawGraph.MatrixBipartite)
                 },
@@ -116,7 +119,7 @@ fun NavGraph(
         composable<Screen.DrawGraph.Menu> {
             GraphDrawingMenu(
                 onBack = { navHostController.popBackStack() },
-                onVisual = { navHostController.navigate(Screen.DrawGraph.Visual) },
+                onVisual = { navHostController.navigate(Screen.DrawGraph.VisualUndirected) },
                 onMatrixBipartite = {
                     navHostController.navigate(Screen.DrawGraph.MatrixBipartite)
                 },
@@ -208,6 +211,16 @@ fun NavGraph(
                         navHostController.navigate(Screen.Egervary.RunAlgorithm)
                     },
                 ),
+                MainMenuItem(
+                    algorithmName = "Teszt",
+                    algorithmImage = ImageBitmap(1, 1),
+                    onRunAlgorithm = {
+                        navHostController.navigate(Screen.Test)
+                    },
+                    onQuiz = {
+                        navHostController.navigate(Screen.DrawGraph.VisualDirected)
+                    },
+                ),
             )
 
             NewMainMenuScreen(menuItems = menuItems)
@@ -218,7 +231,7 @@ fun NavGraph(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
                 onNewGraph = {
-                    navHostController.navigate(Screen.DrawGraph.Visual)
+                    navHostController.navigate(Screen.DrawGraph.VisualUndirected)
                 },
             )
         }
@@ -228,7 +241,7 @@ fun NavGraph(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
                 onNewGraph = {
-                    navHostController.navigate(Screen.DrawGraph.Visual)
+                    navHostController.navigate(Screen.DrawGraph.VisualUndirected)
                 },
             )
         }
@@ -238,7 +251,7 @@ fun NavGraph(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
                 onNewGraph = {
-                    navHostController.navigate(Screen.DrawGraph.Visual)
+                    navHostController.navigate(Screen.DrawGraph.VisualUndirected)
                 },
             )
         }
@@ -248,8 +261,19 @@ fun NavGraph(
                 graphStorage = graphStorage,
                 onBack = { navHostController.popBackStack() },
                 onNewGraph = {
-                    navHostController.navigate(Screen.DrawGraph.Visual)
+                    navHostController.navigate(Screen.DrawGraph.VisualUndirected)
                 },
+            )
+        }
+
+        composable<Screen.Test> {
+            TestScreen()
+        }
+
+        composable<Screen.DrawGraph.VisualDirected> {
+            VisualDirectedGraphDrawingScreen(
+                graphStorage = graphStorage,
+                onBack = { navHostController.popBackStack() },
             )
         }
     }

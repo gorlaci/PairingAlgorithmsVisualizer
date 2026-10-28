@@ -137,7 +137,7 @@ fun BreadthFirstSearchQuizScreen(
         val tableEditable by viewModel.tableEditable
 
         Row(modifier = Modifier.fillMaxSize()) {
-            GraphCanvas(
+            UndirectedGraphCanvas(
                 graphicalGraph = graphicalGraph,
                 modifier = Modifier.fillMaxSize().weight(1f),
                 onTap = viewModel::onTap,
@@ -145,7 +145,7 @@ fun BreadthFirstSearchQuizScreen(
             Column(
                 modifier = Modifier.fillMaxSize().weight(1f),
             ) {
-                GraphCanvas(
+                UndirectedGraphCanvas(
                     graphicalGraph = tree,
                     modifier = Modifier.fillMaxSize().weight(2f),
                 )
