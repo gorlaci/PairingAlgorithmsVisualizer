@@ -83,32 +83,23 @@ data class GraphicalGraph(
         originalGraph: EdmondsGraph,
         animationProgress: Float,
     ): GraphicalGraph {
-        val blossomX =
-            blossomVertices.sumOf { originalGraph.getVertexCoordinates(it).first * it.id.size } /
-                blossomVertices.sumOf { it.id.size }
-        val blossomY =
-            blossomVertices.sumOf { originalGraph.getVertexCoordinates(it).second * it.id.size } /
-                blossomVertices.sumOf { it.id.size }
+        val blossomCoordinates = blossomVertices.map {
+            originalGraph.getVertexCoordinates(it) * it.id.size
+        }.reduce { d, acc ->
+            d + acc
+        } / blossomVertices.sumOf { it.id.size }
 
         val newGraphicalVertices = mutableMapOf<GraphicalVertex, GraphicalVertex>()
         for (vertex in blossomVertices) {
             val graphicalVertex = graphicalVertices.find { it.name == vertex.name } ?: continue
-            val newX =
-                originalGraph.getVertexCoordinates(vertex).first +
-                    (blossomX - originalGraph.getVertexCoordinates(vertex).first) *
-                    animationProgress
-            val newY =
-                originalGraph.getVertexCoordinates(vertex).second + (
-                    blossomY -
-                        originalGraph
-                            .getVertexCoordinates(
-                                vertex,
-                            ).second
-                    ) * animationProgress
+
+            val newPosition =
+                originalGraph.getVertexCoordinates(vertex) +
+                    (blossomCoordinates - originalGraph.getVertexCoordinates(vertex)) * animationProgress
+
             val newGraphicalVertex =
                 graphicalVertex.copy(
-                    x = newX,
-                    y = newY,
+                    position = newPosition,
                 )
             newGraphicalVertices[graphicalVertex] = newGraphicalVertex
         }

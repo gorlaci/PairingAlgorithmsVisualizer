@@ -1,11 +1,10 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.ui.model
 
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 
 data class GraphicalVertex(
-    val x: Double = 0.0,
-    val y: Double = 0.0,
+    val position: Vector2D = Vector2D(0.0, 0.0),
     val name: String = "",
     val innerColor: Color = Color.White,
     val highlight: Color = Color.Transparent,
@@ -13,19 +12,11 @@ data class GraphicalVertex(
     val label: String? = null,
 ) {
 
-    fun transformCoordinates(
-        offsetX: Double,
-        offsetY: Double,
-    ) = Offset(
-        (offsetX + x).toFloat(),
-        (offsetY - y).toFloat(),
-    )
-
-    val radiusInFloat: Float
+    val radius: Float
         get() = 20f + (name.length - 1) * 5f
 
     val maxTextSize: Int
-        get() = (radiusInFloat * 2).toInt() - (name.length - 1) * 2
+        get() = (radius * 2).toInt() - (name.length - 1) * 2
 }
 
 enum class HighlightType {

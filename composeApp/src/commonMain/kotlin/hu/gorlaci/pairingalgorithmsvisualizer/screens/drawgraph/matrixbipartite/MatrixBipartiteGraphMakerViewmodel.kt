@@ -6,6 +6,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 
 class MatrixBipartiteGraphMakerViewmodel(
     private val graphStorage: GraphStorage,
@@ -75,19 +76,19 @@ class MatrixBipartiteGraphMakerViewmodel(
         val width = 700.0
         val height = 300.0
 
-        val coordinateMap = mutableMapOf<String, Pair<Double, Double>>()
+        val coordinateMap = mutableMapOf<String, Vector2D>()
 
         val columnVertices = mutableListOf<Vertex>()
         for (i in 0..<columns.value) {
             val label = (i + 1).toString()
             columnVertices.add(Vertex(label))
-            coordinateMap[label] = Pair(-width / 2 + width / (columns.value - 1) * i, height / 2)
+            coordinateMap[label] = Vector2D(-width / 2 + width / (columns.value - 1) * i, height / 2)
         }
         val rowVertices = mutableListOf<Vertex>()
         for (i in 0..<rows.value) {
             val label = ('A' + i).toString()
             rowVertices.add(Vertex(label))
-            coordinateMap[label] = Pair(-width / 2 + width / (rows.value - 1) * i, -height / 2)
+            coordinateMap[label] = Vector2D(-width / 2 + width / (rows.value - 1) * i, -height / 2)
         }
 
         val edges = mutableSetOf<Edge<Vertex>>()

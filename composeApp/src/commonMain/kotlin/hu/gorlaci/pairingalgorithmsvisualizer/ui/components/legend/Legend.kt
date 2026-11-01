@@ -9,7 +9,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawUndirectedEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 
@@ -34,7 +36,7 @@ fun Legend(
                         ) {
                             drawVertex(
                                 vertex = graphicalElement,
-                                canvasCenter = this.center,
+                                canvasCenter = Vector2D(this.center),
                                 textMeasurer = textMeasurer,
                             )
                         }
@@ -44,8 +46,7 @@ fun Legend(
                         ) {
                             drawUndirectedEdge(
                                 edge = graphicalElement,
-                                centerX = this.center.x.toDouble(),
-                                centerY = this.center.y.toDouble(),
+                                canvasCenter = Vector2D(this.center),
                             )
                         }
                     }

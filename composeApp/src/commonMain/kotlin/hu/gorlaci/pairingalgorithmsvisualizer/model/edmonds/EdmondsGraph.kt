@@ -3,6 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.*
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_GREEN
@@ -16,7 +17,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 class EdmondsGraph(
     vertices: MutableSet<EdmondsVertex> = mutableSetOf(),
     edges: MutableSet<EdmondsEdge> = mutableSetOf(),
-    idCoordinatesMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
+    idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
     name: String = "",
     private var activeEdge: EdmondsEdge? = null,
     private val augmentingPathEdges: MutableSet<EdmondsEdge> = mutableSetOf(),
@@ -582,9 +583,8 @@ class EdmondsGraph(
                 EdmondsVertexType.ROOT -> {
                     graphicalVertices.add(
                         GraphicalVertex(
-                            coordinates.first,
-                            coordinates.second,
-                            vertex.name,
+                            position = coordinates,
+                            name = vertex.name,
                             highlightType = HighlightType.DOUBLE_CIRCLE,
                             highlight = LIGHT_GREEN,
                             innerColor = innerColor,
@@ -595,9 +595,8 @@ class EdmondsGraph(
                 EdmondsVertexType.INNER -> {
                     graphicalVertices.add(
                         GraphicalVertex(
-                            coordinates.first,
-                            coordinates.second,
-                            vertex.name,
+                            position = coordinates,
+                            name = vertex.name,
                             highlightType = HighlightType.SQUARE,
                             highlight = LIGHT_GREEN,
                             innerColor = innerColor,
@@ -608,9 +607,8 @@ class EdmondsGraph(
                 EdmondsVertexType.OUTER -> {
                     graphicalVertices.add(
                         GraphicalVertex(
-                            coordinates.first,
-                            coordinates.second,
-                            vertex.name,
+                            position = coordinates,
+                            name = vertex.name,
                             highlightType = HighlightType.CIRCLE,
                             highlight = LIGHT_GREEN,
                             innerColor = innerColor,
@@ -621,9 +619,8 @@ class EdmondsGraph(
                 EdmondsVertexType.CLEARING, EdmondsVertexType.NONE -> {
                     graphicalVertices.add(
                         GraphicalVertex(
-                            coordinates.first,
-                            coordinates.second,
-                            vertex.name,
+                            position = coordinates,
+                            name = vertex.name,
                             innerColor = innerColor,
                         ),
                     )
@@ -634,14 +631,8 @@ class EdmondsGraph(
         val graphicalEdges = mutableListOf<GraphicalEdge>()
 
         for (edge in edges) {
-            val startGraphicalVertex = graphicalVertices.find { it.name == edge.fromVertex.name }
-            if (startGraphicalVertex == null) {
-                throw IllegalStateException("Vertex with id ${edge.fromVertex.id} not found")
-            }
-            val endGraphicalVertex = graphicalVertices.find { it.name == edge.toVertex.name }
-            if (endGraphicalVertex == null) {
-                throw IllegalStateException("Vertex with id ${edge.toVertex.id} not found")
-            }
+            val startGraphicalVertex = graphicalVertices.find { it.name == edge.fromVertex.name } ?: continue
+            val endGraphicalVertex = graphicalVertices.find { it.name == edge.toVertex.name } ?: continue
             graphicalEdges.add(
                 GraphicalEdge(
                     startGraphicalVertex,

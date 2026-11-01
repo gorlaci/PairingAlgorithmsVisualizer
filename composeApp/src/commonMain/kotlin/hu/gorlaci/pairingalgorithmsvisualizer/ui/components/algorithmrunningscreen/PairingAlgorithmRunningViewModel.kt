@@ -3,7 +3,11 @@ package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscr
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.model.*
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.PairableGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 
@@ -23,14 +27,11 @@ abstract class PairingAlgorithmRunningViewModel<
 
     override var selectedVertex: VertexType? = null
 
-    override fun onTap(
-        x: Double,
-        y: Double,
-    ) {
+    override fun onTap(position: Vector2D) {
         if (!inSetup.value) return
 
         val graph = selectedGraph.value
-        val clickedVertex = graph.getVertexByCoordinates(x, y) ?: return
+        val clickedVertex = graph.getVertexByCoordinates(position) ?: return
         if (selectedVertex == null) {
             selectedVertex = clickedVertex
             graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(

@@ -16,6 +16,7 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawDirectedEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawUndirectedEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawVertex
@@ -27,12 +28,12 @@ import hu.gorlaci.pairingalgorithmsvisualizer.util.distanceFromSegment
 @Composable
 fun GraphCanvas(
     graphicalGraph: GraphicalGraph,
-    drawVertex: DrawScope.(GraphicalVertex, Offset, TextMeasurer) -> Unit,
-    drawEdge: DrawScope.(GraphicalEdge, Double, Double) -> Unit,
+    drawVertex: DrawScope.(GraphicalVertex, Vector2D, TextMeasurer) -> Unit,
+    drawEdge: DrawScope.(GraphicalEdge, Vector2D) -> Unit,
     modifier: Modifier = Modifier,
-    onTap: (Double, Double) -> Unit = { _, _ -> },
-    onDragStart: (Double, Double) -> Unit = { _, _ -> },
-    onDrag: (Double, Double) -> Unit = { _, _ -> },
+    onTap: (Vector2D) -> Unit = { _ -> },
+    onDragStart: (Vector2D) -> Unit = { _ -> },
+    onDrag: (Vector2D) -> Unit = { _ -> },
     onDragEnd: () -> Unit = {},
 ) {
     val vertices = graphicalGraph.graphicalVertices
@@ -63,7 +64,7 @@ fun GraphCanvas(
                 val modelX = offset.x.toDouble() - size.width / 2.0
                 val modelY = size.height / 2.0 - offset.y.toDouble()
 
-                onTap(modelX, modelY)
+                onTap(Vector2D(modelX, modelY))
             }
         }.pointerInput(Unit) {
             detectDragGestures(
@@ -71,13 +72,13 @@ fun GraphCanvas(
                     val modelX = offset.x.toDouble() - size.width / 2.0
                     val modelY = size.height / 2.0 - offset.y.toDouble()
 
-                    onDragStart(modelX, modelY)
+                    onDragStart(Vector2D(modelX, modelY))
                 },
                 onDrag = { _, offset ->
                     val modelX = offset.x.toDouble()
                     val modelY = -offset.y.toDouble()
 
-                    onDrag(modelX, modelY)
+                    onDrag(Vector2D(modelX, modelY))
                 },
                 onDragEnd = {
                     onDragEnd()
@@ -85,21 +86,19 @@ fun GraphCanvas(
             )
         },
     ) {
-        val centerX = size.width / 2.0
-        val centerY = size.height / 2.0
+        val center = Vector2D(size.width / 2.0, size.height / 2.0)
 
         for (edge in edges) {
             drawEdge(
                 edge,
-                centerX,
-                centerY,
+                center,
             )
         }
 
         for (vertex in vertices) {
             drawVertex(
                 vertex,
-                Offset(centerX.toFloat(), centerY.toFloat()),
+                center,
                 textMeasurer,
             )
         }
@@ -109,8 +108,8 @@ fun GraphCanvas(
                 .associateWith { edge ->
                     distanceFromSegment(
                         hoverPosition,
-                        edge.startGraphicalVertex.transformCoordinates(centerX, centerY),
-                        edge.endGraphicalVertex.transformCoordinates(centerX, centerY),
+                        edge.startGraphicalVertex.position.toCanvasCoordinates(center).toOffset(),
+                        edge.endGraphicalVertex.position.toCanvasCoordinates(center).toOffset(),
                     )
                 }
                 .filter { it.value < 5f }
@@ -158,18 +157,18 @@ fun GraphCanvas(
 fun UndirectedGraphCanvas(
     graphicalGraph: GraphicalGraph,
     modifier: Modifier = Modifier,
-    onTap: (Double, Double) -> Unit = { _, _ -> },
-    onDragStart: (Double, Double) -> Unit = { _, _ -> },
-    onDrag: (Double, Double) -> Unit = { _, _ -> },
+    onTap: (Vector2D) -> Unit = { _ -> },
+    onDragStart: (Vector2D) -> Unit = { _ -> },
+    onDrag: (Vector2D) -> Unit = { _ -> },
     onDragEnd: () -> Unit = {},
 ) {
     GraphCanvas(
         graphicalGraph = graphicalGraph,
-        drawVertex = { vertex, centerOffset, textMeasurer ->
-            drawVertex(vertex, centerOffset, textMeasurer)
+        drawVertex = { vertex, canvasCenter, textMeasurer ->
+            drawVertex(vertex, canvasCenter, textMeasurer)
         },
-        drawEdge = { edge, centerX, centerY ->
-            drawUndirectedEdge(edge, centerX, centerY)
+        drawEdge = { edge, canvasCenter ->
+            drawUndirectedEdge(edge, canvasCenter)
         },
         modifier = modifier,
         onTap = onTap,
@@ -182,9 +181,9 @@ fun UndirectedGraphCanvas(
 @Composable fun DirectedGraphCanvas(
     graphicalGraph: GraphicalGraph,
     modifier: Modifier = Modifier,
-    onTap: (Double, Double) -> Unit = { _, _ -> },
-    onDragStart: (Double, Double) -> Unit = { _, _ -> },
-    onDrag: (Double, Double) -> Unit = { _, _ -> },
+    onTap: (Vector2D) -> Unit = { _ -> },
+    onDragStart: (Vector2D) -> Unit = { _ -> },
+    onDrag: (Vector2D) -> Unit = { _ -> },
     onDragEnd: () -> Unit = {},
 ) {
     GraphCanvas(
@@ -192,8 +191,8 @@ fun UndirectedGraphCanvas(
         drawVertex = { vertex, centerOffset, textMeasurer ->
             drawVertex(vertex, centerOffset, textMeasurer)
         },
-        drawEdge = { edge, centerX, centerY ->
-            drawDirectedEdge(edge, centerX, centerY)
+        drawEdge = { edge, canvasCenter ->
+            drawDirectedEdge(edge, canvasCenter)
         },
         modifier = modifier,
         onTap = onTap,

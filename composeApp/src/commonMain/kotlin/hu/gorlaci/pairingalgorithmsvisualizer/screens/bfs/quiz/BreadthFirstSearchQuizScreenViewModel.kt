@@ -8,6 +8,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.BreadthFirstSearchStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.NeighbourStatus
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.Answer
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
@@ -147,12 +148,9 @@ class BreadthFirstSearchQuizScreenViewModel(
         backEnabled.value = step.value > 0
     }
 
-    override fun onTap(
-        x: Double,
-        y: Double,
-    ) {
+    override fun onTap(position: Vector2D) {
         if (!quizStarted.value) {
-            super.onTap(x, y)
+            super.onTap(position)
         }
     }
 

@@ -7,6 +7,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsEdgeType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.Answer
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.runalgorithm.EdmondsAlgorithmRunningScreenViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
@@ -138,12 +139,9 @@ class EdmondsQuizScreenViewmodel(
         markedVertices.value = listOf()
     }
 
-    override fun onTap(
-        x: Double,
-        y: Double,
-    ) {
+    override fun onTap(position: Vector2D) {
         if (!quizStarted.value) {
-            super.onTap(x, y)
+            super.onTap(position)
             return
         }
 
@@ -154,7 +152,7 @@ class EdmondsQuizScreenViewmodel(
         ) {
             val graph = currentGraph.value
 
-            val clickedVertex = graph.getVertexByCoordinates(x, y)
+            val clickedVertex = graph.getVertexByCoordinates(position)
             if (clickedVertex != null) {
                 if (markedVertices.value.lastOrNull() == clickedVertex) {
                     markedVertices.value = markedVertices.value.dropLast(1)

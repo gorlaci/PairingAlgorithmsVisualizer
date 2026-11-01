@@ -7,6 +7,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.BreadthFirstSearchStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.NeighbourStatus
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
@@ -20,7 +21,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 class BreadthFirstSearchGraph(
     override val vertices: MutableSet<BreadthFirstSearchVertex> = mutableSetOf(),
     name: String = "",
-    idCoordinatesMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
+    idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
 ) : Graph<BreadthFirstSearchVertex, Edge<BreadthFirstSearchVertex>>(
     name = name,
     vertices = vertices,
@@ -32,7 +33,7 @@ class BreadthFirstSearchGraph(
     private constructor(
         vertices: MutableSet<BreadthFirstSearchVertex> = mutableSetOf(),
         name: String = "",
-        idCoordinatesMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
+        idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
         queue: MutableList<BreadthFirstSearchVertex> = mutableListOf(),
         activeVertex: BreadthFirstSearchVertex? = null,
         activeNeighbour: BreadthFirstSearchVertex? = null,
@@ -180,7 +181,7 @@ class BreadthFirstSearchGraph(
     private fun calculateTreeCoordinates(
         screenWidth: Double = 400.0,
         screenHeight: Double = 500.0,
-    ): MutableMap<String, Pair<Double, Double>> {
+    ): MutableMap<String, Vector2D> {
         if (treeGrid.last().isEmpty()) {
             treeGrid.removeLast()
         }
@@ -191,14 +192,14 @@ class BreadthFirstSearchGraph(
         val rowDiff = minOf(screenHeight / (rows - 1), 100.0)
         val colDiff = minOf(screenWidth / (cols - 1), 100.0)
 
-        val coordinates = mutableMapOf<String, Pair<Double, Double>>()
+        val coordinates = mutableMapOf<String, Vector2D>()
 
         var y = (rowDiff * (rows - 1)) / 2
 
         treeGrid.forEach { row ->
             var x = -(colDiff * (cols - 1)) / 2
             row.forEach { vertex ->
-                coordinates[vertex.name] = Pair(x, y)
+                coordinates[vertex.name] = Vector2D(x, y)
                 x += colDiff
             }
             y -= rowDiff
@@ -325,8 +326,7 @@ class BreadthFirstSearchGraph(
         val graphicalVertices = vertices.map { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
-                x = coordinates.first,
-                y = coordinates.second,
+                position = coordinates,
                 name = vertex.name,
                 highlight = when (vertex) {
                     activeVertex -> LIGHT_ORANGE

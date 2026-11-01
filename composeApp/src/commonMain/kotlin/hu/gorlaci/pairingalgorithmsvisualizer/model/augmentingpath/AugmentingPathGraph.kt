@@ -2,6 +2,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath
 
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.*
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
@@ -12,7 +13,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 class AugmentingPathGraph(
     override val vertices: MutableSet<AugmentingPathVertex> = mutableSetOf(),
     name: String = "",
-    idCoordinatesMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
+    idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
 ) : BipartiteGraph<AugmentingPathVertex, Edge<AugmentingPathVertex>>(
     name = name,
     vertices = vertices,
@@ -138,7 +139,7 @@ class AugmentingPathGraph(
 
     private val treeGrid = mutableListOf<MutableList<AugmentingPathVertex>>()
 
-    private fun calculateTreeCoordinates(): MutableMap<String, Pair<Double, Double>> {
+    private fun calculateTreeCoordinates(): MutableMap<String, Vector2D> {
         if (treeGrid.last().isEmpty()) {
             treeGrid.removeLast()
         }
@@ -149,14 +150,14 @@ class AugmentingPathGraph(
         val rowDiff = minOf(500.0 / (rows - 1), 100.0)
         val colDiff = minOf(400.0 / (cols - 1), 100.0)
 
-        val coordinates = mutableMapOf<String, Pair<Double, Double>>()
+        val coordinates = mutableMapOf<String, Vector2D>()
 
         var y = (rowDiff * (rows - 1)) / 2
 
         treeGrid.forEach { row ->
             var x = -(colDiff * (cols - 1)) / 2
             row.forEach { vertex ->
-                coordinates[vertex.name] = Pair(x, y)
+                coordinates[vertex.name] = Vector2D(x, y)
                 x += colDiff
             }
             y -= rowDiff
@@ -342,8 +343,7 @@ class AugmentingPathGraph(
         val graphicalVertices = vertices.map { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
-                x = coordinates.first,
-                y = coordinates.second,
+                position = coordinates,
                 name = vertex.name,
                 highlight = when {
                     vertex in minCoverSet -> DARK_GREEN

@@ -6,6 +6,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
 
 class EgervaryAlgorithmRunningViewModel(
@@ -68,9 +69,6 @@ class EgervaryAlgorithmRunningViewModel(
         selectedGraph.value.class2.map { it.name }
     }
 
-    override fun onTap(
-        x: Double,
-        y: Double,
-    ) {
+    override fun onTap(position: Vector2D) {
     }
 }

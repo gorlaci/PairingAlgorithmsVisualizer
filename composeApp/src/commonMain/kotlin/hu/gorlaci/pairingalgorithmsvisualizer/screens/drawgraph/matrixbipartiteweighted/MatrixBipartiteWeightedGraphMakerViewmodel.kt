@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 
 class MatrixBipartiteWeightedGraphMakerViewmodel(
     private val graphStorage: GraphStorage,
@@ -81,19 +82,19 @@ class MatrixBipartiteWeightedGraphMakerViewmodel(
         val width = 700.0
         val height = 300.0
 
-        val coordinateMap = mutableMapOf<String, Pair<Double, Double>>()
+        val coordinateMap = mutableMapOf<String, Vector2D>()
 
         val columnVertices = mutableListOf<EgervaryVertex>()
         for (i in 0..<columns.value) {
             val label = (i + 1).toString()
             columnVertices.add(EgervaryVertex(label))
-            coordinateMap[label] = Pair(-width / 2 + width / (columns.value - 1) * i, height / 2)
+            coordinateMap[label] = Vector2D(-width / 2 + width / (columns.value - 1) * i, height / 2)
         }
         val rowVertices = mutableListOf<EgervaryVertex>()
         for (i in 0..<rows.value) {
             val label = ('A' + i).toString()
             rowVertices.add(EgervaryVertex(label))
-            coordinateMap[label] = Pair(-width / 2 + width / (rows.value - 1) * i, -height / 2)
+            coordinateMap[label] = Vector2D(-width / 2 + width / (rows.value - 1) * i, -height / 2)
         }
 
         val vertices = mutableSetOf<EgervaryVertex>()

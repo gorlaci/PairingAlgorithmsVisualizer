@@ -4,8 +4,8 @@ import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.text.rememberTextMeasurer
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_RED
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawDirectedEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawVertex
@@ -16,26 +16,22 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 fun TestScreen() {
     val vertexA = GraphicalVertex(
         name = "A",
-        x = -100.0,
-        y = 100.0,
+        position = Vector2D(-100.0, 100.0),
     )
 
     val vertexB = GraphicalVertex(
         name = "B",
-        x = 100.0,
-        y = 100.0,
+        position = Vector2D(100.0, 100.0),
     )
 
     val vertexD = GraphicalVertex(
         name = "D",
-        x = -100.0,
-        y = -100.0,
+        position = Vector2D(-100.0, -100.0),
     )
 
     val vertexC = GraphicalVertex(
         name = "C",
-        x = 100.0,
-        y = -100.0,
+        position = Vector2D(100.0, -100.0),
     )
 
     val edges = listOf(
@@ -77,35 +73,33 @@ fun TestScreen() {
     Canvas(
         modifier = Modifier.fillMaxSize(),
     ) {
-        val canvasCenterX = size.width / 2.0
-        val canvasCenterY = size.height / 2.0
-        val centerOffset = Offset(canvasCenterX.toFloat(), canvasCenterY.toFloat())
+        val canvasCenter = Vector2D(size.width / 2.0, size.height / 2.0)
 
         edges.forEach {
-            drawDirectedEdge(it, canvasCenterX, canvasCenterY)
+            drawDirectedEdge(it, canvasCenter)
         }
 
         drawVertex(
             vertex = vertexA,
-            centerOffset,
+            canvasCenter,
             textMeasurer,
         )
 
         drawVertex(
             vertex = vertexB,
-            centerOffset,
+            canvasCenter,
             textMeasurer,
         )
 
         drawVertex(
             vertex = vertexC,
-            centerOffset,
+            canvasCenter,
             textMeasurer,
         )
 
         drawVertex(
             vertex = vertexD,
-            centerOffset,
+            canvasCenter,
             textMeasurer,
         )
     }

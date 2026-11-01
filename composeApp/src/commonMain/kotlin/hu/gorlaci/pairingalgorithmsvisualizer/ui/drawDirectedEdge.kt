@@ -10,20 +10,13 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 
 fun DrawScope.drawDirectedEdge(
     edge: GraphicalEdge,
-    canvasCenterX: Double = 0.0,
-    canvasCenterY: Double = 0.0,
+    canvasCenter: Vector2D,
 ) {
     val centerOffsetMultiplier = 2.0
 
-    val startVector = Vector2D(
-        edge.startGraphicalVertex.x,
-        edge.startGraphicalVertex.y,
-    ).toCanvasCoordinates(canvasCenterX, canvasCenterY)
+    val startVector = edge.startGraphicalVertex.position.toCanvasCoordinates(canvasCenter)
 
-    val endVector = Vector2D(
-        edge.endGraphicalVertex.x,
-        edge.endGraphicalVertex.y,
-    ).toCanvasCoordinates(canvasCenterX, canvasCenterY)
+    val endVector = edge.endGraphicalVertex.position.toCanvasCoordinates(canvasCenter)
 
     val center = (startVector + endVector) / 2.0 + ((endVector - startVector).rotate(90.0) * centerOffsetMultiplier)
 

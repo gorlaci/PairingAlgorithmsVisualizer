@@ -3,6 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
@@ -20,8 +21,8 @@ fun SearchLegend(modifier: Modifier) {
             highlight = LIGHT_BLUE,
         ),
         "Vizsgált él" to GraphicalEdge(
-            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
-            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
+            endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             highlight = LIGHT_BLUE,
         ),
         "Vizsgálandó csúcs" to GraphicalVertex(
@@ -31,8 +32,8 @@ fun SearchLegend(modifier: Modifier) {
             highlight = Color.Black,
         ),
         "Faél" to GraphicalEdge(
-            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
-            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
+            endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             selected = true,
             color = RED,
         ),

@@ -7,6 +7,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.DepthFirstSearchVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.quiz.DepthFirstSearchStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.quiz.NeighbourStatus
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.Answer
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs.DepthFirstSearchAlgorithmRunningViewModel
 
@@ -145,11 +146,8 @@ class DepthFirstSearchQuizScreenViewModel(
         backEnabled.value = step.value > 0
     }
 
-    override fun onTap(
-        x: Double,
-        y: Double,
-    ) {
-        if (!quizStarted.value) super.onTap(x, y)
+    override fun onTap(position: Vector2D) {
+        if (!quizStarted.value) super.onTap(position)
     }
 
     override fun setGraphicalGraph() {

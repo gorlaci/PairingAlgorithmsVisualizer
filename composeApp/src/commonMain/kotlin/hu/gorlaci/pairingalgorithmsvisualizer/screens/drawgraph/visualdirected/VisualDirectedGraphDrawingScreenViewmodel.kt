@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 
 class VisualDirectedGraphDrawingScreenViewmodel(
@@ -32,12 +33,9 @@ class VisualDirectedGraphDrawingScreenViewmodel(
         }
     }
 
-    private fun addVertex(
-        x: Double,
-        y: Double,
-    ) {
+    private fun addVertex(position: Vector2D) {
         graph.vertices.add(Vertex(nextID))
-        graph.idCoordinatesMap[nextID] = Pair(x, y)
+        graph.idCoordinatesMap[nextID] = position
         increaseID(nextID.length - 1)
         graphicalGraph.value = graph.toGraphicalGraph()
     }
@@ -51,19 +49,16 @@ class VisualDirectedGraphDrawingScreenViewmodel(
 
     private var firstVertexForEdge: Vertex? = null
 
-    fun onTap(
-        x: Double,
-        y: Double,
-    ) {
+    fun onTap(position: Vector2D) {
         when (drawMode.value) {
             DrawMode.VERTEX -> {
-                if (graph.getVertexByCoordinates(x, y) == null) {
-                    addVertex(x, y)
+                if (graph.getVertexByCoordinates(position) == null) {
+                    addVertex(position)
                 }
             }
 
             DrawMode.EDGE -> {
-                val clickedVertex = graph.getVertexByCoordinates(x, y)
+                val clickedVertex = graph.getVertexByCoordinates(position)
                 if (clickedVertex != null) {
                     if (firstVertexForEdge == null) {
                         firstVertexForEdge = clickedVertex
@@ -91,22 +86,16 @@ class VisualDirectedGraphDrawingScreenViewmodel(
 
     var draggedVertex: Vertex? = null
 
-    fun onDragStart(
-        x: Double,
-        y: Double,
-    ) {
-        draggedVertex = graph.getVertexByCoordinates(x, y)
+    fun onDragStart(position: Vector2D) {
+        draggedVertex = graph.getVertexByCoordinates(position)
         firstVertexForEdge = null
     }
 
-    fun onDrag(
-        deltaX: Double,
-        deltaY: Double,
-    ) {
+    fun onDrag(delta: Vector2D) {
         draggedVertex?.let { vertex ->
-            val originalCoordinates = graph.idCoordinatesMap[vertex.id[0]] ?: Pair(0.0, 0.0)
+            val originalCoordinates = graph.idCoordinatesMap[vertex.id[0]] ?: Vector2D(0.0, 0.0)
             graph.idCoordinatesMap[vertex.id[0]] =
-                Pair(originalCoordinates.first + deltaX, originalCoordinates.second + deltaY)
+                originalCoordinates + delta
             graphicalGraph.value = graph.toGraphicalGraph()
         }
     }

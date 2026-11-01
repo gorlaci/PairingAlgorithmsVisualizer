@@ -2,6 +2,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
@@ -22,18 +23,18 @@ fun EgervaryLegend(modifier: Modifier = Modifier) {
             highlight = GRAY,
         ),
         "Párosításbeli él" to GraphicalEdge(
-            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
-            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
+            endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             selected = true,
         ),
         "e=(u,v) él, amire c(u)+c(v)=w(e)" to GraphicalEdge(
-            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
-            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
+            endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             color = RED,
         ),
         "Javító út" to GraphicalEdge(
-            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
-            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
+            endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             highlight = LIGHT_YELLOW,
         ),
         "U-beli csúcs" to GraphicalVertex(
@@ -46,8 +47,8 @@ fun EgervaryLegend(modifier: Modifier = Modifier) {
             innerColor = PURPLE,
         ),
         "Él, amin δ felveszi a minimális értékét" to GraphicalEdge(
-            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
-            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
+            endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             highlight = LIGHT_PINK,
         ),
     )

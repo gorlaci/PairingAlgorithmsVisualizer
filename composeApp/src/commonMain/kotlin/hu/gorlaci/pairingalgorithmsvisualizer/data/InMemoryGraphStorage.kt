@@ -9,6 +9,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.toEdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 
 class InMemoryGraphStorage : GraphStorage {
     private val graphs: MutableList<Graph<out Vertex, out Edge<out Vertex>>> = mutableListOf()
@@ -28,8 +29,7 @@ class InMemoryGraphStorage : GraphStorage {
     override fun getAllAugmentingPathGraphs(): List<AugmentingPathGraph> =
         graphs.filter { it.isBipartite }.map { it.toAugmentingPathGraph() }
 
-    override fun getAllEgervaryGraphs(): List<EgervaryGraph> =
-        graphs.filterIsInstance<EgervaryGraph>()
+    override fun getAllEgervaryGraphs(): List<EgervaryGraph> = graphs.filterIsInstance<EgervaryGraph>()
 
     private fun addExampleGraphs() {
         addExampleGraph1()
@@ -56,15 +56,15 @@ class InMemoryGraphStorage : GraphStorage {
                     ),
                 idCoordinatesMap =
                     mutableMapOf(
-                        "A" to Pair(-100.0, 200.0),
-                        "B" to Pair(0.0, 200.0),
-                        "C" to Pair(100.0, 200.0),
-                        "D" to Pair(-200.0, 0.0),
-                        "E" to Pair(0.0, 0.0),
-                        "F" to Pair(200.0, 0.0),
-                        "G" to Pair(-100.0, -200.0),
-                        "H" to Pair(0.0, -200.0),
-                        "I" to Pair(100.0, -200.0),
+                        "A" to Vector2D(-100.0, 200.0),
+                        "B" to Vector2D(0.0, 200.0),
+                        "C" to Vector2D(100.0, 200.0),
+                        "D" to Vector2D(-200.0, 0.0),
+                        "E" to Vector2D(0.0, 0.0),
+                        "F" to Vector2D(200.0, 0.0),
+                        "G" to Vector2D(-100.0, -200.0),
+                        "H" to Vector2D(0.0, -200.0),
+                        "I" to Vector2D(100.0, -200.0),
                     ),
                 name = "Példa Gráf 1",
                 newEdge = { from, to -> Edge(from, to) },
@@ -103,13 +103,13 @@ class InMemoryGraphStorage : GraphStorage {
                     ),
                 idCoordinatesMap =
                     mutableMapOf(
-                        "A" to Pair(-50.0, 150.0),
-                        "B" to Pair(-100.0, 50.0),
-                        "C" to Pair(0.0, 50.0),
-                        "D" to Pair(-50.0, -50.0),
-                        "E" to Pair(50.0, -50.0),
-                        "F" to Pair(0.0, -150.0),
-                        "G" to Pair(100.0, -150.0),
+                        "A" to Vector2D(-50.0, 150.0),
+                        "B" to Vector2D(-100.0, 50.0),
+                        "C" to Vector2D(0.0, 50.0),
+                        "D" to Vector2D(-50.0, -50.0),
+                        "E" to Vector2D(50.0, -50.0),
+                        "F" to Vector2D(0.0, -150.0),
+                        "G" to Vector2D(100.0, -150.0),
                     ),
                 name = "Példa Gráf 2",
                 newEdge = { from, to -> Edge(from, to) },
@@ -146,13 +146,13 @@ class InMemoryGraphStorage : GraphStorage {
             edges = edges,
             idCoordinatesMap =
                 mutableMapOf(
-                    "A" to Pair(-100.0, -100.0),
-                    "B" to Pair(0.0, -100.0),
-                    "C" to Pair(100.0, -100.0),
-                    "D" to Pair(-150.0, 100.0),
-                    "E" to Pair(-50.0, 100.0),
-                    "F" to Pair(50.0, 100.0),
-                    "G" to Pair(150.0, 100.0),
+                    "A" to Vector2D(-100.0, -100.0),
+                    "B" to Vector2D(0.0, -100.0),
+                    "C" to Vector2D(100.0, -100.0),
+                    "D" to Vector2D(-150.0, 100.0),
+                    "E" to Vector2D(-50.0, 100.0),
+                    "F" to Vector2D(50.0, 100.0),
+                    "G" to Vector2D(150.0, 100.0),
                 ),
             name = "Példa Páros Gráf 1",
             newEdge = { from, to -> Edge(from, to) },
@@ -162,15 +162,15 @@ class InMemoryGraphStorage : GraphStorage {
 
     private fun addExampleGraph4() {
         val vertices = mutableSetOf<Vertex>()
-        val coordinates = mutableMapOf<String, Pair<Double, Double>>()
+        val coordinates = mutableMapOf<String, Vector2D>()
         ('A'..'I').map { it.toString() }.forEachIndexed { i, it ->
             vertices.add(Vertex(id = it))
-            coordinates[it] = Pair(-250.0 + i * (500.0 / 8), -100.0)
+            coordinates[it] = Vector2D(-250.0 + i * (500.0 / 8), -100.0)
         }
         (0..9).forEachIndexed { i, it ->
             vertices.add(Vertex(id = it.toString()))
             val shiftedIndex = (i + 9) % 10
-            coordinates[it.toString()] = Pair(-300.0 + shiftedIndex * (600.0 / 9), 100.0)
+            coordinates[it.toString()] = Vector2D(-300.0 + shiftedIndex * (600.0 / 9), 100.0)
         }
         val graph = Graph(
             name = "Példa Páros Gráf 2",
@@ -222,14 +222,14 @@ class InMemoryGraphStorage : GraphStorage {
             EgervaryVertex("S"),
         )
         val idCoordinatesMap = mutableMapOf(
-            "A" to Pair(-300.0, -200.0),
-            "B" to Pair(-100.0, -200.0),
-            "C" to Pair(100.0, -200.0),
-            "D" to Pair(300.0, -200.0),
-            "P" to Pair(-300.0, 200.0),
-            "Q" to Pair(-100.0, 200.0),
-            "R" to Pair(100.0, 200.0),
-            "S" to Pair(300.0, 200.0),
+            "A" to Vector2D(-300.0, -200.0),
+            "B" to Vector2D(-100.0, -200.0),
+            "C" to Vector2D(100.0, -200.0),
+            "D" to Vector2D(300.0, -200.0),
+            "P" to Vector2D(-300.0, 200.0),
+            "Q" to Vector2D(-100.0, 200.0),
+            "R" to Vector2D(100.0, 200.0),
+            "S" to Vector2D(300.0, 200.0),
         )
 
         val graph = EgervaryGraph(

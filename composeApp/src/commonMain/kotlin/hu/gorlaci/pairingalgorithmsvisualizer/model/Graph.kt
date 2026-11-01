@@ -1,5 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model
 
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
@@ -9,8 +10,9 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
     var name: String = "",
     open val vertices: MutableSet<VertexType> = mutableSetOf(),
     open val edges: MutableSet<EdgeType> = mutableSetOf(),
-    val idCoordinatesMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
+    val idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
     private val newEdge: (VertexType, VertexType) -> EdgeType,
+    val directed: Boolean = false,
 ) {
     val isBipartite: Boolean
         get() {
@@ -48,22 +50,15 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
             return true
         }
 
-    fun getVertexCoordinates(vertex: Vertex): Pair<Double, Double> = Pair(
-        vertex.id.sumOf { str ->
-            idCoordinatesMap[str]?.first ?: 0.0
-        } / vertex.id.size,
-        vertex.id.sumOf { str ->
-            idCoordinatesMap[str]?.second ?: 0.0
-        } / vertex.id.size,
-    )
+    fun getVertexCoordinates(vertex: Vertex) =
+        vertex.id.map { idCoordinatesMap[it] ?: Vector2D(0.0, 0.0) }.reduce { d, acc -> d + acc } / vertex.id.size
 
     open fun toGraphicalGraph(stepType: StepType = StepType.Nothing()): GraphicalGraph {
         val graphicalVertices = vertices.map { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
                 name = vertex.name,
-                x = coordinates.first,
-                y = coordinates.second,
+                position = coordinates,
             )
         }
 
@@ -81,14 +76,9 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
         )
     }
 
-    fun getVertexByCoordinates(
-        x: Double,
-        y: Double,
-    ): VertexType? = vertices.lastOrNull { vertex ->
+    fun getVertexByCoordinates(position: Vector2D): VertexType? = vertices.lastOrNull { vertex ->
         val coordinates = getVertexCoordinates(vertex)
-        val dx = coordinates.first - x
-        val dy = coordinates.second - y
-        return@lastOrNull dx * dx + dy * dy <= 400.0
+        position.distanceTo(coordinates) <= 20.0
     }
 
     fun addEdge(

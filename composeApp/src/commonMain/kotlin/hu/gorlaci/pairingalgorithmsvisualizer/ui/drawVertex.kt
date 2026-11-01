@@ -10,19 +10,20 @@ import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Constraints
 import androidx.compose.ui.unit.sp
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
 import kotlin.math.abs
 
 fun DrawScope.drawVertex(
     vertex: GraphicalVertex,
-    canvasCenter: Offset,
+    canvasCenter: Vector2D,
     textMeasurer: TextMeasurer,
 ) {
     val vertexCenter =
-        vertex.transformCoordinates(canvasCenter.x.toDouble(), canvasCenter.y.toDouble())
+        vertex.position.toCanvasCoordinates(canvasCenter).toOffset()
 
-    val radius = vertex.radiusInFloat
+    val radius = vertex.radius
 
     when (vertex.highlightType) {
         HighlightType.CIRCLE -> {
@@ -97,7 +98,7 @@ fun DrawScope.drawVertex(
     )
 
     if (vertex.label != null) {
-        val direction = (vertex.y / (abs(vertex.y))).toFloat() * -1f
+        val direction = (vertex.position.y / (abs(vertex.position.y))).toFloat() * -1f
         val labelCenter = vertexCenter + Offset(0f, (radius + 20f) * direction)
 
         val measuredLabel = textMeasurer.measure(

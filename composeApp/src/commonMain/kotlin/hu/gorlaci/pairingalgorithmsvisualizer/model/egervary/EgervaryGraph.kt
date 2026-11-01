@@ -3,6 +3,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.egervary
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.AlgorithmRunningGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.BipartiteGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
@@ -13,7 +14,7 @@ class EgervaryGraph(
     name: String,
     override val vertices: MutableSet<EgervaryVertex> = mutableSetOf(),
     override val edges: MutableSet<EgervaryEdge> = mutableSetOf(),
-    idCoordinateMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
+    idCoordinateMap: MutableMap<String, Vector2D> = mutableMapOf(),
 ) : BipartiteGraph<EgervaryVertex, EgervaryEdge>(
     name = name,
     vertices = vertices,
@@ -326,8 +327,7 @@ class EgervaryGraph(
         val graphicalVerticesMap = vertices.associateWith { vertex ->
             val coordinates = getVertexCoordinates(vertex)
             GraphicalVertex(
-                x = coordinates.first,
-                y = coordinates.second,
+                position = coordinates,
                 name = vertex.name,
                 label = if (drawVertexLabels) {
                     vertex.label.toString()

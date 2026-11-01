@@ -1,10 +1,12 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model
 
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
+
 abstract class BipartiteGraph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
     name: String,
     vertices: MutableSet<VertexType> = mutableSetOf(),
     edges: MutableSet<EdgeType> = mutableSetOf(),
-    idCoordinatesMap: MutableMap<String, Pair<Double, Double>> = mutableMapOf(),
+    idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
     newEdge: (VertexType, VertexType) -> EdgeType,
 ) : Graph<VertexType, EdgeType>(
     name,

@@ -9,6 +9,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.SkipPoint
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
@@ -123,14 +124,11 @@ abstract class AlgorithmRunningViewModel<
 
     protected open var selectedVertex: VertexType? = null
 
-    open fun onTap(
-        x: Double,
-        y: Double,
-    ) {
+    open fun onTap(position: Vector2D) {
         if (!inSetup.value) return
 
         val graph = selectedGraph.value
-        val clickedVertex = graph.getVertexByCoordinates(x, y) ?: return
+        val clickedVertex = graph.getVertexByCoordinates(position) ?: return
 
         selectedVertex?.let {
             graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(

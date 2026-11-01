@@ -2,6 +2,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
@@ -30,18 +31,18 @@ fun AugmentingLegend(modifier: Modifier = Modifier) {
             highlight = GRAY,
         ),
         "Párosításbeli él" to GraphicalEdge(
-            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
-            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
+            endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             selected = true,
         ),
         "Alternáló fa él" to GraphicalEdge(
-            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
-            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
+            endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             color = DARK_GREEN,
         ),
         "Javító út" to GraphicalEdge(
-            startGraphicalVertex = GraphicalVertex(-25.0, -0.0),
-            endGraphicalVertex = GraphicalVertex(25.0, -0.0),
+            startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
+            endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             highlight = LIGHT_YELLOW,
         ),
         "Lefogó ponthalmaz" to GraphicalVertex(
