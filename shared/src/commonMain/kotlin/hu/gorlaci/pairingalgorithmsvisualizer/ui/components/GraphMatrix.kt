@@ -5,12 +5,17 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberUpdatedState
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,6 +27,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.DARK_GREEN
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun GraphMatrix(
@@ -161,12 +167,32 @@ fun TextFieldCell(
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
 ) {
+    val textFieldState = rememberTextFieldState(initialText = value)
+    val currentValue by rememberUpdatedState(value)
+    val currentOnValueChange by rememberUpdatedState(onValueChange)
+
+    LaunchedEffect(value, textFieldState) {
+        if (textFieldState.text.toString() != value) {
+            textFieldState.edit {
+                replace(0, length, value)
+            }
+        }
+    }
+
+    LaunchedEffect(textFieldState) {
+        snapshotFlow { textFieldState.text.toString() }
+            .collectLatest { text ->
+                if (text != currentValue) {
+                    currentOnValueChange(text)
+                }
+            }
+    }
+
     BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
+        state = textFieldState,
         modifier = modifier.border(1.dp, Color.Black).widthIn(max = 30.dp),
         textStyle = LocalTextStyle.current.copy(textAlign = TextAlign.Center),
-        decorationBox = { innerTextField ->
+        decorator = { innerTextField ->
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier.fillMaxSize(),
