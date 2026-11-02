@@ -1,5 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs
 
+import androidx.compose.material3.DisplayMode
 import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -115,5 +116,16 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
             clickedVertex,
             LIGHT_ORANGE,
         )
+    }
+
+    enum class DisplayMode {
+        Visual,
+        NeighbourList,
+    }
+
+    val displayMode = mutableStateOf(DisplayMode.Visual)
+
+    fun onDisplayModeChanged(newDisplayMode: DisplayMode) {
+        displayMode.value = newDisplayMode
     }
 }

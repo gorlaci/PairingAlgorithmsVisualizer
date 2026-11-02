@@ -14,10 +14,10 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 @Composable
 fun SearchLegend(modifier: Modifier) {
     val items = listOf(
-        "Vizsgált csúcs" to GraphicalVertex(
+        "Aktív csúcs" to GraphicalVertex(
             highlight = LIGHT_ORANGE,
         ),
-        "Vizsgált szomszéd" to GraphicalVertex(
+        "Vizsgált csúcs" to GraphicalVertex(
             highlight = LIGHT_BLUE,
         ),
         "Vizsgált él" to GraphicalEdge(
@@ -25,17 +25,16 @@ fun SearchLegend(modifier: Modifier) {
             endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             highlight = LIGHT_BLUE,
         ),
-        "Vizsgálandó csúcs" to GraphicalVertex(
+        "Bejárt csúcs" to GraphicalVertex(
             highlight = GRAY,
         ),
-        "Lezárt csúcs" to GraphicalVertex(
+        "Befejezett csúcs" to GraphicalVertex(
             highlight = Color.Black,
         ),
         "Faél" to GraphicalEdge(
             startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
             endGraphicalVertex = GraphicalVertex(Vector2D(25.0, -0.0)),
             selected = true,
-            color = RED,
         ),
     )
     Legend(items = items, modifier = modifier)

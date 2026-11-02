@@ -39,7 +39,7 @@ fun GraphCanvasBase(
 
     val textMeasurer = rememberTextMeasurer()
 
-    var hoverPosition by remember { mutableStateOf<Offset?>(null) }
+    var hoverPosition by remember { mutableStateOf<Vector2D?>(null) }
 
     Canvas(
         modifier = modifier.pointerInput(Unit) {
@@ -48,7 +48,7 @@ fun GraphCanvasBase(
                     val event = awaitPointerEvent()
                     when (event.type) {
                         PointerEventType.Move -> {
-                            hoverPosition = event.changes[0].position
+                            hoverPosition = Vector2D(event.changes[0].position)
                         }
 
                         PointerEventType.Exit -> {
@@ -106,8 +106,8 @@ fun GraphCanvasBase(
                 .associateWith { edge ->
                     distanceFromSegment(
                         hoverPosition,
-                        edge.startGraphicalVertex.position.toCanvasCoordinates(center).toOffset(),
-                        edge.endGraphicalVertex.position.toCanvasCoordinates(center).toOffset(),
+                        edge.startGraphicalVertex.position.toCanvasCoordinates(center),
+                        edge.endGraphicalVertex.position.toCanvasCoordinates(center),
                     )
                 }
                 .filter { it.value < 5f }
@@ -123,28 +123,34 @@ fun GraphCanvasBase(
 
                 drawRect(
                     color = Color.Black,
-                    topLeft = hoverPosition - Offset(
-                        measuredLabel.size.width / 2f + 4f,
-                        measuredLabel.size.height + 10f,
-                    ),
+                    topLeft = (
+                        hoverPosition - Vector2D(
+                            measuredLabel.size.width / 2.0 + 4.0,
+                            measuredLabel.size.height + 10.0,
+                        )
+                        ).toOffset(),
                     size = Size(measuredLabel.size.width + 8f, measuredLabel.size.height + 8f),
                 )
 
                 drawRect(
                     color = Color.White,
-                    topLeft = hoverPosition - Offset(
-                        measuredLabel.size.width / 2f + 3f,
-                        measuredLabel.size.height + 9f,
-                    ),
+                    topLeft = (
+                        hoverPosition - Vector2D(
+                            measuredLabel.size.width / 2.0 + 3.0,
+                            measuredLabel.size.height + 9.0,
+                        )
+                        ).toOffset(),
                     size = Size(measuredLabel.size.width + 6f, measuredLabel.size.height + 6f),
                 )
 
                 drawText(
                     measuredLabel,
-                    topLeft = hoverPosition - Offset(
-                        measuredLabel.size.width / 2f,
-                        measuredLabel.size.height + 6f,
-                    ),
+                    topLeft = (
+                        hoverPosition - Vector2D(
+                            measuredLabel.size.width / 2.0,
+                            measuredLabel.size.height + 6.0,
+                        )
+                        ).toOffset(),
                 )
             }
         }

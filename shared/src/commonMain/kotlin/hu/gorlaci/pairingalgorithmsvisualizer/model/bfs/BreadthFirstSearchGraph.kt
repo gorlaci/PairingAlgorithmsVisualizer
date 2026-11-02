@@ -253,20 +253,24 @@ class BreadthFirstSearchGraph(
                     addToTreeGrid(it)
                 }
                 saveStep(
-                    BreadthFirstSearchStepType.SelectedVertex(
+                    BreadthFirstSearchStepType.Nothing(
                         description =
-                            "A vizsgálandó csúcsok listája üres, járjuk be a komponenst ${activeVertex?.name} csúcsból",
-                        vertex = activeVertex!!,
+                            "A vizsgálandó csúcsok listája üres, járjuk be a komponenst a ${activeVertex?.name} csúcsból",
                     ),
                 )
             } else {
                 activeVertex = queue.removeFirst()
-                saveStep(
-                    BreadthFirstSearchStepType.SelectedVertex(
-                        description = "A listában a következő csúcs: ${activeVertex?.name}",
-                        vertex = activeVertex!!,
-                    ),
-                )
+                val description = "A listában a következő csúcs: ${activeVertex?.name}"
+                if (queue.isNotEmpty()) {
+                    saveStep(
+                        BreadthFirstSearchStepType.SelectedVertex(
+                            description = description,
+                            vertex = activeVertex!!,
+                        ),
+                    )
+                } else {
+                    saveStep(description)
+                }
             }
             activeVertex?.let { vertex ->
                 vertex.neighbours.sortedBy { it.name }.forEach { neighbour ->
@@ -363,11 +367,6 @@ class BreadthFirstSearchGraph(
                                 it.name == neighbour.name
                             },
                             selected = vertex.parent == neighbour || neighbour.parent == vertex,
-                            color = if (vertex.parent == neighbour || neighbour.parent == vertex) {
-                                RED
-                            } else {
-                                Color.Black
-                            },
                             highlight = if (
                                 (vertex == activeVertex && neighbour == activeNeighbour) ||
                                 (vertex == activeNeighbour && neighbour == activeVertex)

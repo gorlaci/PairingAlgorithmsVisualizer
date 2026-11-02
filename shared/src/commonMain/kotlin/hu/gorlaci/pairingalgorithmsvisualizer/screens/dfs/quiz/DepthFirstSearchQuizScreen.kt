@@ -15,6 +15,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.quiz.NeighbourStatus
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs.quiz.DepthFirstSearchQuizScreenViewModel.QuestionMode.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.Question
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.QuestionText
@@ -62,21 +63,21 @@ fun DepthFirstSearchQuizScreen(
                 }
 
                 SELECT_VERTEX -> Question(
-                    question = "Melyik csúcsból folytatódik a bejárás?",
+                    question = "Melyik csúcs lesz aktív?",
                     answers = graph.vertices.sortedBy { it.name },
                     toString = { it.name },
                     onAnswer = viewModel::onVertexAnswer,
                 )
 
                 SELECT_NEIGHBOUR_STATUS -> Question(
-                    question = "Be kell-e járni a vizsgált szomszédot?",
+                    question = "Be kell-e járni ezt a csúcsot?",
                     answers = NeighbourStatus.entries,
                     toString = { if (it == NeighbourStatus.VISIT) "Igen" else "Nem" },
                     onAnswer = viewModel::onNeighbourStatusAnswer,
                 )
 
                 SELECT_NEIGHBOUR -> Question(
-                    question = "Melyik szomszédot vizsgáljuk meg?",
+                    question = "Melyik csúcsot vizsgáljuk meg?",
                     answers = graph.vertices.sortedBy { it.name },
                     toString = { it.name },
                     onAnswer = viewModel::onNeighbourAnswer,
@@ -103,17 +104,21 @@ fun DepthFirstSearchQuizScreen(
             }
         },
     ) {
+        val directed by viewModel.isDirected
+
         Row(modifier = Modifier.fillMaxSize()) {
-            UndirectedGraphCanvas(
+            GraphCanvas(
                 graphicalGraph = graphicalGraph,
+                directed = directed,
                 modifier = Modifier.fillMaxSize().weight(1f),
                 onTap = viewModel::onTap,
             )
             Column(
                 modifier = Modifier.fillMaxSize().weight(1f),
             ) {
-                UndirectedGraphCanvas(
+                GraphCanvas(
                     graphicalGraph = tree,
+                    directed = directed,
                     modifier = Modifier.fillMaxSize().weight(2f),
                 )
 

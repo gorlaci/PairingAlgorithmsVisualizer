@@ -289,10 +289,9 @@ class DepthFirstSearchGraph(
                     addToTreeGrid(it)
                 }
                 saveStep(
-                    DepthFirstSearchStepType.SelectedVertex(
+                    DepthFirstSearchStepType.Nothing(
                         description =
                             "Járjuk be a komponenst a ${activeVertex?.name} csúcsból",
-                        vertex = activeVertex!!,
                     ),
                 )
             }
@@ -339,11 +338,6 @@ class DepthFirstSearchGraph(
                                 it.name == neighbour.name
                             },
                             selected = vertex.parent == neighbour || neighbour.parent == vertex,
-                            color = if (vertex.parent == neighbour || neighbour.parent == vertex) {
-                                RED
-                            } else {
-                                Color.Black
-                            },
                             highlight = if (
                                 (vertex == activeVertex && neighbour == activeNeighbour) ||
                                 (vertex == activeNeighbour && neighbour == activeVertex)

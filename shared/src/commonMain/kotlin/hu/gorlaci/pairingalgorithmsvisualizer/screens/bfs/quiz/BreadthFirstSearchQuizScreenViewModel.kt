@@ -60,6 +60,8 @@ class BreadthFirstSearchQuizScreenViewModel(
         questionMode.value = QuestionMode.NOTHING
 
         super.onGraphSelected(index)
+
+        setGraphicalGraph()
         setButtons()
     }
 
@@ -87,10 +89,6 @@ class BreadthFirstSearchQuizScreenViewModel(
 
         when (val possibleQuestion = graphicalGraph.value.stepType) {
             is BreadthFirstSearchStepType.SelectedVertex -> {
-                if (possibleQuestion.vertex == selectedVertex) {
-                    setButtons()
-                    return
-                }
                 questionMode.value = QuestionMode.SELECT_VERTEX
                 graphicalGraph.value =
                     graphicalGraph.value.changeVertexHighlight(
@@ -142,9 +140,6 @@ class BreadthFirstSearchQuizScreenViewModel(
         super.onBack()
         setButtons()
     }
-
-    override fun onStepChange(newValue: String): Unit =
-        throw UnsupportedOperationException("Step change is not supported in quiz mode.")
 
     private fun setButtons() {
         nextEnabled.value =

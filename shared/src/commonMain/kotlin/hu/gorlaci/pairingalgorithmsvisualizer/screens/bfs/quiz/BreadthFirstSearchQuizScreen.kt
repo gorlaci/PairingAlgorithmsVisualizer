@@ -15,6 +15,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.NeighbourStatus
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.quiz.BreadthFirstSearchQuizScreenViewModel.QuestionMode.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.SearchLegend
@@ -79,7 +80,7 @@ fun BreadthFirstSearchQuizScreen(
 
                 SELECT_VERTEX -> {
                     Question(
-                        question = "Melyik csúcsot vizsgáljuk?",
+                        question = "Melyik csúcs lesz aktív?",
                         answers = currentGraph.vertices.sortedBy { it.name },
                         toString = { it.name },
                         onAnswer = viewModel::onVertexAnswer,
@@ -88,7 +89,7 @@ fun BreadthFirstSearchQuizScreen(
 
                 SELECT_NEIGHBOUR -> {
                     Question(
-                        question = "Melyik szomszédot vizsgáljuk meg?",
+                        question = "Melyik csúcsot vizsgáljuk meg?",
                         answers = currentGraph.vertices.sortedBy { it.name },
                         toString = { it.name },
                         onAnswer = viewModel::onNeighbourAnswer,
@@ -97,7 +98,7 @@ fun BreadthFirstSearchQuizScreen(
 
                 SELECT_NEIGHBOUR_STATUS -> {
                     Question(
-                        question = "Be kell-e venni a vizsgált szomszédot a vizsgálandó csúcsok közé?",
+                        question = "Be kell-e járni ezt a csúcsot?",
                         answers = NeighbourStatus.entries,
                         toString = {
                             if (it == NeighbourStatus.ADDED) {
@@ -136,18 +137,21 @@ fun BreadthFirstSearchQuizScreen(
         val tree by viewModel.tree
         val inSetup by viewModel.inSetup
         val tableEditable by viewModel.tableEditable
+        val directed by viewModel.isDirected
 
         Row(modifier = Modifier.fillMaxSize()) {
-            UndirectedGraphCanvas(
+            GraphCanvas(
                 graphicalGraph = graphicalGraph,
+                directed = directed,
                 modifier = Modifier.fillMaxSize().weight(1f),
                 onTap = viewModel::onTap,
             )
             Column(
                 modifier = Modifier.fillMaxSize().weight(1f),
             ) {
-                UndirectedGraphCanvas(
+                GraphCanvas(
                     graphicalGraph = tree,
+                    directed = directed,
                     modifier = Modifier.fillMaxSize().weight(2f),
                 )
 
@@ -171,23 +175,27 @@ fun BreadthFirstSearchQuizScreen(
                                 }
                             }
 
-                            Row {
-                                TextCell(
-                                    text = "táv(v)",
-                                    modifier = firstCellSizeModifier,
-                                )
+                            val showDistances by viewModel.showDistances
 
-                                val tableDistanceContent by viewModel.tableDistanceContent
-
-                                for (vertex in currentGraph.vertices) {
-                                    TextFieldCell(
-                                        value = tableDistanceContent[vertex.name] ?: "∞",
-                                        onValueChange = {
-                                            viewModel.onTableDistanceChanged(vertex, it)
-                                        },
-                                        modifier = cellSizeModifier,
-                                        enabled = tableEditable,
+                            if (showDistances) {
+                                Row {
+                                    TextCell(
+                                        text = "táv(v)",
+                                        modifier = firstCellSizeModifier,
                                     )
+
+                                    val tableDistanceContent by viewModel.tableDistanceContent
+
+                                    for (vertex in currentGraph.vertices) {
+                                        TextFieldCell(
+                                            value = tableDistanceContent[vertex.name] ?: "∞",
+                                            onValueChange = {
+                                                viewModel.onTableDistanceChanged(vertex, it)
+                                            },
+                                            modifier = cellSizeModifier,
+                                            enabled = tableEditable,
+                                        )
+                                    }
                                 }
                             }
 
@@ -204,6 +212,7 @@ fun BreadthFirstSearchQuizScreen(
                                             viewModel.onTableParentChanged(vertex, it)
                                         },
                                         modifier = cellSizeModifier,
+                                        enabled = tableEditable,
                                     )
                                 }
                             }
