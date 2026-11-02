@@ -14,7 +14,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.shared.generated.resources.*
 

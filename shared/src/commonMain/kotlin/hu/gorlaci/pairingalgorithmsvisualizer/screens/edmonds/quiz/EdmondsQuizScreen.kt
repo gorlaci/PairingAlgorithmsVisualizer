@@ -17,7 +17,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz.EdmondsQuizSc
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.AnswerCard
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphSelectionDropdown
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.EdmondsLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.Question

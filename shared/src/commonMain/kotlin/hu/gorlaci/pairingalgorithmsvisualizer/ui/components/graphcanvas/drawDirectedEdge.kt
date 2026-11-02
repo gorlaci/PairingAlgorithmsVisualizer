@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas
 
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
@@ -7,6 +7,8 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
+import kotlin.math.PI
+import kotlin.math.atan2
 
 fun DrawScope.drawDirectedEdge(
     edge: GraphicalEdge,
@@ -23,12 +25,12 @@ fun DrawScope.drawDirectedEdge(
     val radius = (startVector - center).length().toFloat()
 
     val startAngleDegrees = (startVector - center).let {
-        val angle = kotlin.math.atan2(it.y, it.x) * (180.0 / kotlin.math.PI)
+        val angle = atan2(it.y, it.x) * (180.0 / PI)
         angle.toFloat()
     }.let { if (it < 0f) it + 360f else it }
 
     val endAngleDegrees = (endVector - center).let {
-        val angle = kotlin.math.atan2(it.y, it.x) * (180.0 / kotlin.math.PI)
+        val angle = atan2(it.y, it.x) * (180.0 / PI)
         angle.toFloat()
     }.let { if (it < 0f) it + 360f else it }
 

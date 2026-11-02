@@ -14,7 +14,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphSelectionDropdown
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.StepSelector
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.shared.generated.resources.Res
 import pairingalgorithmsvisualizer.shared.generated.resources.run_button

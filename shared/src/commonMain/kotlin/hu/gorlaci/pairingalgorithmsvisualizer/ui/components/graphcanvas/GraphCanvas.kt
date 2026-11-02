@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui.components
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas
 
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.gestures.detectDragGestures
@@ -12,14 +12,12 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.PointerEventType
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.TextMeasurer
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.drawText
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.sp
 import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawDirectedEdge
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawUndirectedEdge
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
@@ -117,7 +115,7 @@ fun GraphCanvasBase(
             if (hoveredEdge?.label != null) {
                 val measuredLabel = textMeasurer.measure(
                     text = hoveredEdge.label,
-                    style = androidx.compose.ui.text.TextStyle(
+                    style = TextStyle(
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Normal,
                     ),

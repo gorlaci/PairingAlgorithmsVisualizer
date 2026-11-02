@@ -1,4 +1,4 @@
-package hu.gorlaci.pairingalgorithmsvisualizer.ui
+package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas
 
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D

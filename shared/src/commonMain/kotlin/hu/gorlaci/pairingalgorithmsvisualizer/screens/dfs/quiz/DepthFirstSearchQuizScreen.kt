@@ -15,6 +15,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.quiz.NeighbourStatus
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs.quiz.DepthFirstSearchQuizScreenViewModel.QuestionMode.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.Question
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.QuestionText
 import org.jetbrains.compose.resources.stringResource

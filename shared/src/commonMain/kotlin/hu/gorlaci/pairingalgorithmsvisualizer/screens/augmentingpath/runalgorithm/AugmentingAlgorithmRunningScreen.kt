@@ -10,8 +10,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayModeSwitch
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphMatrix
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.AugmentingLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import org.jetbrains.compose.resources.stringResource

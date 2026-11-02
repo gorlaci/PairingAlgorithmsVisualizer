@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.rememberTextMeasurer
 import androidx.compose.ui.unit.dp
 import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawUndirectedEdge
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.drawUndirectedEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.drawVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 

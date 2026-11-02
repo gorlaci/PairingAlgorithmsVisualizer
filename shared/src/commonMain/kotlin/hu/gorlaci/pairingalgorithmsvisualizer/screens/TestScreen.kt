@@ -7,8 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.rememberTextMeasurer
 import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_RED
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawDirectedEdge
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.drawVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.drawDirectedEdge
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.drawVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 
