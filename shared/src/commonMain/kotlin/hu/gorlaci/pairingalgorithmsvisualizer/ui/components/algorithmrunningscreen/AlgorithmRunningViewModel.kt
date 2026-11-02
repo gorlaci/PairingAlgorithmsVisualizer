@@ -5,7 +5,6 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.ViewModel
-import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
@@ -19,19 +18,17 @@ abstract class AlgorithmRunningViewModel<
     GraphType : Graph<VertexType, EdgeType>,
     VertexType : Vertex,
     EdgeType : Edge<VertexType>,
-    >(
-    graphStorage: GraphStorage,
-) : ViewModel() {
+    > : ViewModel() {
 
     protected open val initString = "Jelöld ki a kiinduló párosítást!"
 
-    abstract val graphList: List<GraphType>
+    abstract val graphList: State<List<GraphType>>
 
     protected val selectedGraphIndex = mutableStateOf(0)
 
     open val selectedGraph by lazy {
         derivedStateOf {
-            graphList[selectedGraphIndex.value]
+            graphList.value[selectedGraphIndex.value]
         }
     }
 

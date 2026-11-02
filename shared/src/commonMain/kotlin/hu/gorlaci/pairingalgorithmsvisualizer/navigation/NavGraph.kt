@@ -211,16 +211,16 @@ fun NavGraph(
                         navHostController.navigate(Screen.Egervary.RunAlgorithm)
                     },
                 ),
-                MainMenuItem(
-                    algorithmName = "Teszt",
-                    algorithmImage = ImageBitmap(1, 1),
-                    onRunAlgorithm = {
-                        navHostController.navigate(Screen.Test)
-                    },
-                    onQuiz = {
-                        navHostController.navigate(Screen.DrawGraph.VisualDirected)
-                    },
-                ),
+//                MainMenuItem(
+//                    algorithmName = "Teszt",
+//                    algorithmImage = ImageBitmap(1, 1),
+//                    onRunAlgorithm = {
+//                        navHostController.navigate(Screen.Test)
+//                    },
+//                    onQuiz = {
+//                        navHostController.navigate(Screen.DrawGraph.VisualDirected)
+//                    },
+//                ),
             )
 
             NewMainMenuScreen(menuItems = menuItems)

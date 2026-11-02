@@ -19,11 +19,10 @@ open class DepthFirstSearchAlgorithmRunningViewModel(
     DepthFirstSearchGraph,
     DepthFirstSearchVertex,
     Edge<DepthFirstSearchVertex>,
-    >(graphsStorage) {
+    >() {
 
-    override val graphList = graphsStorage.getAllGraphs().map { it.toDepthFirstSearchGraph() }
-    override val selectedGraph = derivedStateOf {
-        graphList[selectedGraphIndex.value]
+    override val graphList = derivedStateOf {
+        graphsStorage.getAllGraphs().value.map { it.toDepthFirstSearchGraph() }
     }
 
     override val initString = "Jelöld ki a kezdő csúcsot!"
@@ -33,7 +32,7 @@ open class DepthFirstSearchAlgorithmRunningViewModel(
             Triple<DepthFirstSearchGraph, StepType, DepthFirstSearchGraph>(
                 selectedGraph.value,
                 StepType.Nothing(initString),
-                DepthFirstSearchGraph(),
+                DepthFirstSearchGraph(directed = selectedGraph.value.directed),
             ),
         ),
     )
@@ -50,6 +49,10 @@ open class DepthFirstSearchAlgorithmRunningViewModel(
         _steps.value[step.value].third.toGraphicalGraph()
     }
 
+    val isDirected = derivedStateOf {
+        selectedGraph.value.directed
+    }
+
     override fun onGraphSelected(index: Int) {
         selectedGraphIndex.value = index
 
@@ -61,7 +64,7 @@ open class DepthFirstSearchAlgorithmRunningViewModel(
             Triple(
                 selectedGraph.value,
                 StepType.Nothing(initString),
-                DepthFirstSearchGraph(),
+                DepthFirstSearchGraph(directed = selectedGraph.value.directed),
             ),
         )
 
@@ -73,7 +76,7 @@ open class DepthFirstSearchAlgorithmRunningViewModel(
     override fun onRun() {
         val graph = selectedGraph.value
 
-        graph.runAlgorithm(selectedVertex as? DepthFirstSearchVertex)
+        graph.runAlgorithm(selectedVertex)
 
         _steps.value = graph.steps
 

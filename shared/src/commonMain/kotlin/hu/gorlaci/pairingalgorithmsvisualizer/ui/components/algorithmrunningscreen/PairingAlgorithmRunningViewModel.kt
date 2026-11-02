@@ -1,8 +1,8 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.graphics.Color
-import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.PairableGraph
@@ -15,15 +15,8 @@ abstract class PairingAlgorithmRunningViewModel<
     GraphType,
     VertexType : Vertex,
     EdgeType : Edge<VertexType>,
-    >(
-    graphStorage: GraphStorage,
-) : AlgorithmRunningViewModel<GraphType, VertexType, EdgeType>(
-    graphStorage = graphStorage,
-)where GraphType : Graph<VertexType, EdgeType>, GraphType : PairableGraph<VertexType, EdgeType> {
-
-    abstract override val graphList: List<GraphType>
-
-    override val selectedGraph = derivedStateOf { graphList[selectedGraphIndex.value] }
+    > : AlgorithmRunningViewModel<GraphType, VertexType, EdgeType>()
+    where GraphType : Graph<VertexType, EdgeType>, GraphType : PairableGraph<VertexType, EdgeType> {
 
     override var selectedVertex: VertexType? = null
 

@@ -183,6 +183,8 @@ data class GraphicalGraph(
             label = label,
         )
         val newGraphicalEdges = graphicalEdges + newGraphicalEdge
+
+        println("Added edge from ${fromVertex.name} to ${toVertex.name}. Total edges: ${newGraphicalEdges.size}")
         return this.copy(graphicalEdges = newGraphicalEdges)
     }
 

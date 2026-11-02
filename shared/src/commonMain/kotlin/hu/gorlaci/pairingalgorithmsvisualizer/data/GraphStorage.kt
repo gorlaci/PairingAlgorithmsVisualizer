@@ -1,20 +1,24 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.data
 
+import androidx.compose.runtime.State
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
-import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryGraph
 
 interface GraphStorage {
-    fun addGraph(graph: Graph<out Vertex, out Edge<out Vertex>>)
+    fun storeGraph(graph: Graph<out Vertex, out Edge<out Vertex>>)
 
-    fun getAllGraphs(): List<Graph<out Vertex, out Edge<out Vertex>>>
+    fun getAllGraphs(): State<List<Graph<out Vertex, out Edge<out Vertex>>>>
 
-    fun getAllEdmondsGraphs(): List<EdmondsGraph>
+    fun addGraph(graph: Graph<out Vertex, out Edge<out Vertex>>) {
+        val center =
+            graph.vertices.map { graph.getVertexCoordinates(it) }.reduce { acc, vector -> acc + vector } /
+                graph.vertices.size.toDouble()
 
-    fun getAllAugmentingPathGraphs(): List<AugmentingPathGraph>
+        graph.idCoordinatesMap.entries.forEach {
+            graph.idCoordinatesMap[it.key] = it.value - center
+        }
 
-    fun getAllEgervaryGraphs(): List<EgervaryGraph>
+        storeGraph(graph)
+    }
 }

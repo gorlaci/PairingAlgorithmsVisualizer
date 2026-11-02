@@ -22,18 +22,21 @@ class BreadthFirstSearchGraph(
     override val vertices: MutableSet<BreadthFirstSearchVertex> = mutableSetOf(),
     name: String = "",
     idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
+    directed: Boolean,
 ) : Graph<BreadthFirstSearchVertex, Edge<BreadthFirstSearchVertex>>(
     name = name,
     vertices = vertices,
     edges = mutableSetOf(),
     idCoordinatesMap = idCoordinatesMap,
     newEdge = { from, to -> Edge(from, to) },
+    directed = directed,
 ),
     AlgorithmRunningGraph {
     private constructor(
         vertices: MutableSet<BreadthFirstSearchVertex> = mutableSetOf(),
         name: String = "",
         idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
+        directed: Boolean,
         queue: MutableList<BreadthFirstSearchVertex> = mutableListOf(),
         activeVertex: BreadthFirstSearchVertex? = null,
         activeNeighbour: BreadthFirstSearchVertex? = null,
@@ -43,6 +46,7 @@ class BreadthFirstSearchGraph(
         vertices = vertices,
         name = name,
         idCoordinatesMap = idCoordinatesMap,
+        directed = directed,
     ) {
         this.queue.addAll(queue)
         this.processedVertices.addAll(processedVertices)
@@ -101,6 +105,7 @@ class BreadthFirstSearchGraph(
             vertices = newVertices,
             name = name,
             idCoordinatesMap = idCoordinatesMap.toMutableMap(),
+            directed = directed,
             queue = newQueue,
             activeVertex = newActiveVertex,
             activeNeighbour = newActiveNeighbour,
@@ -161,6 +166,7 @@ class BreadthFirstSearchGraph(
         }
         return BreadthFirstSearchGraph(
             vertices = treeVertices,
+            directed = directed,
             activeVertex = newActiveVertex,
             queue = newQueue.toMutableList(),
             processedVertices = newProcessedVertices.toMutableSet(),
@@ -412,7 +418,9 @@ fun Graph<out Vertex, out Edge<out Vertex>>.toBreadthFirstSearchGraph(): Breadth
         val toVertex = bfsVertices.find { it.id == edge.toVertex.id }
         if (fromVertex != null && toVertex != null) {
             fromVertex.neighbours.add(toVertex)
-            toVertex.neighbours.add(fromVertex)
+            if (!directed) {
+                toVertex.neighbours.add(fromVertex)
+            }
         }
     }
 
@@ -420,5 +428,6 @@ fun Graph<out Vertex, out Edge<out Vertex>>.toBreadthFirstSearchGraph(): Breadth
         vertices = bfsVertices,
         name = name,
         idCoordinatesMap = idCoordinatesMap.toMutableMap(),
+        directed = directed,
     )
 }

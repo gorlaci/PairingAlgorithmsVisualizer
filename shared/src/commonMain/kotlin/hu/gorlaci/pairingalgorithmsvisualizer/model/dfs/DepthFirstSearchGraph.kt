@@ -22,18 +22,21 @@ class DepthFirstSearchGraph(
     override val vertices: MutableSet<DepthFirstSearchVertex> = mutableSetOf(),
     name: String = "",
     idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
+    directed: Boolean,
 ) : Graph<DepthFirstSearchVertex, Edge<DepthFirstSearchVertex>>(
     name = name,
     vertices = vertices,
     edges = mutableSetOf(),
     idCoordinatesMap = idCoordinatesMap,
     newEdge = { from, to -> Edge(from, to) },
+    directed = directed,
 ),
     AlgorithmRunningGraph {
     private constructor(
         vertices: MutableSet<DepthFirstSearchVertex> = mutableSetOf(),
         name: String = "",
         idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
+        directed: Boolean,
         activeVertex: DepthFirstSearchVertex? = null,
         activeNeighbour: DepthFirstSearchVertex? = null,
         startingVertex: DepthFirstSearchVertex? = null,
@@ -41,6 +44,7 @@ class DepthFirstSearchGraph(
         vertices = vertices,
         name = name,
         idCoordinatesMap = idCoordinatesMap,
+        directed = directed,
     ) {
         this.activeVertex = activeVertex
         this.activeNeighbour = activeNeighbour
@@ -90,6 +94,7 @@ class DepthFirstSearchGraph(
             vertices = newVertices,
             name = name,
             idCoordinatesMap = idCoordinatesMap.toMutableMap(),
+            directed = directed,
             activeVertex = newActiveVertex,
             activeNeighbour = newActiveNeighbour,
             startingVertex = newStartingVertex,
@@ -142,6 +147,7 @@ class DepthFirstSearchGraph(
             vertices = treeVertices,
             activeVertex = newActiveVertex,
             activeNeighbour = newActiveNeighbour,
+            directed = directed,
         )
     }
 
@@ -285,7 +291,7 @@ class DepthFirstSearchGraph(
                 saveStep(
                     DepthFirstSearchStepType.SelectedVertex(
                         description =
-                            "A vizsgálandó csúcsok listája üres, járjuk be a komponenst a ${activeVertex?.name} csúcsból",
+                            "Járjuk be a komponenst a ${activeVertex?.name} csúcsból",
                         vertex = activeVertex!!,
                     ),
                 )
@@ -384,11 +390,12 @@ fun Graph<out Vertex, out Edge<out Vertex>>.toDepthFirstSearchGraph(): DepthFirs
         )
     }.toMutableSet()
 
-    edges.forEach { edge ->
-        val fromVertex = dfsVertices.find { it.id == edge.fromVertex.id }
-        val toVertex = dfsVertices.find { it.id == edge.toVertex.id }
-        if (fromVertex != null && toVertex != null) {
-            fromVertex.neighbours.add(toVertex)
+    for (edge in edges) {
+        val fromVertex = dfsVertices.find { it.id == edge.fromVertex.id } ?: continue
+        val toVertex = dfsVertices.find { it.id == edge.toVertex.id } ?: continue
+        fromVertex.neighbours.add(toVertex)
+
+        if (!directed) {
             toVertex.neighbours.add(fromVertex)
         }
     }
@@ -397,5 +404,6 @@ fun Graph<out Vertex, out Edge<out Vertex>>.toDepthFirstSearchGraph(): DepthFirs
         vertices = dfsVertices,
         name = name,
         idCoordinatesMap = idCoordinatesMap.toMutableMap(),
+        directed = directed,
     )
 }

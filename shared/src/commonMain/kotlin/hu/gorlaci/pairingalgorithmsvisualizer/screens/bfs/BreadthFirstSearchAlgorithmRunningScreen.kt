@@ -9,6 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.DirectedGraphCanvas
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextFieldCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
@@ -26,12 +28,6 @@ fun BreadthFirstSearchAlgorithmRunningScreen(
     onNewGraph: () -> Unit,
 ) {
     val viewModel = viewModel { BreadthFirstSearchAlgorithmRunningViewModel(graphStorage) }
-
-    val graphicalGraph by viewModel.graphicalGraph
-    val tree by viewModel.tree
-    val graph by viewModel.currentGraph
-
-    val inSetup by viewModel.inSetup
 
     AlgorithmRunningScreen(
         viewModel = viewModel,
@@ -65,18 +61,21 @@ fun BreadthFirstSearchScreenContent(
     val tree by viewModel.tree
     val currentGraph by viewModel.currentGraph
     val inSetup by viewModel.inSetup
+    val isDirected by viewModel.isDirected
 
     Row(modifier = Modifier.fillMaxSize()) {
-        UndirectedGraphCanvas(
+        GraphCanvas(
             graphicalGraph = graphicalGraph,
+            directed = isDirected,
             modifier = Modifier.fillMaxSize().weight(1f),
             onTap = viewModel::onTap,
         )
         Column(
             modifier = Modifier.fillMaxSize().weight(1f),
         ) {
-            UndirectedGraphCanvas(
+            GraphCanvas(
                 graphicalGraph = tree,
+                directed = isDirected,
                 modifier = Modifier.fillMaxSize().weight(2f),
             )
 
@@ -100,26 +99,30 @@ fun BreadthFirstSearchScreenContent(
                             }
                         }
 
-                        Row {
-                            TextCell(
-                                text = "táv(v)",
-                                modifier = firstCellSizeModifier,
-                            )
-                            for (vertex in currentGraph.vertices) {
-                                if (tableEditable) {
-                                    val text = mutableStateOf(vertex.distance?.toString() ?: "∞")
-                                    TextFieldCell(
-                                        value = text.value,
-                                        onValueChange = {
-                                            text.value = it
-                                        },
-                                        modifier = cellSizeModifier,
-                                    )
-                                } else {
-                                    TextCell(
-                                        text = vertex.distance?.toString() ?: "∞",
-                                        modifier = cellSizeModifier,
-                                    )
+                        val showDistances by viewModel.showDistances
+
+                        if (showDistances) {
+                            Row {
+                                TextCell(
+                                    text = "táv(v)",
+                                    modifier = firstCellSizeModifier,
+                                )
+                                for (vertex in currentGraph.vertices) {
+                                    if (tableEditable) {
+                                        val text = mutableStateOf(vertex.distance?.toString() ?: "∞")
+                                        TextFieldCell(
+                                            value = text.value,
+                                            onValueChange = {
+                                                text.value = it
+                                            },
+                                            modifier = cellSizeModifier,
+                                        )
+                                    } else {
+                                        TextCell(
+                                            text = vertex.distance?.toString() ?: "∞",
+                                            modifier = cellSizeModifier,
+                                        )
+                                    }
                                 }
                             }
                         }

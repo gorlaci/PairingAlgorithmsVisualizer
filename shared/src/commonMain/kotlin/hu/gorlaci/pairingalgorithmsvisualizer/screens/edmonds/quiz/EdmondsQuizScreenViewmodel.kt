@@ -32,7 +32,7 @@ class EdmondsQuizScreenViewmodel(
     override val backEnabled = mutableStateOf(false)
 
     override fun onNext() {
-        if (step.value < _steps.value.size - 1) {
+        if (step.value < edmondsSteps.value.size - 1) {
             step.value++
 
             setCurrentGraph()
@@ -95,9 +95,9 @@ class EdmondsQuizScreenViewmodel(
 
         super.onRun()
 
-        _steps.value =
-            _steps.value.takeWhile { it.second !is EdmondsStepType.MaxPairingFound } +
-            _steps.value.dropWhile { it.second !is EdmondsStepType.MaxPairingFound }
+        edmondsSteps.value =
+            edmondsSteps.value.takeWhile { it.second !is EdmondsStepType.MaxPairingFound } +
+            edmondsSteps.value.dropWhile { it.second !is EdmondsStepType.MaxPairingFound }
                 .take(2)
 
         setButtons()
@@ -105,7 +105,7 @@ class EdmondsQuizScreenViewmodel(
 
     fun setButtons() {
         nextEnabled.value =
-            (step.value < _steps.value.size - 1 && questionMode.value == QuestionMode.NOTHING) ||
+            (step.value < edmondsSteps.value.size - 1 && questionMode.value == QuestionMode.NOTHING) ||
             (questionMode.value == QuestionMode.SHOW_ANSWER)
         backEnabled.value = step.value > 0
     }

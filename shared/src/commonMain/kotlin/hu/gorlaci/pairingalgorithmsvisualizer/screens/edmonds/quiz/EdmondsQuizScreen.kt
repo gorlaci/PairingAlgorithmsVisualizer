@@ -44,6 +44,8 @@ fun EdmondsQuizScreen(
     val backEnabled by viewModel.backEnabled
     val quizStarted by viewModel.quizStarted
 
+    val graphList by viewModel.graphList
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -61,7 +63,7 @@ fun EdmondsQuizScreen(
             ) {
                 GraphSelectionDropdown(
                     selectedGraph = selectedGraph,
-                    graphList = viewModel.graphList,
+                    graphList = graphList,
                     onGraphSelected = viewModel::onGraphSelected,
                     onNewGraph = onNewGraph,
                 )

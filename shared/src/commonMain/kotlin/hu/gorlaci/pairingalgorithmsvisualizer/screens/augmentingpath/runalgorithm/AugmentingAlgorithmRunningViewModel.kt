@@ -6,6 +6,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathVertex
+import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.toAugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.PairingAlgorithmRunningViewModel
@@ -16,14 +17,10 @@ class AugmentingAlgorithmRunningViewModel(
     AugmentingPathGraph,
     AugmentingPathVertex,
     Edge<AugmentingPathVertex>,
-    >(
-    graphStorage,
-) {
+    >() {
 
-    override val graphList = graphStorage.getAllAugmentingPathGraphs()
-
-    override val selectedGraph = derivedStateOf {
-        graphList[selectedGraphIndex.value]
+    override val graphList = derivedStateOf {
+        graphStorage.getAllGraphs().value.filter { it.isBipartite }.map { it.toAugmentingPathGraph() }
     }
 
     private val _steps = mutableStateOf(

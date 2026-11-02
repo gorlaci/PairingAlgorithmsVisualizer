@@ -1,35 +1,25 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.data
 
+import androidx.compose.runtime.mutableStateOf
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
-import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.toAugmentingPathGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.toEdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.egervary.EgervaryVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 
 class InMemoryGraphStorage : GraphStorage {
-    private val graphs: MutableList<Graph<out Vertex, out Edge<out Vertex>>> = mutableListOf()
+    private val graphs = mutableStateOf(mutableListOf<Graph<out Vertex, out Edge<out Vertex>>>())
 
     init {
         addExampleGraphs()
     }
 
-    override fun addGraph(graph: Graph<out Vertex, out Edge<out Vertex>>) {
-        graphs.add(graph)
+    override fun storeGraph(graph: Graph<out Vertex, out Edge<out Vertex>>) {
+        graphs.value = graphs.value.toMutableList().apply { add(graph) }
     }
 
-    override fun getAllGraphs(): List<Graph<out Vertex, out Edge<out Vertex>>> = graphs
-
-    override fun getAllEdmondsGraphs(): List<EdmondsGraph> = graphs.map { it.toEdmondsGraph() }
-
-    override fun getAllAugmentingPathGraphs(): List<AugmentingPathGraph> =
-        graphs.filter { it.isBipartite }.map { it.toAugmentingPathGraph() }
-
-    override fun getAllEgervaryGraphs(): List<EgervaryGraph> = graphs.filterIsInstance<EgervaryGraph>()
+    override fun getAllGraphs() = graphs
 
     private fun addExampleGraphs() {
         addExampleGraph1()
@@ -37,6 +27,7 @@ class InMemoryGraphStorage : GraphStorage {
         addExampleGraph3()
         addExampleGraph4()
         addExampleGraph5()
+        addExampleGraph6()
     }
 
     private fun addExampleGraph1() {
@@ -68,6 +59,7 @@ class InMemoryGraphStorage : GraphStorage {
                     ),
                 name = "Példa Gráf 1",
                 newEdge = { from, to -> Edge(from, to) },
+                directed = false,
             )
 
         graph.addEdge("E", "D")
@@ -253,6 +245,42 @@ class InMemoryGraphStorage : GraphStorage {
         graph.addEdge("D", "Q", weight = 2)
         graph.addEdge("D", "R", weight = 7)
         graph.addEdge("D", "S", weight = 5)
+
+        addGraph(graph)
+    }
+
+    private fun addExampleGraph6() {
+        val vertices = mutableSetOf(
+            Vertex("A"),
+            Vertex("B"),
+            Vertex("C"),
+            Vertex("D"),
+            Vertex("E"),
+            Vertex("F"),
+        )
+        val coordinates = mutableMapOf(
+            "A" to Vector2D(0.0, 0.0),
+            "B" to Vector2D(-100.0, -100.0),
+            "C" to Vector2D(100.0, -100.0),
+            "D" to Vector2D(-100.0, -200.0),
+            "E" to Vector2D(200.0, 0.0),
+            "F" to Vector2D(100.0, -200.0),
+        )
+        val graph = Graph(
+            name = "Irányított Gráf 1",
+            vertices = vertices,
+            idCoordinatesMap = coordinates,
+            newEdge = { from, to -> Edge(from, to) },
+            directed = true,
+        )
+        graph.addEdge("A", "B")
+        graph.addEdge("A", "C")
+        graph.addEdge("A", "F")
+        graph.addEdge("B", "D")
+        graph.addEdge("C", "D")
+        graph.addEdge("C", "F")
+        graph.addEdge("D", "A")
+        graph.addEdge("E", "F")
 
         addGraph(graph)
     }

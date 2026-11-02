@@ -110,12 +110,14 @@ class GraphDrawingScreenViewmodel(
         draggedVertex = null
     }
 
+    val graphs = graphStorage.getAllGraphs()
+
     fun saveGraph() {
         if (graph.vertices.isEmpty() || graph.vertices.isEmpty()) {
             return
         }
 
-        if (graphStorage.getAllGraphs().contains(graph)) {
+        if (graphs.value.contains(graph)) {
             return
         }
         graphStorage.addGraph(graph)

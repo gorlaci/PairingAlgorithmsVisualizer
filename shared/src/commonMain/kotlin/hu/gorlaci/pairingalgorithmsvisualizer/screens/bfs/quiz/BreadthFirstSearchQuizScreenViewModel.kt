@@ -12,6 +12,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.Answer
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.RED
 
@@ -33,7 +34,7 @@ class BreadthFirstSearchQuizScreenViewModel(
 
     override fun setGraphicalGraph() {
         super.setGraphicalGraph()
-        tree.value = _steps.value[step.value].third.toGraphicalGraph()
+        tree.value = bfsSteps.value[step.value].third.toGraphicalGraph()
     }
 
     fun onTableDistanceChanged(
@@ -86,6 +87,10 @@ class BreadthFirstSearchQuizScreenViewModel(
 
         when (val possibleQuestion = graphicalGraph.value.stepType) {
             is BreadthFirstSearchStepType.SelectedVertex -> {
+                if (possibleQuestion.vertex == selectedVertex) {
+                    setButtons()
+                    return
+                }
                 questionMode.value = QuestionMode.SELECT_VERTEX
                 graphicalGraph.value =
                     graphicalGraph.value.changeVertexHighlight(
@@ -127,7 +132,7 @@ class BreadthFirstSearchQuizScreenViewModel(
                     }
             }
 
-            else -> Unit
+            else -> {}
         }
         setButtons()
     }
@@ -195,13 +200,13 @@ class BreadthFirstSearchQuizScreenViewModel(
                 Answer.Incorrect(explanation)
             }
         setGraphicalGraph()
-        graphicalGraph.value = graphicalGraph.value.apply {
-            addEdge(
-                question.vertex,
-                question.neighbour,
-                selected = true,
-                color = RED,
-            )
+        if (question.neighbourStatus == NeighbourStatus.ADDED) {
+            tree.value = tree.value
+                .addEdge(
+                    question.vertex,
+                    question.neighbour,
+                    highlight = LIGHT_BLUE,
+                )
         }
         showAnswer()
     }

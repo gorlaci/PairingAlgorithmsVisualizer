@@ -15,14 +15,12 @@ class EgervaryAlgorithmRunningViewModel(
     EgervaryGraph,
     EgervaryVertex,
     EgervaryEdge,
-    >(graphStorage) {
+    >() {
 
     override val initString = ""
 
-    override val graphList = graphStorage.getAllEgervaryGraphs()
-
-    override val selectedGraph = derivedStateOf {
-        graphList[selectedGraphIndex.value]
+    override val graphList = derivedStateOf {
+        graphStorage.getAllGraphs().value.filterIsInstance<EgervaryGraph>()
     }
 
     init {

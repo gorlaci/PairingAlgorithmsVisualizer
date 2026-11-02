@@ -43,7 +43,7 @@ fun <
         )
     },
 ) {
-    val graphList = viewModel.graphList
+    val graphList by viewModel.graphList
 
     val selectedGraph by viewModel.selectedGraph
     val graphicalGraph by viewModel.graphicalGraph

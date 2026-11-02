@@ -10,6 +10,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.EdmondsVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsStepType
+import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.toEdmondsGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.PairingAlgorithmRunningViewModel
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.launch
@@ -22,23 +23,24 @@ open class EdmondsAlgorithmRunningScreenViewModel(
     EdmondsGraph,
     EdmondsVertex,
     EdmondsEdge,
-    >(graphStorage) {
-    override val graphList = graphStorage.getAllEdmondsGraphs()
+    >() {
+    override val graphList = derivedStateOf {
+        graphStorage.getAllGraphs().value.map { it.toEdmondsGraph() }
+    }
 
-    val currentGraph = mutableStateOf(graphList[selectedGraphIndex.value])
+    val currentGraph = mutableStateOf(graphList.value[selectedGraphIndex.value])
 
-    @Suppress("ktlint:standard:backing-property-naming")
-    protected val _steps = mutableStateOf(
+    protected val edmondsSteps = mutableStateOf(
         listOf<Pair<EdmondsGraph, EdmondsStepType>>(
             currentGraph.value to EdmondsStepType.Nothing(initString),
         ),
     )
     override val steps = derivedStateOf {
-        _steps.value.map { it.first.toGraphicalGraph(it.second) }
+        edmondsSteps.value.map { it.first.toGraphicalGraph(it.second) }
     }
 
     override fun onNext() {
-        if (step.value < _steps.value.size - 1) {
+        if (step.value < edmondsSteps.value.size - 1) {
             step.value++
 
             setCurrentGraph()
@@ -70,18 +72,18 @@ open class EdmondsAlgorithmRunningScreenViewModel(
     }
 
     protected fun setCurrentGraph() {
-        currentGraph.value = _steps.value[step.value].first
+        currentGraph.value = edmondsSteps.value[step.value].first
         graphicalGraph.value =
-            _steps.value[step.value].first.toGraphicalGraph(_steps.value[step.value].second)
+            edmondsSteps.value[step.value].first.toGraphicalGraph(edmondsSteps.value[step.value].second)
     }
 
     override fun onGraphSelected(index: Int) {
         selectedGraphIndex.value = index
-        currentGraph.value = graphList[selectedGraphIndex.value]
+        currentGraph.value = graphList.value[selectedGraphIndex.value]
 
         currentGraph.value.resetAlgorithm()
 
-        _steps.value = listOf(currentGraph.value to EdmondsStepType.Nothing(initString))
+        edmondsSteps.value = listOf(currentGraph.value to EdmondsStepType.Nothing(initString))
 
         graphicalGraph.value =
             currentGraph.value.toGraphicalGraph(EdmondsStepType.Nothing(initString))
@@ -134,10 +136,10 @@ open class EdmondsAlgorithmRunningScreenViewModel(
     }
 
     override fun onRun() {
-        val graph = graphList[selectedGraphIndex.value]
+        val graph = graphList.value[selectedGraphIndex.value]
 
         graph.runAlgorithm()
-        _steps.value = graph.steps
+        edmondsSteps.value = graph.steps
 
         step.value = 0
         inSetup.value = false

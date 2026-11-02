@@ -118,6 +118,8 @@ class MatrixBipartiteWeightedGraphMakerViewmodel(
         return graph
     }
 
+    val graphs = graphStorage.getAllGraphs()
+
     fun saveGraph() {
         val graph = getGraph()
 
@@ -125,7 +127,7 @@ class MatrixBipartiteWeightedGraphMakerViewmodel(
             return
         }
 
-        if (graphStorage.getAllGraphs().contains(graph)) {
+        if (graphs.value.contains(graph)) {
             return
         }
 

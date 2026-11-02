@@ -21,37 +21,41 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
     BreadthFirstSearchGraph,
     BreadthFirstSearchVertex,
     Edge<BreadthFirstSearchVertex>,
-    >(graphsStorage) {
+    >() {
 
-    override val graphList = graphsStorage.getAllGraphs().map { it.toBreadthFirstSearchGraph() }
-    override val selectedGraph = derivedStateOf {
-        graphList[selectedGraphIndex.value]
+    override val graphList = derivedStateOf {
+        graphsStorage.getAllGraphs().value.map { it.toBreadthFirstSearchGraph() }
     }
 
     override val initString = "Jelöld ki a kezdő csúcsot!"
 
-    @Suppress("ktlint:standard:backing-property-naming")
-    protected val _steps = mutableStateOf(
+    protected val bfsSteps = mutableStateOf(
         listOf(
             Triple<BreadthFirstSearchGraph, StepType, BreadthFirstSearchGraph>(
                 selectedGraph.value,
                 StepType.Nothing(initString),
-                BreadthFirstSearchGraph(),
+                BreadthFirstSearchGraph(directed = selectedGraph.value.directed),
             ),
         ),
     )
 
     override val steps = derivedStateOf {
-        _steps.value.map { it.first.toGraphicalGraph(it.second) }
+        bfsSteps.value.map { it.first.toGraphicalGraph(it.second) }
     }
 
     val currentGraph = derivedStateOf {
-        _steps.value[step.value].first
+        bfsSteps.value[step.value].first
     }
 
     open val tree: State<GraphicalGraph> = derivedStateOf {
-        _steps.value[step.value].third.toGraphicalGraph()
+        bfsSteps.value[step.value].third.toGraphicalGraph()
     }
+
+    val isDirected = derivedStateOf {
+        currentGraph.value.directed
+    }
+
+    val showDistances = mutableStateOf(false)
 
     override fun onGraphSelected(index: Int) {
         selectedGraphIndex.value = index
@@ -60,11 +64,11 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
 
         step.value = 0
 
-        _steps.value = listOf(
+        bfsSteps.value = listOf(
             Triple(
                 selectedGraph.value,
                 StepType.Nothing(initString),
-                BreadthFirstSearchGraph(),
+                BreadthFirstSearchGraph(directed = selectedGraph.value.directed),
             ),
         )
 
@@ -78,7 +82,9 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
 
         graph.runAlgorithm(selectedVertex)
 
-        _steps.value = graph.steps
+        showDistances.value = selectedVertex != null
+
+        bfsSteps.value = graph.steps
 
         step.value = 0
 

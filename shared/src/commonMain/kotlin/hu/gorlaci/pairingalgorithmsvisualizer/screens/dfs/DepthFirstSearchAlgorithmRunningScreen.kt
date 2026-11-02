@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.DepthFirstSearchGraph
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
@@ -26,12 +27,6 @@ fun DepthFirstSearchAlgorithmRunningScreen(
     onNewGraph: () -> Unit,
 ) {
     val viewModel = viewModel { DepthFirstSearchAlgorithmRunningViewModel(graphStorage) }
-
-    val graphicalGraph by viewModel.graphicalGraph
-    val tree by viewModel.tree
-    val graph by viewModel.currentGraph
-
-    val inSetup by viewModel.inSetup
 
     AlgorithmRunningScreen(
         viewModel = viewModel,
@@ -52,33 +47,32 @@ fun DepthFirstSearchAlgorithmRunningScreen(
     ) {
         DepthFirstSearchScreenContent(
             viewModel = viewModel,
-            graphicalGraph = graphicalGraph,
-            tree = tree,
-            graph = graph,
-            inSetup = inSetup,
         )
     }
 }
 
 @Composable
-fun DepthFirstSearchScreenContent(
-    viewModel: DepthFirstSearchAlgorithmRunningViewModel,
-    graphicalGraph: GraphicalGraph,
-    tree: GraphicalGraph,
-    graph: DepthFirstSearchGraph,
-    inSetup: Boolean,
-) {
+fun DepthFirstSearchScreenContent(viewModel: DepthFirstSearchAlgorithmRunningViewModel) {
+    val graphicalGraph by viewModel.graphicalGraph
+    val tree by viewModel.tree
+    val graph by viewModel.currentGraph
+
+    val inSetup by viewModel.inSetup
+    val directed by viewModel.isDirected
+
     Row(modifier = Modifier.fillMaxSize()) {
-        UndirectedGraphCanvas(
+        GraphCanvas(
             graphicalGraph = graphicalGraph,
+            directed = directed,
             modifier = Modifier.fillMaxSize().weight(1f),
             onTap = viewModel::onTap,
         )
         Column(
             modifier = Modifier.fillMaxSize().weight(1f),
         ) {
-            UndirectedGraphCanvas(
+            GraphCanvas(
                 graphicalGraph = tree,
+                directed = directed,
                 modifier = Modifier.fillMaxSize().weight(2f),
             )
 

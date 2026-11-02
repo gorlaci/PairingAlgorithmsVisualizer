@@ -26,7 +26,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.util.distanceFromSegment
 
 @Composable
-fun GraphCanvas(
+fun GraphCanvasBase(
     graphicalGraph: GraphicalGraph,
     drawVertex: DrawScope.(GraphicalVertex, Vector2D, TextMeasurer) -> Unit,
     drawEdge: DrawScope.(GraphicalEdge, Vector2D) -> Unit,
@@ -114,7 +114,7 @@ fun GraphCanvas(
                 }
                 .filter { it.value < 5f }
                 .minByOrNull { it.value }?.key
-            if (hoveredEdge != null && hoveredEdge.label != null) {
+            if (hoveredEdge?.label != null) {
                 val measuredLabel = textMeasurer.measure(
                     text = hoveredEdge.label,
                     style = androidx.compose.ui.text.TextStyle(
@@ -162,7 +162,7 @@ fun UndirectedGraphCanvas(
     onDrag: (Vector2D) -> Unit = { _ -> },
     onDragEnd: () -> Unit = {},
 ) {
-    GraphCanvas(
+    GraphCanvasBase(
         graphicalGraph = graphicalGraph,
         drawVertex = { vertex, canvasCenter, textMeasurer ->
             drawVertex(vertex, canvasCenter, textMeasurer)
@@ -178,7 +178,8 @@ fun UndirectedGraphCanvas(
     )
 }
 
-@Composable fun DirectedGraphCanvas(
+@Composable
+fun DirectedGraphCanvas(
     graphicalGraph: GraphicalGraph,
     modifier: Modifier = Modifier,
     onTap: (Vector2D) -> Unit = { _ -> },
@@ -186,7 +187,7 @@ fun UndirectedGraphCanvas(
     onDrag: (Vector2D) -> Unit = { _ -> },
     onDragEnd: () -> Unit = {},
 ) {
-    GraphCanvas(
+    GraphCanvasBase(
         graphicalGraph = graphicalGraph,
         drawVertex = { vertex, centerOffset, textMeasurer ->
             drawVertex(vertex, centerOffset, textMeasurer)
@@ -200,4 +201,35 @@ fun UndirectedGraphCanvas(
         onDrag = onDrag,
         onDragEnd = onDragEnd,
     )
+}
+
+@Composable
+fun GraphCanvas(
+    graphicalGraph: GraphicalGraph,
+    directed: Boolean,
+    modifier: Modifier = Modifier,
+    onTap: (Vector2D) -> Unit = { _ -> },
+    onDragStart: (Vector2D) -> Unit = { _ -> },
+    onDrag: (Vector2D) -> Unit = { _ -> },
+    onDragEnd: () -> Unit = {},
+) {
+    if (directed) {
+        DirectedGraphCanvas(
+            graphicalGraph = graphicalGraph,
+            modifier = modifier,
+            onTap = onTap,
+            onDragStart = onDragStart,
+            onDrag = onDrag,
+            onDragEnd = onDragEnd,
+        )
+    } else {
+        UndirectedGraphCanvas(
+            graphicalGraph = graphicalGraph,
+            modifier = modifier,
+            onTap = onTap,
+            onDragStart = onDragStart,
+            onDrag = onDrag,
+            onDragEnd = onDragEnd,
+        )
+    }
 }
