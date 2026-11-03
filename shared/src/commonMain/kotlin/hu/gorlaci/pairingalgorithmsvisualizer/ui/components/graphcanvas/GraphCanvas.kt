@@ -5,7 +5,6 @@ import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -112,7 +111,7 @@ fun GraphCanvasBase(
                 }
                 .filter { it.value < 5f }
                 .minByOrNull { it.value }?.key
-            if (hoveredEdge?.label != null) {
+            if (hoveredEdge?.label?.isNotEmpty() ?: false) {
                 val measuredLabel = textMeasurer.measure(
                     text = hoveredEdge.label,
                     style = TextStyle(

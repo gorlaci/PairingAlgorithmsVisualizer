@@ -9,7 +9,7 @@ data class GraphicalVertex(
     val innerColor: Color = Color.White,
     val highlight: Color = Color.Transparent,
     val highlightType: HighlightType = HighlightType.CIRCLE,
-    val label: String? = null,
+    val label: String = "",
 ) {
 
     val radius: Float

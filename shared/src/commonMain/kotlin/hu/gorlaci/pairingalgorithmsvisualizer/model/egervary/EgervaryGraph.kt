@@ -332,7 +332,7 @@ class EgervaryGraph(
                 label = if (drawVertexLabels) {
                     vertex.label.toString()
                 } else {
-                    null
+                    ""
                 },
                 highlight = when (vertex) {
                     activeVertex -> LIGHT_ORANGE

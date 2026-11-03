@@ -121,6 +121,8 @@ abstract class AlgorithmRunningViewModel<
 
     protected open var selectedVertex: VertexType? = null
 
+    open val selectedVertexColor = LIGHT_ORANGE
+
     open fun onTap(position: Vector2D) {
         if (!inSetup.value) return
 
@@ -138,7 +140,7 @@ abstract class AlgorithmRunningViewModel<
             selectedVertex = clickedVertex
             graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
                 clickedVertex,
-                LIGHT_ORANGE,
+                selectedVertexColor,
             )
         } else {
             selectedVertex = null

@@ -9,10 +9,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.BreadthFirstSearchS
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.NeighbourStatus
 import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.RED
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
@@ -149,7 +146,6 @@ class BreadthFirstSearchGraph(
                 distance = vertex.distance,
             )
         }
-        var newActiveNeighbour: BreadthFirstSearchVertex? = null
         val treeVertices = (newProcessedVertices + newQueue).toMutableSet()
         newActiveVertex?.let { treeVertices.add(it) }
         treeVertices.forEach { newVertex ->
@@ -157,20 +153,19 @@ class BreadthFirstSearchGraph(
             originalVertex.parent?.let { parent ->
                 val newParent = treeVertices.first { it.id == parent.id }
                 newVertex.parent = newParent
-                newVertex.neighbours.add(newParent)
+
                 newParent.neighbours.add(newVertex)
-            }
-            if (originalVertex == activeNeighbour) {
-                newActiveNeighbour = newVertex
+                if (!directed) {
+                    newVertex.neighbours.add(newParent)
+                }
             }
         }
         return BreadthFirstSearchGraph(
             vertices = treeVertices,
             directed = directed,
-            activeVertex = newActiveVertex,
-            queue = newQueue.toMutableList(),
-            processedVertices = newProcessedVertices.toMutableSet(),
-            activeNeighbour = newActiveNeighbour,
+//            activeVertex = newActiveVertex,
+//            queue = newQueue.toMutableList(),
+//            processedVertices = newProcessedVertices.toMutableSet(),
         )
     }
 
@@ -260,7 +255,7 @@ class BreadthFirstSearchGraph(
                 )
             } else {
                 activeVertex = queue.removeFirst()
-                val description = "A listában a következő csúcs: ${activeVertex?.name}"
+                val description = "A listában a következő csúcs: ${activeVertex?.name}, ez válik aktívvá"
                 if (queue.isNotEmpty()) {
                     saveStep(
                         BreadthFirstSearchStepType.SelectedVertex(
@@ -340,16 +335,28 @@ class BreadthFirstSearchGraph(
                 name = vertex.name,
                 highlight = when (vertex) {
                     activeVertex -> LIGHT_ORANGE
-                    activeNeighbour -> LIGHT_BLUE
-                    in queue -> GRAY
-                    in processedVertices -> Color.Black
+                    activeNeighbour -> LIGHT_YELLOW
                     else -> Color.Transparent
                 },
                 highlightType = HighlightType.CIRCLE,
-                innerColor = if (vertex == startingVertex) {
-                    LIGHT_ORANGE
-                } else {
-                    Color.White
+                innerColor = when (vertex) {
+                    in processedVertices -> {
+                        if (vertex.parent == null) {
+                            PURPLE
+                        } else {
+                            PINK
+                        }
+                    }
+
+                    in queue, activeVertex, startingVertex -> {
+                        if (vertex.parent == null) {
+                            LIGHT_PURPLE
+                        } else {
+                            LIGHT_PINK
+                        }
+                    }
+
+                    else -> Color.White
                 },
             )
         }
@@ -357,7 +364,7 @@ class BreadthFirstSearchGraph(
 
         vertices.forEach { vertex ->
             vertex.neighbours.forEach { neighbour ->
-                if (vertex.name < neighbour.name) {
+                if (directed || vertex.name < neighbour.name) {
                     graphicalEdges.add(
                         GraphicalEdge(
                             startGraphicalVertex = graphicalVertices.first {
@@ -366,12 +373,12 @@ class BreadthFirstSearchGraph(
                             endGraphicalVertex = graphicalVertices.first {
                                 it.name == neighbour.name
                             },
-                            selected = vertex.parent == neighbour || neighbour.parent == vertex,
+                            selected = neighbour.parent == vertex || (!directed && vertex.parent == neighbour),
                             highlight = if (
                                 (vertex == activeVertex && neighbour == activeNeighbour) ||
-                                (vertex == activeNeighbour && neighbour == activeVertex)
+                                (!directed && vertex == activeNeighbour && neighbour == activeVertex)
                             ) {
-                                LIGHT_BLUE
+                                LIGHT_YELLOW
                             } else {
                                 Color.Transparent
                             },
@@ -412,14 +419,13 @@ fun Graph<out Vertex, out Edge<out Vertex>>.toBreadthFirstSearchGraph(): Breadth
         )
     }.toMutableSet()
 
-    edges.forEach { edge ->
-        val fromVertex = bfsVertices.find { it.id == edge.fromVertex.id }
-        val toVertex = bfsVertices.find { it.id == edge.toVertex.id }
-        if (fromVertex != null && toVertex != null) {
-            fromVertex.neighbours.add(toVertex)
-            if (!directed) {
-                toVertex.neighbours.add(fromVertex)
-            }
+    for (edge in edges) {
+        val fromVertex = bfsVertices.find { it.id == edge.fromVertex.id } ?: continue
+        val toVertex = bfsVertices.find { it.id == edge.toVertex.id } ?: continue
+
+        fromVertex.neighbours.add(toVertex)
+        if (!directed) {
+            toVertex.neighbours.add(fromVertex)
         }
     }
 

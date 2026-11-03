@@ -259,10 +259,10 @@ class InMemoryGraphStorage : GraphStorage {
             Vertex("F"),
         )
         val coordinates = mutableMapOf(
-            "A" to Vector2D(0.0, 0.0),
-            "B" to Vector2D(-100.0, -100.0),
+            "A" to Vector2D(-100.0, 0.0),
+            "B" to Vector2D(-50.0, -100.0),
             "C" to Vector2D(100.0, -100.0),
-            "D" to Vector2D(-100.0, -200.0),
+            "D" to Vector2D(-50.0, -200.0),
             "E" to Vector2D(200.0, 0.0),
             "F" to Vector2D(100.0, -200.0),
         )

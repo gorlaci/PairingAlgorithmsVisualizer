@@ -16,7 +16,6 @@ import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.quiz.BreadthFirstSearc
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.GraphCanvas
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.SearchLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.Question
@@ -36,6 +35,14 @@ fun BreadthFirstSearchQuizScreen(
     val graphicalGraph by viewModel.graphicalGraph
 
     val currentGraph by viewModel.currentGraph
+
+    val showDialog by viewModel.showDialog
+
+    if (showDialog) {
+        DistinctionDialog(
+            onDismissRequest = viewModel::onDismissDialog,
+        )
+    }
 
     AlgorithmRunningScreen(
         viewModel = viewModel,
@@ -98,7 +105,7 @@ fun BreadthFirstSearchQuizScreen(
 
                 SELECT_NEIGHBOUR_STATUS -> {
                     Question(
-                        question = "Be kell-e járni ezt a csúcsot?",
+                        question = "Be kell-e járni ezt a csúcsot (és hozzá venni a vizsgálandó csúcsok listájához)?",
                         answers = NeighbourStatus.entries,
                         toString = {
                             if (it == NeighbourStatus.ADDED) {

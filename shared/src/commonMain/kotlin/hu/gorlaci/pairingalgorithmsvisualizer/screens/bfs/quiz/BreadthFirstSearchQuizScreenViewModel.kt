@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
-import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.BreadthFirstSearchVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.BreadthFirstSearchStepType
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.NeighbourStatus
@@ -12,9 +11,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.Answer
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.RED
 
 class BreadthFirstSearchQuizScreenViewModel(
     graphStorage: GraphStorage,
@@ -30,10 +27,8 @@ class BreadthFirstSearchQuizScreenViewModel(
     val tableDistanceContent = mutableStateOf(currentGraph.value.vertices.map { it.name }.associateWith { "∞" })
     val tableParentContent = mutableStateOf(currentGraph.value.vertices.map { it.name }.associateWith { "*" })
 
-    override val tree = mutableStateOf(Graph.getEmpty().toGraphicalGraph())
-
     override fun setGraphicalGraph() {
-        super.setGraphicalGraph()
+        graphicalGraph.value = steps.value[step.value]
         tree.value = bfsSteps.value[step.value].third.toGraphicalGraph()
     }
 
@@ -200,7 +195,6 @@ class BreadthFirstSearchQuizScreenViewModel(
                 .addEdge(
                     question.vertex,
                     question.neighbour,
-                    highlight = LIGHT_BLUE,
                 )
         }
         showAnswer()
@@ -267,5 +261,11 @@ class BreadthFirstSearchQuizScreenViewModel(
         SELECT_NEIGHBOUR,
         SELECT_NEIGHBOUR_STATUS,
         FILL_TABLE,
+    }
+
+    val showDialog = mutableStateOf(true)
+
+    fun onDismissDialog() {
+        showDialog.value = false
     }
 }

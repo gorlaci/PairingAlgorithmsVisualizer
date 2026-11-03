@@ -3,8 +3,8 @@ package hu.gorlaci.pairingalgorithmsvisualizer.model.egervary
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 
 class EgervaryEdge(
-    override val fromVertex: EgervaryVertex,
-    override val toVertex: EgervaryVertex,
+    fromVertex: EgervaryVertex,
+    toVertex: EgervaryVertex,
     val weight: Int,
 ) : Edge<EgervaryVertex>(
     fromVertex,

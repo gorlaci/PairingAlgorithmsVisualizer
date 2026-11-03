@@ -4,8 +4,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.edmonds.quiz.EdmondsEdgeType
 
 class EdmondsEdge(
-    override val fromVertex: EdmondsVertex,
-    override val toVertex: EdmondsVertex,
+    fromVertex: EdmondsVertex,
+    toVertex: EdmondsVertex,
     var visited: Boolean = false,
 ) : Edge<EdmondsVertex>(fromVertex, toVertex) {
     override fun toString(): String = "Edge(${fromVertex.id}, ${toVertex.id})"

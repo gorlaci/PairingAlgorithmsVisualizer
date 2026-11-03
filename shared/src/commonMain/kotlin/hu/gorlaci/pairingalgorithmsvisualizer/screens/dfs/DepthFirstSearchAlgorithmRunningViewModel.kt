@@ -2,15 +2,13 @@ package hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs
 
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.DepthFirstSearchGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.DepthFirstSearchVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.toDepthFirstSearchGraph
-import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_PURPLE
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningViewModel
 
 open class DepthFirstSearchAlgorithmRunningViewModel(
@@ -87,33 +85,5 @@ open class DepthFirstSearchAlgorithmRunningViewModel(
         inSetup.value = false
     }
 
-    override fun onTap(position: Vector2D) {
-        if (!inSetup.value) return
-
-        val graph = currentGraph.value
-        val clickedVertex = graph.getVertexByCoordinates(position) ?: return
-
-        if (selectedVertex == clickedVertex) {
-            selectedVertex = null
-            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
-                clickedVertex,
-                Color.White,
-            )
-            return
-        }
-
-        selectedVertex?.let {
-            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
-                it,
-                Color.White,
-            )
-        }
-
-        selectedVertex = clickedVertex
-        graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
-            clickedVertex,
-            LIGHT_ORANGE,
-        )
-        return
-    }
+    override val selectedVertexColor = LIGHT_PURPLE
 }

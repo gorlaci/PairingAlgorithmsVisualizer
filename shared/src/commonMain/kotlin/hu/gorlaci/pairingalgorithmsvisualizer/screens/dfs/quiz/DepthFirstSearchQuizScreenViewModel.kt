@@ -279,4 +279,10 @@ class DepthFirstSearchQuizScreenViewModel(
         SELECT_NEIGHBOUR_STATUS,
         FILL_TABLE,
     }
+
+    val showDialog = mutableStateOf(true)
+
+    fun onDismissDialog() {
+        showDialog.value = false
+    }
 }

@@ -16,7 +16,6 @@ import hu.gorlaci.pairingalgorithmsvisualizer.screens.dfs.quiz.DepthFirstSearchQ
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.GraphCanvas
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.Question
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.QuestionText
 import org.jetbrains.compose.resources.stringResource
@@ -34,6 +33,14 @@ fun DepthFirstSearchQuizScreen(
     val graph by viewModel.currentGraph
     val tree by viewModel.tree
     val inSetup by viewModel.inSetup
+
+    val showDialog by viewModel.showDialog
+
+    if (showDialog) {
+        DistinctionDialog(
+            onDismissRequest = viewModel::onDismissDialog,
+        )
+    }
 
     AlgorithmRunningScreen(
         viewModel = viewModel,

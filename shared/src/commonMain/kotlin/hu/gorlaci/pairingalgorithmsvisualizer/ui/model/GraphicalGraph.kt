@@ -210,4 +210,24 @@ data class GraphicalGraph(
         val newGraphicalEdges = graphicalEdges - graphicalEdge + newGraphicalEdge
         return this.copy(graphicalEdges = newGraphicalEdges)
     }
+
+    fun changeVertex(
+        vertex: Vertex,
+        innerColor: Color? = null,
+        highlight: Color? = null,
+        highlightType: HighlightType? = null,
+        label: String? = null,
+    ): GraphicalGraph {
+        val graphicalVertex = graphicalVertices.find { it.name == vertex.name } ?: return this
+        val newGraphicalVertex = GraphicalVertex(
+            name = vertex.name,
+            position = graphicalVertex.position,
+            innerColor = innerColor ?: graphicalVertex.innerColor,
+            highlight = highlight ?: graphicalVertex.highlight,
+            highlightType = highlightType ?: graphicalVertex.highlightType,
+            label = label ?: graphicalVertex.label,
+        )
+        val newGraphicalVertices = graphicalVertices - graphicalVertex + newGraphicalVertex
+        return this.copy(graphicalVertices = newGraphicalVertices)
+    }
 }

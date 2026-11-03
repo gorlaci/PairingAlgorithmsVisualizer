@@ -97,7 +97,7 @@ fun DrawScope.drawVertex(
                 ),
     )
 
-    if (vertex.label != null) {
+    if (vertex.label.isNotEmpty()) {
         val direction = (vertex.position.y / (abs(vertex.position.y))).toFloat() * -1f
         val labelCenter = vertexCenter + Offset(0f, (radius + 20f) * direction)
 

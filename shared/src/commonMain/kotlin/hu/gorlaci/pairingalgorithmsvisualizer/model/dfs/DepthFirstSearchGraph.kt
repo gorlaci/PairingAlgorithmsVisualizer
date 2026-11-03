@@ -9,10 +9,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.quiz.DepthFirstSearchSte
 import hu.gorlaci.pairingalgorithmsvisualizer.model.dfs.quiz.NeighbourStatus
 import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_BLUE
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.RED
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
@@ -133,8 +130,11 @@ class DepthFirstSearchGraph(
             originalVertex.parent?.let { parent ->
                 val newParent = treeVertices.first { it.id == parent.id }
                 newVertex.parent = newParent
-                newVertex.neighbours.add(newParent)
+
                 newParent.neighbours.add(newVertex)
+                if (!directed) {
+                    newVertex.neighbours.add(newParent)
+                }
             }
             if (originalVertex == activeNeighbour) {
                 newActiveNeighbour = newVertex
@@ -145,8 +145,8 @@ class DepthFirstSearchGraph(
         }
         return DepthFirstSearchGraph(
             vertices = treeVertices,
-            activeVertex = newActiveVertex,
-            activeNeighbour = newActiveNeighbour,
+//            activeVertex = newActiveVertex,
+//            activeNeighbour = newActiveNeighbour,
             directed = directed,
         )
     }
@@ -309,18 +309,30 @@ class DepthFirstSearchGraph(
             GraphicalVertex(
                 position = coordinates,
                 name = vertex.name,
-                highlight = when {
-                    vertex == activeVertex -> LIGHT_ORANGE
-                    vertex == activeNeighbour -> LIGHT_BLUE
-                    vertex.finishedNumber != null -> Color.Black
-                    vertex.reachedNumber != null -> GRAY
+                highlight = when (vertex) {
+                    activeVertex -> LIGHT_ORANGE
+                    activeNeighbour -> LIGHT_YELLOW
                     else -> Color.Transparent
                 },
                 highlightType = HighlightType.CIRCLE,
-                innerColor = if (vertex == startingVertex) {
-                    LIGHT_ORANGE
-                } else {
-                    Color.White
+                innerColor = when {
+                    vertex.finishedNumber != null -> {
+                        if (vertex.parent == null) {
+                            PURPLE
+                        } else {
+                            PINK
+                        }
+                    }
+
+                    vertex.reachedNumber != null || vertex == startingVertex -> {
+                        if (vertex.parent == null) {
+                            LIGHT_PURPLE
+                        } else {
+                            LIGHT_PINK
+                        }
+                    }
+
+                    else -> Color.White
                 },
             )
         }
@@ -328,7 +340,7 @@ class DepthFirstSearchGraph(
 
         vertices.forEach { vertex ->
             vertex.neighbours.forEach { neighbour ->
-                if (vertex.name < neighbour.name) {
+                if (directed || vertex.name < neighbour.name) {
                     graphicalEdges.add(
                         GraphicalEdge(
                             startGraphicalVertex = graphicalVertices.first {
@@ -337,12 +349,12 @@ class DepthFirstSearchGraph(
                             endGraphicalVertex = graphicalVertices.first {
                                 it.name == neighbour.name
                             },
-                            selected = vertex.parent == neighbour || neighbour.parent == vertex,
+                            selected = neighbour.parent == vertex || (!directed && vertex.parent == neighbour),
                             highlight = if (
                                 (vertex == activeVertex && neighbour == activeNeighbour) ||
-                                (vertex == activeNeighbour && neighbour == activeVertex)
+                                (!directed && vertex == activeNeighbour && neighbour == activeVertex)
                             ) {
-                                LIGHT_BLUE
+                                LIGHT_YELLOW
                             } else {
                                 Color.Transparent
                             },

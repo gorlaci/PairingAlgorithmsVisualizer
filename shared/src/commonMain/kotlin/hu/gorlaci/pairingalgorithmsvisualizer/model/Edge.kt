@@ -1,8 +1,8 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.model
 
 open class Edge<VertexType : Vertex>(
-    open val fromVertex: VertexType,
-    open val toVertex: VertexType,
+    val fromVertex: VertexType,
+    val toVertex: VertexType,
 ) {
     fun otherEnd(vertex: Vertex): VertexType? {
         if (vertex == fromVertex) {
