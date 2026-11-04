@@ -22,12 +22,12 @@ class InMemoryGraphStorage : GraphStorage {
     override fun getAllGraphs() = graphs
 
     private fun addExampleGraphs() {
+        addExampleGraph6()
         addExampleGraph1()
         addExampleGraph2()
         addExampleGraph3()
         addExampleGraph4()
         addExampleGraph5()
-        addExampleGraph6()
     }
 
     private fun addExampleGraph1() {
