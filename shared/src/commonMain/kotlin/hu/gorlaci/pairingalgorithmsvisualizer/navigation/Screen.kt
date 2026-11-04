@@ -6,11 +6,17 @@ object Screen {
 
     object DrawGraph {
 
-        @Serializable
-        object VisualUndirected
+        object Visual {
 
-        @Serializable
-        object VisualDirected
+            @Serializable
+            object Menu
+
+            @Serializable
+            object Undirected
+
+            @Serializable
+            object Directed
+        }
 
         @Serializable
         object MatrixBipartite
