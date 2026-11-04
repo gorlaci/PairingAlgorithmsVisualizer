@@ -110,9 +110,13 @@ open class Graph<VertexType : Vertex, EdgeType : Edge<VertexType>>(
     }
 
     companion object {
-        fun getEmpty(name: String = ""): Graph<Vertex, Edge<Vertex>> = Graph(
+        fun getEmpty(
+            name: String = "",
+            directed: Boolean,
+        ): Graph<Vertex, Edge<Vertex>> = Graph(
             name = name,
             newEdge = { from, to -> Edge(from, to) },
+            directed = directed,
         )
     }
 }

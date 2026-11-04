@@ -16,7 +16,10 @@ class VisualDirectedGraphDrawingScreenViewmodel(
         private const val DEFAULT_GRAPH_NAME = "Saját Gráf"
     }
 
-    private var graph = Graph.getEmpty(DEFAULT_GRAPH_NAME)
+    private var graph = Graph.getEmpty(
+        DEFAULT_GRAPH_NAME,
+        directed = true,
+    )
 
     val graphicalGraph = mutableStateOf(graph.toGraphicalGraph())
 
@@ -115,7 +118,10 @@ class VisualDirectedGraphDrawingScreenViewmodel(
             return
         }
         graphStorage.addGraph(graph)
-        graph = Graph.getEmpty(DEFAULT_GRAPH_NAME)
+        graph = Graph.getEmpty(
+            DEFAULT_GRAPH_NAME,
+            directed = true,
+        )
         graphicalGraph.value = graph.toGraphicalGraph()
         graphName.value = DEFAULT_GRAPH_NAME
         nextID = "A"
