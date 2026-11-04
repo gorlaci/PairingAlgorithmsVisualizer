@@ -29,7 +29,9 @@ import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.MainMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.NewMainMenuScreen
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.stringResource
-import pairingalgorithmsvisualizer.shared.generated.resources.*
+import pairingalgorithmsvisualizer.shared.generated.resources.Res
+import pairingalgorithmsvisualizer.shared.generated.resources.bfs
+import pairingalgorithmsvisualizer.shared.generated.resources.bfs_algorithm
 
 @Composable
 fun NavGraph(
@@ -177,50 +179,6 @@ fun NavGraph(
                         navHostController.navigate(Screen.BreadthFirstSearch.Quiz)
                     },
                 ),
-                MainMenuItem(
-                    algorithmName = stringResource(Res.string.dfs_algorithm),
-                    algorithmImage = imageResource(Res.drawable.dfs),
-                    onRunAlgorithm = {
-                        navHostController.navigate(Screen.DepthFirstSearch.RunAlgorithm)
-                    },
-                    onQuiz = {
-                        navHostController.navigate(Screen.DepthFirstSearch.Quiz)
-                    },
-                ),
-                MainMenuItem(
-                    algorithmName = stringResource(Res.string.augmenting_path_algorithm),
-                    algorithmImage = imageResource(Res.drawable.augmenting),
-                    onRunAlgorithm = {
-                        navHostController.navigate(Screen.AugmentingPath.RunAlgorithm)
-                    },
-                ),
-                MainMenuItem(
-                    algorithmName = stringResource(Res.string.edmonds_algorithm),
-                    algorithmImage = imageResource(Res.drawable.edmonds),
-                    onRunAlgorithm = {
-                        navHostController.navigate(Screen.Edmonds.RunAlgorithm)
-                    },
-                    onQuiz = {
-                        navHostController.navigate(Screen.Edmonds.Quiz)
-                    },
-                ),
-                MainMenuItem(
-                    algorithmName = stringResource(Res.string.egervary_algorithm),
-                    algorithmImage = imageResource(Res.drawable.egervary),
-                    onRunAlgorithm = {
-                        navHostController.navigate(Screen.Egervary.RunAlgorithm)
-                    },
-                ),
-//                MainMenuItem(
-//                    algorithmName = "Teszt",
-//                    algorithmImage = ImageBitmap(1, 1),
-//                    onRunAlgorithm = {
-//                        navHostController.navigate(Screen.Test)
-//                    },
-//                    onQuiz = {
-//                        navHostController.navigate(Screen.DrawGraph.VisualDirected)
-//                    },
-//                ),
             )
 
             NewMainMenuScreen(menuItems = menuItems)
