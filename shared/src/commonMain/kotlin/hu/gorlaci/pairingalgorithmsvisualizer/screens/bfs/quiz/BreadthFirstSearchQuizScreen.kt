@@ -105,7 +105,7 @@ fun BreadthFirstSearchQuizScreen(
 
                 SELECT_NEIGHBOUR_STATUS -> {
                     Question(
-                        question = "Be kell-e járni ezt a csúcsot (és hozzá venni a vizsgálandó csúcsok listájához)?",
+                        question = "Meg kell-e látogatni ezt a csúcsot (és hozzá venni a vizsgálandó csúcsok listájához)?",
                         answers = NeighbourStatus.entries,
                         toString = {
                             if (it == NeighbourStatus.ADDED) {
