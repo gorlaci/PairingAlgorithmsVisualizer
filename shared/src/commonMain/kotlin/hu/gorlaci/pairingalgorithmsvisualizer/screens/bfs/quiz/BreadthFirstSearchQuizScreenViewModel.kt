@@ -12,6 +12,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.Answer
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.GRAY
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
+import hu.gorlaci.pairingalgorithmsvisualizer.util.withArticle
+import hu.gorlaci.pairingalgorithmsvisualizer.util.withCapitalArticle
 
 class BreadthFirstSearchQuizScreenViewModel(
     graphStorage: GraphStorage,
@@ -96,6 +98,8 @@ class BreadthFirstSearchQuizScreenViewModel(
             is BreadthFirstSearchStepType.NeighbourEvaluated -> {
                 questionMode.value = QuestionMode.SELECT_NEIGHBOUR_STATUS
                 if (possibleQuestion.neighbourStatus == NeighbourStatus.ADDED) {
+                    graphicalGraph.value = graphicalGraph.value
+                        .changeVertex(possibleQuestion.vertex, innerColor = Color.White)
                     tree.value = tree.value
                         .removeVertex(possibleQuestion.neighbour)
                 }
@@ -104,10 +108,7 @@ class BreadthFirstSearchQuizScreenViewModel(
             is BreadthFirstSearchStepType.SelectedNeighbour -> {
                 questionMode.value = QuestionMode.SELECT_NEIGHBOUR
                 graphicalGraph.value = graphicalGraph.value
-                    .changeVertexHighlight(possibleQuestion.neighbour, Color.Transparent)
-                    .removeEdgeHighlight(possibleQuestion.vertex, possibleQuestion.neighbour)
-                tree.value = tree.value
-                    .changeVertexHighlight(possibleQuestion.neighbour, Color.Transparent)
+                    .changeVertex(possibleQuestion.neighbour, highlight = Color.Transparent)
                     .removeEdgeHighlight(possibleQuestion.vertex, possibleQuestion.neighbour)
             }
 
@@ -155,7 +156,7 @@ class BreadthFirstSearchQuizScreenViewModel(
             if (answer.id == question.vertex.id) {
                 Answer.Correct
             } else {
-                Answer.Incorrect("A következő csúcs: ${question.vertex.name}.")
+                Answer.Incorrect("A következő csúcs: ${question.vertex.name}")
             }
         graphicalGraph.value = graphicalGraph.value.changeVertexHighlight(question.vertex, LIGHT_ORANGE)
         showAnswer()
@@ -168,7 +169,7 @@ class BreadthFirstSearchQuizScreenViewModel(
             if (answer.id == question.neighbour.id) {
                 Answer.Correct
             } else {
-                Answer.Incorrect("A következő szomszéd: ${question.neighbour.name}.")
+                Answer.Incorrect("A következő szomszéd: ${question.neighbour.name}")
             }
         setGraphicalGraph()
         showAnswer()
@@ -183,9 +184,13 @@ class BreadthFirstSearchQuizScreenViewModel(
             } else {
                 val explanation =
                     if (question.neighbourStatus == NeighbourStatus.ADDED) {
-                        "A ${question.neighbour.name} csúcsot még nem vizsgáltuk meg, ezért bekerül a listába."
+                        "${withCapitalArticle(
+                            question.neighbour.name,
+                        )} csúcsot még nem vizsgáltuk meg, ezért bekerül a listába."
                     } else {
-                        "A ${question.neighbour.name} csúcsot már megvizsgáltuk, vagy szerepel a listában."
+                        "${withCapitalArticle(
+                            question.neighbour.name,
+                        )} csúcsot már megvizsgáltuk, vagy szerepel a listában."
                     }
                 Answer.Incorrect(explanation)
             }
@@ -214,14 +219,18 @@ class BreadthFirstSearchQuizScreenViewModel(
         for (vertex in currentGraph.value.vertices.filter { it.id != question.neighbour.id }) {
             if (tableDistanceContent.value[vertex.name] != correctDistances[vertex.name]) {
                 lastAnswer.value = Answer.Incorrect(
-                    "Jelenleg a ${question.neighbour.name} csúcsot vizsgáljuk, csak a megfelelő oszlopot kell kitölteni.",
+                    "Jelenleg ${withArticle(
+                        question.neighbour.name,
+                    )} csúcsot vizsgáljuk, csak a megfelelő oszlopot kell kitölteni.",
                 )
                 showAnswer()
                 return
             }
             if (tableParentContent.value[vertex.name] != correctParents[vertex.name]) {
                 lastAnswer.value = Answer.Incorrect(
-                    "Jelenleg a ${question.neighbour.name} csúcsot vizsgáljuk, csak a megfelelő oszlopot kell kitölteni.",
+                    "Jelenleg ${withArticle(
+                        question.neighbour.name,
+                    )} csúcsot vizsgáljuk, csak a megfelelő oszlopot kell kitölteni.",
                 )
                 showAnswer()
                 return
@@ -232,7 +241,7 @@ class BreadthFirstSearchQuizScreenViewModel(
         ) {
             lastAnswer.value =
                 Answer.Incorrect(
-                    "A ${question.neighbour.name} csúcs távolsága ${question.neighbour.distance}.",
+                    "${withCapitalArticle(question.neighbour.name)} csúcs távolsága ${question.neighbour.distance}.",
                 )
             showAnswer()
             return
@@ -240,7 +249,9 @@ class BreadthFirstSearchQuizScreenViewModel(
         if (tableParentContent.value[question.neighbour.name] != correctParents[question.neighbour.name]) {
             lastAnswer.value =
                 Answer.Incorrect(
-                    "A ${question.neighbour.name} csúcs előzője ${question.neighbour.parent?.name ?: "*"}.",
+                    "${withCapitalArticle(
+                        question.neighbour.name,
+                    )} csúcs előzője ${question.neighbour.parent?.name ?: "*"}.",
                 )
             showAnswer()
             return
@@ -267,5 +278,10 @@ class BreadthFirstSearchQuizScreenViewModel(
 
     fun onDismissDialog() {
         showDialog.value = false
+    }
+
+    fun onRetry() {
+        onBack()
+        onNext()
     }
 }

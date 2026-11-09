@@ -14,7 +14,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphSelectionDropdown
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.SimpleTopAppbar
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.StepSelector
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.GraphCanvas
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.shared.generated.resources.Res
 import pairingalgorithmsvisualizer.shared.generated.resources.run_button
@@ -36,10 +36,11 @@ fun <
     description: (@Composable ColumnScope.() -> Unit)? = null,
     stepSelector: (@Composable () -> Unit)? = null,
     content: @Composable () -> Unit = {
-        UndirectedGraphCanvas(
+        GraphCanvas(
             graphicalGraph = viewModel.graphicalGraph.value,
             onTap = viewModel::onTap,
             modifier = Modifier.fillMaxSize(),
+            directed = viewModel.selectedGraph.value.directed,
         )
     },
 ) {

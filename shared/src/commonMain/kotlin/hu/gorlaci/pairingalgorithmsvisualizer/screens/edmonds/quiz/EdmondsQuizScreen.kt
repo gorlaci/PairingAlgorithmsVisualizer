@@ -107,6 +107,7 @@ fun EdmondsQuizScreen(
                             val lastAnswer by viewModel.lastAnswer
                             AnswerCard(
                                 answer = lastAnswer,
+                                onRetry = viewModel::onRetry,
                                 modifier = Modifier.padding(5.dp).width(300.dp),
                             )
                         }

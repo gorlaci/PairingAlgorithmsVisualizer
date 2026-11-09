@@ -1,5 +1,6 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs
 
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
@@ -55,6 +56,8 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
     }
 
     val showDistances = mutableStateOf(false)
+
+    val queue: State<List<BreadthFirstSearchVertex>> = derivedStateOf { currentGraph.value.queue }
 
     override fun onGraphSelected(index: Int) {
         selectedGraphIndex.value = index

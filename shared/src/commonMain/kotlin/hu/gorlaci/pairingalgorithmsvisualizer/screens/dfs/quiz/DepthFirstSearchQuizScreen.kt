@@ -66,7 +66,11 @@ fun DepthFirstSearchQuizScreen(
 
                 SHOW_ANSWER -> {
                     val lastAnswer by viewModel.lastAnswer
-                    AnswerCard(lastAnswer, Modifier.padding(5.dp).width(300.dp))
+                    AnswerCard(
+                        answer = lastAnswer,
+                        onRetry = viewModel::onRetry,
+                        modifier = Modifier.padding(5.dp).width(300.dp),
+                    )
                 }
 
                 SELECT_VERTEX -> Question(

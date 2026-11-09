@@ -12,10 +12,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.model.bfs.quiz.NeighbourStatus
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchScreenContent
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.quiz.BreadthFirstSearchQuizScreenViewModel.QuestionMode.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.SearchLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.question.Question
@@ -81,6 +81,7 @@ fun BreadthFirstSearchQuizScreen(
                     val lastAnswer by viewModel.lastAnswer
                     AnswerCard(
                         answer = lastAnswer,
+                        onRetry = viewModel::onRetry,
                         modifier = Modifier.padding(5.dp).width(300.dp),
                     )
                 }
@@ -141,90 +142,84 @@ fun BreadthFirstSearchQuizScreen(
             }
         },
     ) {
-        val tree by viewModel.tree
-        val inSetup by viewModel.inSetup
-        val tableEditable by viewModel.tableEditable
-        val directed by viewModel.isDirected
-
-        Row(modifier = Modifier.fillMaxSize()) {
-            GraphCanvas(
-                graphicalGraph = graphicalGraph,
-                directed = directed,
-                modifier = Modifier.fillMaxSize().weight(1f),
-                onTap = viewModel::onTap,
-            )
-            Column(
-                modifier = Modifier.fillMaxSize().weight(1f),
-            ) {
-                GraphCanvas(
-                    graphicalGraph = tree,
-                    directed = directed,
-                    modifier = Modifier.fillMaxSize().weight(2f),
+        BreadthFirstSearchScreenContent(
+            viewModel = viewModel,
+            table = {
+                BfsQuizVertexTable(
+                    viewModel = viewModel,
+                    modifier = Modifier.fillMaxSize().weight(1f),
                 )
+            },
+        )
+    }
+}
 
-                if (!inSetup) {
-                    val cellSizeModifier = Modifier.size(40.dp, 25.dp)
-                    val firstCellSizeModifier = Modifier.size(80.dp, 25.dp)
+@Composable
+fun BfsQuizVertexTable(
+    viewModel: BreadthFirstSearchQuizScreenViewModel,
+    modifier: Modifier = Modifier,
+) {
+    val currentGraph by viewModel.currentGraph
+    val tableEditable by viewModel.tableEditable
 
-                    Box(
-                        modifier = Modifier.fillMaxSize().weight(1f),
-                    ) {
-                        Column(
-                            modifier = Modifier.align(Alignment.Center),
-                        ) {
-                            Row {
-                                Spacer(modifier = firstCellSizeModifier)
-                                for (vertex in currentGraph.vertices) {
-                                    TextCell(
-                                        text = vertex.name,
-                                        modifier = cellSizeModifier,
-                                    )
-                                }
-                            }
+    val cellSizeModifier = Modifier.size(40.dp, 25.dp)
+    val firstCellSizeModifier = Modifier.size(80.dp, 25.dp)
 
-                            val showDistances by viewModel.showDistances
+    Box(
+        modifier = modifier,
+    ) {
+        Column(
+            modifier = Modifier.align(Alignment.Center),
+        ) {
+            Row {
+                Spacer(modifier = firstCellSizeModifier)
+                for (vertex in currentGraph.vertices) {
+                    TextCell(
+                        text = vertex.name,
+                        modifier = cellSizeModifier,
+                    )
+                }
+            }
 
-                            if (showDistances) {
-                                Row {
-                                    TextCell(
-                                        text = "táv(v)",
-                                        modifier = firstCellSizeModifier,
-                                    )
+            val showDistances by viewModel.showDistances
 
-                                    val tableDistanceContent by viewModel.tableDistanceContent
+            if (showDistances) {
+                Row {
+                    TextCell(
+                        text = "táv(v)",
+                        modifier = firstCellSizeModifier,
+                    )
 
-                                    for (vertex in currentGraph.vertices) {
-                                        TextFieldCell(
-                                            value = tableDistanceContent[vertex.name] ?: "∞",
-                                            onValueChange = {
-                                                viewModel.onTableDistanceChanged(vertex, it)
-                                            },
-                                            modifier = cellSizeModifier,
-                                            enabled = tableEditable,
-                                        )
-                                    }
-                                }
-                            }
+                    val tableDistanceContent by viewModel.tableDistanceContent
 
-                            Row {
-                                TextCell(
-                                    text = "előző(v)",
-                                    modifier = firstCellSizeModifier,
-                                )
-                                val tableParentContent by viewModel.tableParentContent
-                                for (vertex in currentGraph.vertices) {
-                                    TextFieldCell(
-                                        value = tableParentContent[vertex.name] ?: "*",
-                                        onValueChange = {
-                                            viewModel.onTableParentChanged(vertex, it)
-                                        },
-                                        modifier = cellSizeModifier,
-                                        enabled = tableEditable,
-                                    )
-                                }
-                            }
-                        }
+                    for (vertex in currentGraph.vertices) {
+                        TextFieldCell(
+                            value = tableDistanceContent[vertex.name] ?: "∞",
+                            onValueChange = {
+                                viewModel.onTableDistanceChanged(vertex, it)
+                            },
+                            modifier = cellSizeModifier,
+                            enabled = tableEditable,
+                        )
                     }
+                }
+            }
+
+            Row {
+                TextCell(
+                    text = "előző(v)",
+                    modifier = firstCellSizeModifier,
+                )
+                val tableParentContent by viewModel.tableParentContent
+                for (vertex in currentGraph.vertices) {
+                    TextFieldCell(
+                        value = tableParentContent[vertex.name] ?: "*",
+                        onValueChange = {
+                            viewModel.onTableParentChanged(vertex, it)
+                        },
+                        modifier = cellSizeModifier,
+                        enabled = tableEditable,
+                    )
                 }
             }
         }

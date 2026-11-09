@@ -286,4 +286,9 @@ class EdmondsQuizScreenViewmodel(
         MARK_AUGMENTING_PATH,
         MARK_BLOSSOM,
     }
+
+    fun onRetry() {
+        onBack()
+        onNext()
+    }
 }

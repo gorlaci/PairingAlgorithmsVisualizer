@@ -14,6 +14,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.HighlightType
+import hu.gorlaci.pairingalgorithmsvisualizer.util.withArticle
+import hu.gorlaci.pairingalgorithmsvisualizer.util.withCapitalArticle
 
 class BreadthFirstSearchGraph(
     override val vertices: MutableSet<BreadthFirstSearchVertex> = mutableSetOf(),
@@ -236,7 +238,7 @@ class BreadthFirstSearchGraph(
             startingVertex.row = 0
             queue.add(startingVertex)
             addToTreeGrid(startingVertex)
-            saveStep("Induljunk el a ${startingVertex.name} csúcsból")
+            saveStep("Induljunk el ${withArticle(startingVertex.name)} csúcsból")
         }
 
         while (processedVertices.size < vertices.size) {
@@ -250,7 +252,9 @@ class BreadthFirstSearchGraph(
                 saveStep(
                     BreadthFirstSearchStepType.Nothing(
                         description =
-                            "A vizsgálandó csúcsok listája üres, járjuk be a komponenst a ${activeVertex?.name} csúcsból",
+                            "A vizsgálandó csúcsok listája üres, járjuk be a komponenst ${withArticle(
+                                activeVertex?.name ?: "",
+                            )} csúcsból",
                     ),
                 )
             } else {
@@ -273,7 +277,7 @@ class BreadthFirstSearchGraph(
                     saveStep(
                         BreadthFirstSearchStepType.SelectedNeighbour(
                             description =
-                                "Vizsgáljuk meg a ${vertex.name} csúcs ${neighbour.name} szomszédját",
+                                "Vizsgáljuk meg ${withArticle(vertex.name)} csúcs ${neighbour.name} szomszédját",
                             vertex = vertex,
                             neighbour = neighbour,
                         ),
@@ -285,7 +289,9 @@ class BreadthFirstSearchGraph(
                         saveStep(
                             BreadthFirstSearchStepType.NeighbourEvaluated(
                                 description =
-                                    "A ${neighbour.name} csúcsot még nem vizsgáltuk, hozzáadjuk a vizsgálandó csúcsokhoz",
+                                    "${withCapitalArticle(
+                                        neighbour.name,
+                                    )} csúcsot még nem vizsgáltuk, hozzáadjuk a vizsgálandó csúcsokhoz",
                                 vertex = vertex,
                                 neighbour = neighbour,
                                 neighbourStatus = NeighbourStatus.ADDED,
@@ -295,7 +301,7 @@ class BreadthFirstSearchGraph(
                         neighbour.parent = vertex
                         saveStep(
                             BreadthFirstSearchStepType.FillTable(
-                                description = "Kitöltjük a táblázatot a ${neighbour.name} csúcs adataival",
+                                description = "Kitöltjük a táblázatot ${withArticle(neighbour.name)} csúcs adataival",
                                 vertex = vertex,
                                 neighbour = neighbour,
                             ),
@@ -304,7 +310,9 @@ class BreadthFirstSearchGraph(
                         saveStep(
                             BreadthFirstSearchStepType.NeighbourEvaluated(
                                 description =
-                                    "A ${neighbour.name} csúcsot már vizsgáltuk, vagy szerepel a listában, kihagyjuk",
+                                    "${withCapitalArticle(
+                                        neighbour.name,
+                                    )} csúcsot már vizsgáltuk, vagy szerepel a listában, kihagyjuk",
                                 vertex = vertex,
                                 neighbour = neighbour,
                                 neighbourStatus = NeighbourStatus.SKIPPED,
@@ -316,9 +324,11 @@ class BreadthFirstSearchGraph(
                 saveStep("Megvizsgáltuk a csúcs összes szomszédját")
 
                 processedVertices.add(vertex)
+
+                val activeVertexBefore = activeVertex
                 activeVertex = null
 
-                saveStep("Megvizsgáltuk a csúcs összes szomszédját")
+                saveStep("Befejezzük ${withArticle(activeVertexBefore?.name ?: "")} vizsgálatát")
             }
         }
 

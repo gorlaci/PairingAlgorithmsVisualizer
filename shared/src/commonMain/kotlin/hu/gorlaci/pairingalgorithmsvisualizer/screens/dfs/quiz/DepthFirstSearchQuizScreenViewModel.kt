@@ -285,4 +285,9 @@ class DepthFirstSearchQuizScreenViewModel(
     fun onDismissDialog() {
         showDialog.value = false
     }
+
+    fun onRetry() {
+        onBack()
+        onNext()
+    }
 }

@@ -28,10 +28,10 @@ fun GraphCanvasBase(
     drawVertex: DrawScope.(GraphicalVertex, Vector2D, TextMeasurer) -> Unit,
     drawEdge: DrawScope.(GraphicalEdge, Vector2D) -> Unit,
     modifier: Modifier = Modifier,
-    onTap: (Vector2D) -> Unit = { _ -> },
-    onDragStart: (Vector2D) -> Unit = { _ -> },
-    onDrag: (Vector2D) -> Unit = { _ -> },
-    onDragEnd: () -> Unit = {},
+    onTap: ((Vector2D) -> Unit)? = null,
+    onDragStart: ((Vector2D) -> Unit)? = null,
+    onDrag: ((Vector2D) -> Unit)? = null,
+    onDragEnd: (() -> Unit)? = null,
 ) {
     val vertices = graphicalGraph.graphicalVertices
     val edges = graphicalGraph.graphicalEdges
@@ -40,48 +40,58 @@ fun GraphCanvasBase(
 
     var hoverPosition by remember { mutableStateOf<Vector2D?>(null) }
 
-    Canvas(
-        modifier = modifier.pointerInput(Unit) {
-            awaitPointerEventScope {
-                while (true) {
-                    val event = awaitPointerEvent()
-                    when (event.type) {
-                        PointerEventType.Move -> {
-                            hoverPosition = Vector2D(event.changes[0].position)
-                        }
+    var canvasModifier = modifier.pointerInput(Unit) {
+        awaitPointerEventScope {
+            while (true) {
+                val event = awaitPointerEvent()
+                when (event.type) {
+                    PointerEventType.Move -> {
+                        hoverPosition = Vector2D(event.changes[0].position)
+                    }
 
-                        PointerEventType.Exit -> {
-                            hoverPosition = null
-                        }
+                    PointerEventType.Exit -> {
+                        hoverPosition = null
                     }
                 }
             }
-        }.pointerInput(Unit) {
+        }
+    }
+
+    if (onTap != null) {
+        canvasModifier = canvasModifier.pointerInput(Unit) {
             detectTapGestures { offset ->
                 val modelX = offset.x.toDouble() - size.width / 2.0
                 val modelY = size.height / 2.0 - offset.y.toDouble()
 
                 onTap(Vector2D(modelX, modelY))
             }
-        }.pointerInput(Unit) {
+        }
+    }
+
+    if (onDragStart != null || onDrag != null || onDragEnd != null) {
+        canvasModifier = canvasModifier.pointerInput(Unit) {
             detectDragGestures(
                 onDragStart = { offset ->
                     val modelX = offset.x.toDouble() - size.width / 2.0
                     val modelY = size.height / 2.0 - offset.y.toDouble()
 
-                    onDragStart(Vector2D(modelX, modelY))
+                    onDragStart?.invoke(Vector2D(modelX, modelY))
                 },
                 onDrag = { _, offset ->
                     val modelX = offset.x.toDouble()
                     val modelY = -offset.y.toDouble()
 
-                    onDrag(Vector2D(modelX, modelY))
+                    onDrag?.invoke(Vector2D(modelX, modelY))
                 },
                 onDragEnd = {
-                    onDragEnd()
+                    onDragEnd?.invoke()
                 },
             )
-        },
+        }
+    }
+
+    Canvas(
+        modifier = canvasModifier,
     ) {
         val center = Vector2D(size.width / 2.0, size.height / 2.0)
 
@@ -160,10 +170,10 @@ fun GraphCanvasBase(
 fun UndirectedGraphCanvas(
     graphicalGraph: GraphicalGraph,
     modifier: Modifier = Modifier,
-    onTap: (Vector2D) -> Unit = { _ -> },
-    onDragStart: (Vector2D) -> Unit = { _ -> },
-    onDrag: (Vector2D) -> Unit = { _ -> },
-    onDragEnd: () -> Unit = {},
+    onTap: ((Vector2D) -> Unit)? = null,
+    onDragStart: ((Vector2D) -> Unit)? = null,
+    onDrag: ((Vector2D) -> Unit)? = null,
+    onDragEnd: (() -> Unit)? = null,
 ) {
     GraphCanvasBase(
         graphicalGraph = graphicalGraph,
@@ -185,10 +195,10 @@ fun UndirectedGraphCanvas(
 fun DirectedGraphCanvas(
     graphicalGraph: GraphicalGraph,
     modifier: Modifier = Modifier,
-    onTap: (Vector2D) -> Unit = { _ -> },
-    onDragStart: (Vector2D) -> Unit = { _ -> },
-    onDrag: (Vector2D) -> Unit = { _ -> },
-    onDragEnd: () -> Unit = {},
+    onTap: ((Vector2D) -> Unit)? = null,
+    onDragStart: ((Vector2D) -> Unit)? = null,
+    onDrag: ((Vector2D) -> Unit)? = null,
+    onDragEnd: (() -> Unit)? = null,
 ) {
     GraphCanvasBase(
         graphicalGraph = graphicalGraph,
@@ -211,10 +221,10 @@ fun GraphCanvas(
     graphicalGraph: GraphicalGraph,
     directed: Boolean,
     modifier: Modifier = Modifier,
-    onTap: (Vector2D) -> Unit = { _ -> },
-    onDragStart: (Vector2D) -> Unit = { _ -> },
-    onDrag: (Vector2D) -> Unit = { _ -> },
-    onDragEnd: () -> Unit = {},
+    onTap: ((Vector2D) -> Unit)? = null,
+    onDragStart: ((Vector2D) -> Unit)? = null,
+    onDrag: ((Vector2D) -> Unit)? = null,
+    onDragEnd: (() -> Unit)? = null,
 ) {
     if (directed) {
         DirectedGraphCanvas(
