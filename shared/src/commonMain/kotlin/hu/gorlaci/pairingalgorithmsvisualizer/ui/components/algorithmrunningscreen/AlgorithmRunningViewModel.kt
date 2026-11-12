@@ -130,17 +130,17 @@ abstract class AlgorithmRunningViewModel<
         val clickedVertex = graph.getVertexByCoordinates(position) ?: return
 
         selectedVertex?.let {
-            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertex(
                 it,
-                Color.White,
+                innerColor = Color.White,
             )
         }
 
         if (clickedVertex != selectedVertex) {
             selectedVertex = clickedVertex
-            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertex(
                 clickedVertex,
-                selectedVertexColor,
+                innerColor = selectedVertexColor,
             )
         } else {
             selectedVertex = null

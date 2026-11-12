@@ -89,8 +89,8 @@ class DepthFirstSearchQuizScreenViewModel(
 
             is DepthFirstSearchStepType.SelectedNeighbour -> {
                 graphicalGraph.value = graphicalGraph.value
-                    .removeEdgeHighlight(possibleQuestion.vertex, possibleQuestion.neighbour)
-                    .changeVertexHighlight(possibleQuestion.neighbour, Color.Transparent)
+                    .changeEdge(possibleQuestion.vertex, possibleQuestion.neighbour, highlight = Color.Transparent)
+                    .changeVertex(possibleQuestion.neighbour, highlight = Color.Transparent)
                 QuestionMode.SELECT_NEIGHBOUR
             }
 
@@ -164,9 +164,6 @@ class DepthFirstSearchQuizScreenViewModel(
         tableParentContent.value =
             currentGraph.value.vertices.associate { it.name to (it.parent?.name ?: "*") }
     }
-
-    override fun onStepChange(newValue: String): Unit =
-        throw IllegalStateException("Step change is not allowed in quiz mode.")
 
     fun onVertexAnswer(answer: DepthFirstSearchVertex) {
         val question = graphicalGraph.value.stepType as DepthFirstSearchStepType.SelectedVertex

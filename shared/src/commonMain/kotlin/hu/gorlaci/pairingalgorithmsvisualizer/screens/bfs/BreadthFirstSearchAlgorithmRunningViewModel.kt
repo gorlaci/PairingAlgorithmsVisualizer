@@ -107,9 +107,9 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
         ) {
             tree.value = tree.value.addEdge(currentStep.vertex, currentStep.neighbour)
             graphicalGraph.value = graphicalGraph.value
-                .changeVertexInnerColor(
+                .changeVertex(
                     currentStep.neighbour,
-                    LIGHT_PINK,
+                    innerColor = LIGHT_PINK,
                 )
         }
     }

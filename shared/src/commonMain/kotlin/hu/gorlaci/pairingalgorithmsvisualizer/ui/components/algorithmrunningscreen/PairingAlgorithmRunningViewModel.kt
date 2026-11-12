@@ -1,7 +1,5 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen
 
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
@@ -27,15 +25,15 @@ abstract class PairingAlgorithmRunningViewModel<
         val clickedVertex = graph.getVertexByCoordinates(position) ?: return
         if (selectedVertex == null) {
             selectedVertex = clickedVertex
-            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertex(
                 clickedVertex,
-                LIGHT_ORANGE,
+                innerColor = LIGHT_ORANGE,
             )
             return
         }
         if (selectedVertex == clickedVertex) {
             selectedVertex = null
-            graphicalGraph.value = graphicalGraph.value.changeVertexInnerColor(
+            graphicalGraph.value = graphicalGraph.value.changeVertex(
                 clickedVertex,
                 Color.White,
             )

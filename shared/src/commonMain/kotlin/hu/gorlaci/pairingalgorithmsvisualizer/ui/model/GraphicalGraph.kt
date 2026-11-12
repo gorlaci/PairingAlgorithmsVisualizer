@@ -12,59 +12,6 @@ data class GraphicalGraph(
     val graphicalEdges: List<GraphicalEdge> = emptyList(),
     val stepType: StepType = StepType.Nothing(),
 ) {
-    fun changeVertexInnerColor(
-        vertex: Vertex,
-        color: Color,
-    ): GraphicalGraph {
-        val graphicalVertex = graphicalVertices.find { it.name == vertex.name }
-        if (graphicalVertex == null) {
-            return this
-        }
-        val newGraphicalVertex = graphicalVertex.copy(innerColor = color)
-        val newGraphicalVertices = graphicalVertices - graphicalVertex + newGraphicalVertex
-        return this.copy(graphicalVertices = newGraphicalVertices)
-    }
-
-    fun addEdgeHighlight(
-        edge: Edge<out Vertex>,
-        color: Color,
-    ): GraphicalGraph {
-        val graphicalEdge =
-            graphicalEdges.find {
-                it.startGraphicalVertex.name == edge.fromVertex.name &&
-                    it.endGraphicalVertex.name == edge.toVertex.name
-            } ?: return this
-        val newGraphicalEdge = graphicalEdge.copy(highlight = color)
-        val newGraphicalEdges = graphicalEdges - graphicalEdge + newGraphicalEdge
-        return this.copy(graphicalEdges = newGraphicalEdges)
-    }
-
-    fun addEdgeHighlight(
-        fromVertex: Vertex,
-        toVertex: Vertex,
-        color: Color,
-    ): GraphicalGraph {
-        val graphicalEdge = graphicalEdges.find {
-            (
-                it.startGraphicalVertex.name == fromVertex.name &&
-                    it.endGraphicalVertex.name == toVertex.name
-                ) ||
-                (
-                    it.startGraphicalVertex.name == toVertex.name &&
-                        it.endGraphicalVertex.name == fromVertex.name
-                    )
-        } ?: return this
-        val newGraphicalEdge = graphicalEdge.copy(highlight = color)
-        val newGraphicalEdges = graphicalEdges - graphicalEdge + newGraphicalEdge
-        return this.copy(graphicalEdges = newGraphicalEdges)
-    }
-
-    fun removeEdgeHighlight(edge: Edge<out Vertex>) = addEdgeHighlight(edge, Color.Transparent)
-
-    fun removeEdgeHighlight(
-        fromVertex: Vertex,
-        toVertex: Vertex,
-    ) = addEdgeHighlight(fromVertex, toVertex, Color.Transparent)
 
     fun removeAllEdgeHighlights(): GraphicalGraph {
         val newGraphicalEdges =
@@ -122,20 +69,6 @@ data class GraphicalGraph(
             graphicalVertices = graphicalVertices.map { gv -> newGraphicalVertices[gv] ?: gv },
             graphicalEdges = newGraphicalEdges,
         )
-    }
-
-    fun changeVertexHighlight(
-        vertex: Vertex,
-        color: Color,
-        highlightType: HighlightType = HighlightType.CIRCLE,
-    ): GraphicalGraph {
-        val graphicalVertex = graphicalVertices.find { it.name == vertex.name } ?: return this
-        val newGraphicalVertex = graphicalVertex.copy(
-            highlight = color,
-            highlightType = highlightType,
-        )
-        val newGraphicalVertices = graphicalVertices - graphicalVertex + newGraphicalVertex
-        return this.copy(graphicalVertices = newGraphicalVertices)
     }
 
     fun removeVertex(vertex: Vertex): GraphicalGraph {
@@ -207,9 +140,21 @@ data class GraphicalGraph(
                 color = color ?: graphicalEdge.color,
                 label = label ?: graphicalEdge.label,
             )
-        val newGraphicalEdges = graphicalEdges - graphicalEdge + newGraphicalEdge
+        val newGraphicalEdges = buildList {
+            addAll(this@GraphicalGraph.graphicalEdges)
+            remove(graphicalEdge)
+            add(newGraphicalEdge)
+        }
         return this.copy(graphicalEdges = newGraphicalEdges)
     }
+
+    fun changeEdge(
+        edge: Edge<out Vertex>,
+        selected: Boolean? = null,
+        highlight: Color? = null,
+        color: Color? = null,
+        label: String? = null,
+    ): GraphicalGraph = changeEdge(edge.fromVertex, edge.toVertex, selected, highlight, color, label)
 
     fun changeVertex(
         vertex: Vertex,
@@ -227,7 +172,11 @@ data class GraphicalGraph(
             highlightType = highlightType ?: graphicalVertex.highlightType,
             label = label ?: graphicalVertex.label,
         )
-        val newGraphicalVertices = graphicalVertices - graphicalVertex + newGraphicalVertex
+        val newGraphicalVertices = buildList {
+            addAll(this@GraphicalGraph.graphicalVertices)
+            remove(graphicalVertex)
+            add(newGraphicalVertex)
+        }
         return this.copy(graphicalVertices = newGraphicalVertices)
     }
 }
