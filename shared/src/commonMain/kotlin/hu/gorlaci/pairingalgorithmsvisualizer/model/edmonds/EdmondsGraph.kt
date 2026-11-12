@@ -585,8 +585,8 @@ class EdmondsGraph(
                         GraphicalVertex(
                             position = coordinates,
                             name = vertex.name,
-                            highlightType = HighlightType.DOUBLE_CIRCLE,
-                            highlight = LIGHT_GREEN,
+                            highlightType = HighlightType.CIRCLE,
+                            highlight = listOf(LIGHT_GREEN, Color.White, LIGHT_GREEN),
                             innerColor = innerColor,
                         ),
                     )
@@ -598,7 +598,7 @@ class EdmondsGraph(
                             position = coordinates,
                             name = vertex.name,
                             highlightType = HighlightType.SQUARE,
-                            highlight = LIGHT_GREEN,
+                            highlight = listOf(LIGHT_GREEN),
                             innerColor = innerColor,
                         ),
                     )
@@ -610,7 +610,7 @@ class EdmondsGraph(
                             position = coordinates,
                             name = vertex.name,
                             highlightType = HighlightType.CIRCLE,
-                            highlight = LIGHT_GREEN,
+                            highlight = listOf(LIGHT_GREEN),
                             innerColor = innerColor,
                         ),
                     )

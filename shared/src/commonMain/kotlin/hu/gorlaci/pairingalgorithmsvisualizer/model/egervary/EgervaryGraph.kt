@@ -335,11 +335,11 @@ class EgervaryGraph(
                     ""
                 },
                 highlight = when (vertex) {
-                    activeVertex -> LIGHT_ORANGE
-                    in unpairedVertices -> LIGHT_RED
-                    in pairedVertices -> LIGHT_BLUE
-                    in visitedVertices -> GRAY
-                    else -> Color.Transparent
+                    activeVertex -> listOf(LIGHT_ORANGE)
+                    in unpairedVertices -> listOf(LIGHT_RED)
+                    in pairedVertices -> listOf(LIGHT_BLUE)
+                    in visitedVertices -> listOf(GRAY)
+                    else -> emptyList()
                 },
                 innerColor = when (vertex) {
                     in filteredClass1, in filteredClass2 -> {

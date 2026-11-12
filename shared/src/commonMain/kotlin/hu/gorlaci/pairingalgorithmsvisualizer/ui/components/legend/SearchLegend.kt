@@ -11,10 +11,10 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 fun SearchLegend(modifier: Modifier) {
     val items = listOf(
         "Aktív csúcs" to GraphicalVertex(
-            highlight = LIGHT_ORANGE,
+            highlight = listOf(LIGHT_ORANGE),
         ),
         "Vizsgált csúcs" to GraphicalVertex(
-            highlight = LIGHT_YELLOW,
+            highlight = listOf(LIGHT_YELLOW),
         ),
         "Vizsgált él" to GraphicalEdge(
             startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),

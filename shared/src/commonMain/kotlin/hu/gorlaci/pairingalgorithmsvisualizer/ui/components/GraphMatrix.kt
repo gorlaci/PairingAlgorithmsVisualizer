@@ -11,11 +11,7 @@ import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberUpdatedState
-import androidx.compose.runtime.snapshotFlow
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -65,8 +61,8 @@ fun GraphMatrix(
                     }
                     EdgeCell(
                         edge = edge,
-                        modifier = if (rowVertex.highlight == DARK_GREEN ||
-                            columnVertex.highlight == DARK_GREEN
+                        modifier = if (rowVertex.highlight.elementAtOrNull(0) == DARK_GREEN ||
+                            columnVertex.highlight.elementAtOrNull(0) == DARK_GREEN
                         ) {
                             Modifier.width(40.dp).background(DARK_GREEN)
                         } else {
@@ -155,7 +151,7 @@ fun VertexCell(
 ) {
     TextCell(
         text = vertex.name,
-        modifier = modifier.background(vertex.highlight),
+        modifier = modifier.background(vertex.highlight.elementAtOrElse(0) { Color.Transparent }),
         fontWeight = FontWeight.Bold,
     )
 }

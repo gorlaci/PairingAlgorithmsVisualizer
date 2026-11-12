@@ -90,9 +90,9 @@ class BreadthFirstSearchQuizScreenViewModel(
                 graphicalGraph.value =
                     graphicalGraph.value.changeVertex(
                         possibleQuestion.vertex,
-                        highlight = GRAY,
+                        highlight = listOf(GRAY),
                     )
-                tree.value = tree.value.changeVertex(possibleQuestion.vertex, highlight = GRAY)
+                tree.value = tree.value.changeVertex(possibleQuestion.vertex, highlight = listOf(GRAY))
             }
 
             is BreadthFirstSearchStepType.NeighbourEvaluated -> {
@@ -108,7 +108,7 @@ class BreadthFirstSearchQuizScreenViewModel(
             is BreadthFirstSearchStepType.SelectedNeighbour -> {
                 questionMode.value = QuestionMode.SELECT_NEIGHBOUR
                 graphicalGraph.value = graphicalGraph.value
-                    .changeVertex(possibleQuestion.neighbour, highlight = Color.Transparent)
+                    .changeVertex(possibleQuestion.neighbour, highlight = emptyList())
                     .changeEdge(possibleQuestion.vertex, possibleQuestion.neighbour, highlight = Color.Transparent)
             }
 
@@ -158,7 +158,7 @@ class BreadthFirstSearchQuizScreenViewModel(
             } else {
                 Answer.Incorrect("A következő csúcs: ${question.vertex.name}")
             }
-        graphicalGraph.value = graphicalGraph.value.changeVertex(question.vertex, highlight = LIGHT_ORANGE)
+        graphicalGraph.value = graphicalGraph.value.changeVertex(question.vertex, highlight = listOf(LIGHT_ORANGE))
         showAnswer()
     }
 

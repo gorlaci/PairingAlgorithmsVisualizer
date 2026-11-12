@@ -310,9 +310,9 @@ class DepthFirstSearchGraph(
                 position = coordinates,
                 name = vertex.name,
                 highlight = when (vertex) {
-                    activeVertex -> LIGHT_ORANGE
-                    activeNeighbour -> LIGHT_YELLOW
-                    else -> Color.Transparent
+                    activeVertex -> listOf(LIGHT_ORANGE)
+                    activeNeighbour -> listOf(LIGHT_YELLOW)
+                    else -> emptyList()
                 },
                 highlightType = HighlightType.CIRCLE,
                 innerColor = when {

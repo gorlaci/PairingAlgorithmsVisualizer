@@ -346,12 +346,12 @@ class AugmentingPathGraph(
                 position = coordinates,
                 name = vertex.name,
                 highlight = when {
-                    vertex in minCoverSet -> DARK_GREEN
-                    vertex == activeVertex -> LIGHT_ORANGE
-                    vertex in unpairedVertices -> RED
-                    vertex in pairedVertices -> BLUE
-                    vertex.visited -> GRAY
-                    else -> Color.Transparent
+                    vertex in minCoverSet -> listOf(DARK_GREEN)
+                    vertex == activeVertex -> listOf(LIGHT_ORANGE)
+                    vertex in unpairedVertices -> listOf(RED)
+                    vertex in pairedVertices -> listOf(BLUE)
+                    vertex.visited -> listOf(GRAY)
+                    else -> emptyList()
                 },
                 highlightType = HighlightType.CIRCLE,
                 innerColor = when (vertex) {

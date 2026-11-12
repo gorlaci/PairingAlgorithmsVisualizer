@@ -11,16 +11,16 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 fun EgervaryLegend(modifier: Modifier = Modifier) {
     val items = listOf(
         "Vizsgálandó A-beli csúcs" to GraphicalVertex(
-            highlight = LIGHT_RED,
+            highlight = listOf(LIGHT_RED),
         ),
         "Vizsgálandó B-beli csúcs" to GraphicalVertex(
-            highlight = LIGHT_BLUE,
+            highlight = listOf(LIGHT_BLUE),
         ),
         "Aktuálisan vizsgált csúcs" to GraphicalVertex(
-            highlight = LIGHT_ORANGE,
+            highlight = listOf(LIGHT_ORANGE),
         ),
         "Már vizsgált csúcs" to GraphicalVertex(
-            highlight = GRAY,
+            highlight = listOf(GRAY),
         ),
         "Párosításbeli él" to GraphicalEdge(
             startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),

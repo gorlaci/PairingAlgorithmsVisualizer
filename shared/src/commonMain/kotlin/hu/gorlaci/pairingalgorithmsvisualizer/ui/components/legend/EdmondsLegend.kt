@@ -2,6 +2,7 @@ package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import hu.gorlaci.pairingalgorithmsvisualizer.model.geometry.Vector2D
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.*
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
@@ -13,15 +14,15 @@ fun EdmondsLegend(modifier: Modifier = Modifier) {
     val items =
         listOf(
             "Gyökér csúcs" to GraphicalVertex(
-                highlight = LIGHT_GREEN,
-                highlightType = HighlightType.DOUBLE_CIRCLE,
+                highlight = listOf(LIGHT_GREEN, Color.White, LIGHT_GREEN),
+                highlightType = HighlightType.CIRCLE,
             ),
             "Külső csúcs" to GraphicalVertex(
-                highlight = LIGHT_GREEN,
+                highlight = listOf(LIGHT_GREEN),
                 highlightType = HighlightType.CIRCLE,
             ),
             "Belső csúcs" to GraphicalVertex(
-                highlight = LIGHT_GREEN,
+                highlight = listOf(LIGHT_GREEN),
                 highlightType = HighlightType.SQUARE,
             ),
             "Párosításbeli él" to GraphicalEdge(

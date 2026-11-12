@@ -18,17 +18,17 @@ fun AugmentingLegend(modifier: Modifier = Modifier) {
         ),
         "Vizsgálandó A-beli csúcs" to GraphicalVertex(
             innerColor = LIGHT_BLUE,
-            highlight = RED,
+            highlight = listOf(RED),
         ),
         "Vizsgálandó B-beli csúcs" to GraphicalVertex(
             innerColor = LIGHT_RED,
-            highlight = BLUE,
+            highlight = listOf(BLUE),
         ),
         "Aktuálisan vizsgált csúcs" to GraphicalVertex(
-            highlight = LIGHT_ORANGE,
+            highlight = listOf(LIGHT_ORANGE),
         ),
         "Már vizsgált csúcs" to GraphicalVertex(
-            highlight = GRAY,
+            highlight = listOf(GRAY),
         ),
         "Párosításbeli él" to GraphicalEdge(
             startGraphicalVertex = GraphicalVertex(Vector2D(-25.0, -0.0)),
@@ -46,7 +46,7 @@ fun AugmentingLegend(modifier: Modifier = Modifier) {
             highlight = LIGHT_YELLOW,
         ),
         "Lefogó ponthalmaz" to GraphicalVertex(
-            highlight = DARK_GREEN,
+            highlight = listOf(DARK_GREEN),
         ),
     )
     Legend(items = items, modifier = modifier)

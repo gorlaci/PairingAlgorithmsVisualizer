@@ -90,7 +90,7 @@ class DepthFirstSearchQuizScreenViewModel(
             is DepthFirstSearchStepType.SelectedNeighbour -> {
                 graphicalGraph.value = graphicalGraph.value
                     .changeEdge(possibleQuestion.vertex, possibleQuestion.neighbour, highlight = Color.Transparent)
-                    .changeVertex(possibleQuestion.neighbour, highlight = Color.Transparent)
+                    .changeVertex(possibleQuestion.neighbour, highlight = emptyList())
                 QuestionMode.SELECT_NEIGHBOUR
             }
 
