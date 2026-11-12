@@ -25,43 +25,34 @@ fun DrawScope.drawVertex(
 
     val radius = vertex.radius
 
+    val highlightReversed = vertex.highlight.reversed()
+
     when (vertex.highlightType) {
         HighlightType.CIRCLE -> {
-            drawCircle(
-                color = vertex.highlight,
-                radius = radius + 5f,
-                center = vertexCenter,
-            )
+            highlightReversed.forEachIndexed { index, highlightColor ->
+                drawCircle(
+                    color = highlightColor,
+                    radius = radius + (highlightReversed.size - index) * 5f,
+                    center = vertexCenter,
+                )
+            }
         }
 
         HighlightType.SQUARE -> {
-            drawRect(
-                color = vertex.highlight,
-                size = Size((radius + 5f) * 2f, (radius + 5f) * 2f),
-                topLeft = vertexCenter - Offset(radius + 5f, radius + 5f),
-            )
+            highlightReversed.forEachIndexed { index, highlightColor ->
+
+                val halfSideLength = radius + (highlightReversed.size - index) * 5f
+
+                drawRect(
+                    color = highlightColor,
+                    size = Size(halfSideLength * 2f, halfSideLength * 2f),
+                    topLeft = vertexCenter - Offset(halfSideLength, halfSideLength),
+                )
+            }
             drawRect(
                 color = Color.White,
                 size = Size(radius * 2f, radius * 2f),
                 topLeft = vertexCenter - Offset(radius, radius),
-            )
-        }
-
-        HighlightType.DOUBLE_CIRCLE -> {
-            drawCircle(
-                color = vertex.highlight,
-                radius = radius + 15f,
-                center = vertexCenter,
-            )
-            drawCircle(
-                color = Color.White,
-                radius = radius + 10f,
-                center = vertexCenter,
-            )
-            drawCircle(
-                color = vertex.highlight,
-                radius = radius + 5f,
-                center = vertexCenter,
             )
         }
     }

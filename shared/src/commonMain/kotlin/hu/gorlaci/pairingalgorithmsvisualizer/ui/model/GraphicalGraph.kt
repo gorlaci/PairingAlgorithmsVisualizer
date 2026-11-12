@@ -159,7 +159,7 @@ data class GraphicalGraph(
     fun changeVertex(
         vertex: Vertex,
         innerColor: Color? = null,
-        highlight: Color? = null,
+        highlight: List<Color>? = null,
         highlightType: HighlightType? = null,
         label: String? = null,
     ): GraphicalGraph {
