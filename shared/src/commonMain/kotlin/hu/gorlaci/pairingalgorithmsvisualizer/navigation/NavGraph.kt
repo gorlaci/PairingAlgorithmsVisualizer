@@ -24,9 +24,8 @@ import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.quiz.EdmondsQuizSc
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.edmonds.runalgorithm.EdmondsAlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.menu.EgervaryMenuScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.egervary.runalgorithm.EgervaryAlgorithmRunningViewScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.MainMenuItem
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.MainMenuScreen
-import hu.gorlaci.pairingalgorithmsvisualizer.screens.mainmenu.NewMainMenuScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MainMenuItem
 import org.jetbrains.compose.resources.imageResource
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.shared.generated.resources.*
@@ -78,19 +77,6 @@ fun NavGraph(
                 onBack = { navHostController.popBackStack() },
                 onNewGraph = {
                     navHostController.navigate(Screen.DrawGraph.Visual.Undirected)
-                },
-            )
-        }
-
-        composable<Screen.MainMenu> {
-            MainMenuScreen(
-                onDrawGraphClick = { navHostController.navigate(Screen.DrawGraph.Menu) },
-                onEdmondsClick = { navHostController.navigate(Screen.Edmonds.Menu) },
-                onAugmentingPathClick = {
-                    navHostController.navigate(Screen.AugmentingPath.Menu)
-                },
-                onEgervaryClick = {
-                    navHostController.navigate(Screen.Egervary.Menu)
                 },
             )
         }
@@ -223,7 +209,7 @@ fun NavGraph(
 //                ),
             )
 
-            NewMainMenuScreen(menuItems = menuItems)
+            MainMenuScreen(menuItems = menuItems)
         }
 
         composable<Screen.BreadthFirstSearch.RunAlgorithm> {

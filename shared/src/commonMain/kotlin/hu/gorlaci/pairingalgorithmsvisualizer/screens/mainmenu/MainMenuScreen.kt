@@ -9,35 +9,29 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.unit.dp
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.AlgorithmCard
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MobileAlgorithmCard
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MainMenuAlgorithmCard
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MainMenuItem
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MainMenuMobileAlgorithmCard
 import hu.gorlaci.pairingalgorithmsvisualizer.util.isTouchDevice
 
 @Composable
-fun NewMainMenuScreen(menuItems: List<MainMenuItem>) {
+fun MainMenuScreen(menuItems: List<MainMenuItem>) {
     Scaffold(modifier = Modifier.fillMaxSize()) {
         LazyVerticalGrid(
             columns = GridCells.Adaptive(minSize = 250.dp),
         ) {
             items(menuItems) { menuItem ->
                 if (!isTouchDevice()) {
-                    AlgorithmCard(
-                        algorithmName = menuItem.algorithmName,
-                        algorithmImage = menuItem.algorithmImage,
-                        onRunAlgorithm = menuItem.onRunAlgorithm,
-                        onQuiz = menuItem.onQuiz,
+                    MainMenuAlgorithmCard(
+                        menuItem = menuItem,
                         modifier = Modifier
                             .padding(16.dp)
                             .size(250.dp),
                     )
                 } else {
-                    MobileAlgorithmCard(
-                        algorithmName = menuItem.algorithmName,
-                        algorithmImage = menuItem.algorithmImage,
-                        onRunAlgorithm = menuItem.onRunAlgorithm,
-                        onQuiz = menuItem.onQuiz,
+                    MainMenuMobileAlgorithmCard(
+                        menuItem = menuItem,
                         modifier = Modifier
                             .padding(16.dp)
                             .size(200.dp),
@@ -47,10 +41,3 @@ fun NewMainMenuScreen(menuItems: List<MainMenuItem>) {
         }
     }
 }
-
-data class MainMenuItem(
-    val algorithmName: String,
-    val algorithmImage: ImageBitmap,
-    val onRunAlgorithm: () -> Unit,
-    val onQuiz: (() -> Unit)? = null,
-)

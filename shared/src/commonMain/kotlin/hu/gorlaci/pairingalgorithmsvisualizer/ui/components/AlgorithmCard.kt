@@ -17,12 +17,16 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
+data class MainMenuItem(
+    val algorithmName: String,
+    val algorithmImage: ImageBitmap,
+    val onRunAlgorithm: () -> Unit,
+    val onQuiz: (() -> Unit)? = null,
+)
+
 @Composable
-fun AlgorithmCard(
-    algorithmName: String,
-    algorithmImage: ImageBitmap,
-    onRunAlgorithm: () -> Unit,
-    onQuiz: (() -> Unit)?,
+fun MainMenuAlgorithmCard(
+    menuItem: MainMenuItem,
     modifier: Modifier = Modifier,
 ) {
     var hovered by remember { mutableStateOf(false) }
@@ -49,8 +53,8 @@ fun AlgorithmCard(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
-                bitmap = algorithmImage,
-                contentDescription = algorithmName,
+                bitmap = menuItem.algorithmImage,
+                contentDescription = menuItem.algorithmName,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -75,12 +79,12 @@ fun AlgorithmCard(
                             .fillMaxSize()
                             .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f)),
                     ) {
-                        Button(onClick = onRunAlgorithm) {
+                        Button(onClick = menuItem.onRunAlgorithm) {
                             Text(text = "Algoritmus futtatása")
                         }
 
-                        if (onQuiz != null) {
-                            Button(onClick = onQuiz) {
+                        if (menuItem.onQuiz != null) {
+                            Button(onClick = menuItem.onQuiz) {
                                 Text(text = "Kvíz")
                             }
                         }
@@ -88,7 +92,7 @@ fun AlgorithmCard(
                 }
             }
             Text(
-                text = algorithmName,
+                text = menuItem.algorithmName,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
@@ -101,11 +105,8 @@ fun AlgorithmCard(
 }
 
 @Composable
-fun MobileAlgorithmCard(
-    algorithmName: String,
-    algorithmImage: ImageBitmap,
-    onRunAlgorithm: () -> Unit,
-    onQuiz: (() -> Unit)?,
+fun MainMenuMobileAlgorithmCard(
+    menuItem: MainMenuItem,
     modifier: Modifier = Modifier,
 ) {
     Card(
@@ -114,8 +115,8 @@ fun MobileAlgorithmCard(
     ) {
         Box(modifier = Modifier.fillMaxSize()) {
             Image(
-                bitmap = algorithmImage,
-                contentDescription = algorithmName,
+                bitmap = menuItem.algorithmImage,
+                contentDescription = menuItem.algorithmName,
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .align(Alignment.Center)
@@ -134,19 +135,19 @@ fun MobileAlgorithmCard(
                         .fillMaxSize()
                         .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f)),
                 ) {
-                    Button(onClick = onRunAlgorithm) {
+                    Button(onClick = menuItem.onRunAlgorithm) {
                         Text(text = "Algoritmus futtatása")
                     }
 
-                    if (onQuiz != null) {
-                        Button(onClick = onQuiz) {
+                    if (menuItem.onQuiz != null) {
+                        Button(onClick = menuItem.onQuiz) {
                             Text(text = "Kvíz")
                         }
                     }
                 }
             }
             Text(
-                text = algorithmName,
+                text = menuItem.algorithmName,
                 textAlign = TextAlign.Center,
                 color = MaterialTheme.colorScheme.onPrimary,
                 modifier = Modifier
