@@ -141,7 +141,7 @@ data class GraphicalGraph(
                 label = label ?: graphicalEdge.label,
             )
         val newGraphicalEdges = buildList {
-            addAll(this@GraphicalGraph.graphicalEdges)
+            addAll(graphicalEdges)
             remove(graphicalEdge)
             add(newGraphicalEdge)
         }
@@ -173,7 +173,7 @@ data class GraphicalGraph(
             label = label ?: graphicalVertex.label,
         )
         val newGraphicalVertices = buildList {
-            addAll(this@GraphicalGraph.graphicalVertices)
+            addAll(graphicalVertices)
             remove(graphicalVertex)
             add(newGraphicalVertex)
         }

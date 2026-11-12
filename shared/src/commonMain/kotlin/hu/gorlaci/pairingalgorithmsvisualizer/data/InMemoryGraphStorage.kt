@@ -1,5 +1,7 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.data
 
+import androidx.compose.runtime.State
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableStateOf
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
@@ -19,18 +21,27 @@ class InMemoryGraphStorage : GraphStorage {
         graphs.value = graphs.value.toMutableList().apply { add(graph) }
     }
 
-    override fun getAllGraphs() = graphs
+    override fun getAllGraphs(vararg startIndexes: Int): State<List<Graph<out Vertex, out Edge<out Vertex>>>> {
+        if (startIndexes.isEmpty()) {
+            return graphs
+        }
+        return derivedStateOf {
+            val start = graphs.value.slice(startIndexes.toList())
+
+            start + (graphs.value - start.toSet())
+        }
+    }
 
     private fun addExampleGraphs() {
+        addExampleGraph0()
         addExampleGraph1()
         addExampleGraph2()
         addExampleGraph3()
         addExampleGraph4()
         addExampleGraph5()
-        addExampleGraph6()
     }
 
-    private fun addExampleGraph1() {
+    private fun addExampleGraph0() {
         val graph =
             Graph(
                 vertices =
@@ -80,7 +91,7 @@ class InMemoryGraphStorage : GraphStorage {
         addGraph(graph)
     }
 
-    private fun addExampleGraph2() {
+    private fun addExampleGraph1() {
         val graph =
             Graph(
                 vertices =
@@ -120,7 +131,7 @@ class InMemoryGraphStorage : GraphStorage {
         addGraph(graph)
     }
 
-    private fun addExampleGraph3() {
+    private fun addExampleGraph2() {
         val vertices = ('A'..'G').map {
             Vertex(id = it.toString())
         }
@@ -152,7 +163,7 @@ class InMemoryGraphStorage : GraphStorage {
         addGraph(graph)
     }
 
-    private fun addExampleGraph4() {
+    private fun addExampleGraph3() {
         val vertices = mutableSetOf<Vertex>()
         val coordinates = mutableMapOf<String, Vector2D>()
         ('A'..'I').map { it.toString() }.forEachIndexed { i, it ->
@@ -202,7 +213,7 @@ class InMemoryGraphStorage : GraphStorage {
         addGraph(graph)
     }
 
-    private fun addExampleGraph5() {
+    private fun addExampleGraph4() {
         val vertices = mutableSetOf(
             EgervaryVertex("A"),
             EgervaryVertex("B"),
@@ -249,7 +260,7 @@ class InMemoryGraphStorage : GraphStorage {
         addGraph(graph)
     }
 
-    private fun addExampleGraph6() {
+    private fun addExampleGraph5() {
         val vertices = mutableSetOf(
             Vertex("A"),
             Vertex("B"),

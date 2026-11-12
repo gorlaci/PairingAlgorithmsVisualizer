@@ -24,7 +24,7 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
     >() {
 
     override val graphList = derivedStateOf {
-        graphsStorage.getAllGraphs().value.map { it.toBreadthFirstSearchGraph() }
+        graphsStorage.getAllGraphs(5).value.map { it.toBreadthFirstSearchGraph() }
     }
 
     override val initString = "Jelöld ki a kezdő csúcsot!"
