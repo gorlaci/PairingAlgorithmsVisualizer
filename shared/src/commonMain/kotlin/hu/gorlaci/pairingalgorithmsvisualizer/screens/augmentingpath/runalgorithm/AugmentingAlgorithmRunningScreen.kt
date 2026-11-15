@@ -51,7 +51,7 @@ fun AugmentingAlgorithmRunningScreen(
         },
         controls = {
             GraphDisplayModeSwitch(
-                matrixMode = displayMode,
+                selectedMode = displayMode,
                 onModeChange = viewModel::changeDisplayMode,
                 modifier = Modifier.padding(10.dp),
             )

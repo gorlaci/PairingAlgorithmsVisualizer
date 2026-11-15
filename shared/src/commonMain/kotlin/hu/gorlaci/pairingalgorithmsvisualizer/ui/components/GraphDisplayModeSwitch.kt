@@ -11,7 +11,6 @@ import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.jetbrains.compose.resources.painterResource
 import pairingalgorithmsvisualizer.shared.generated.resources.Res
@@ -19,7 +18,7 @@ import pairingalgorithmsvisualizer.shared.generated.resources.graph_7_24px
 
 @Composable
 fun GraphDisplayModeSwitch(
-    matrixMode: GraphDisplayMode,
+    selectedMode: GraphDisplayMode,
     onModeChange: (GraphDisplayMode) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -33,7 +32,7 @@ fun GraphDisplayModeSwitch(
                     0,
                     3,
                 ),
-                selected = matrixMode == GraphDisplayMode.BOTH,
+                selected = selectedMode == GraphDisplayMode.BOTH,
                 onClick = { onModeChange(GraphDisplayMode.BOTH) },
                 label = {
                     Row {
@@ -56,7 +55,7 @@ fun GraphDisplayModeSwitch(
                     1,
                     3,
                 ),
-                selected = matrixMode == GraphDisplayMode.GRAPHICAL,
+                selected = selectedMode == GraphDisplayMode.GRAPHICAL,
                 onClick = { onModeChange(GraphDisplayMode.GRAPHICAL) },
                 label = {
                     Icon(
@@ -72,7 +71,7 @@ fun GraphDisplayModeSwitch(
                     2,
                     3,
                 ),
-                selected = matrixMode == GraphDisplayMode.MATRIX,
+                selected = selectedMode == GraphDisplayMode.MATRIX,
                 onClick = { onModeChange(GraphDisplayMode.MATRIX) },
                 label = {
                     Icon(
@@ -91,13 +90,4 @@ enum class GraphDisplayMode {
     BOTH,
     GRAPHICAL,
     MATRIX,
-}
-
-@Preview
-@Composable
-fun GraphDisplayModeSwitchPreview() {
-    GraphDisplayModeSwitch(
-        matrixMode = GraphDisplayMode.BOTH,
-        onModeChange = {},
-    )
 }

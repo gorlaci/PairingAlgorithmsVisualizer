@@ -36,22 +36,24 @@ class BreadthFirstSearchGraph(
         name: String = "",
         idCoordinatesMap: MutableMap<String, Vector2D> = mutableMapOf(),
         directed: Boolean,
-        queue: MutableList<BreadthFirstSearchVertex> = mutableListOf(),
         activeVertex: BreadthFirstSearchVertex? = null,
         activeNeighbour: BreadthFirstSearchVertex? = null,
-        processedVertices: MutableSet<BreadthFirstSearchVertex> = mutableSetOf(),
         startingVertex: BreadthFirstSearchVertex? = null,
+        queue: MutableList<BreadthFirstSearchVertex> = mutableListOf(),
+        processedVertices: MutableList<BreadthFirstSearchVertex> = mutableListOf(),
+        visitedNeighbours: MutableList<BreadthFirstSearchVertex> = mutableListOf(),
     ) : this(
         vertices = vertices,
         name = name,
         idCoordinatesMap = idCoordinatesMap,
         directed = directed,
     ) {
-        this.queue.addAll(queue)
-        this.processedVertices.addAll(processedVertices)
         this.activeVertex = activeVertex
         this.activeNeighbour = activeNeighbour
         this.startingVertex = startingVertex
+        this.queue.addAll(queue)
+        this.processedVertices.addAll(processedVertices)
+        this.visitedNeighbours.addAll(visitedNeighbours)
     }
 
     override val edges: MutableSet<Edge<BreadthFirstSearchVertex>>
@@ -70,7 +72,8 @@ class BreadthFirstSearchGraph(
     val queue = mutableListOf<BreadthFirstSearchVertex>()
     var activeVertex: BreadthFirstSearchVertex? = null
     var activeNeighbour: BreadthFirstSearchVertex? = null
-    val processedVertices: MutableSet<BreadthFirstSearchVertex> = mutableSetOf()
+    val processedVertices: MutableList<BreadthFirstSearchVertex> = mutableListOf()
+    val visitedNeighbours: MutableList<BreadthFirstSearchVertex> = mutableListOf()
 
     fun copy(): BreadthFirstSearchGraph {
         val newVertices = vertices.map { vertex ->
@@ -80,16 +83,19 @@ class BreadthFirstSearchGraph(
             )
         }.toMutableSet()
 
-        val newQueue = queue.map { vertex ->
-            newVertices.first { it.id == vertex.id }
-        }.toMutableList()
-
         val newActiveVertex = newVertices.find { it.id == activeVertex?.id }
         val newActiveNeighbour = newVertices.find { it.id == activeNeighbour?.id }
         val newStartingVertex = newVertices.find { it.id == startingVertex?.id }
+
+        val newQueue = queue.map { vertex ->
+            newVertices.first { it.id == vertex.id }
+        }.toMutableList()
         val newProcessedVertices = processedVertices.map { vertex ->
             newVertices.first { it.id == vertex.id }
-        }.toMutableSet()
+        }.toMutableList()
+        val newVisitedNeighbours = visitedNeighbours.map { vertex ->
+            newVertices.first { it.id == vertex.id }
+        }.toMutableList()
 
         newVertices.forEach { newVertex ->
             val originalVertex = vertices.first { it.id == newVertex.id }
@@ -109,6 +115,7 @@ class BreadthFirstSearchGraph(
             activeVertex = newActiveVertex,
             activeNeighbour = newActiveNeighbour,
             processedVertices = newProcessedVertices,
+            visitedNeighbours = newVisitedNeighbours,
             startingVertex = newStartingVertex,
         )
     }
@@ -165,9 +172,6 @@ class BreadthFirstSearchGraph(
         return BreadthFirstSearchGraph(
             vertices = treeVertices,
             directed = directed,
-//            activeVertex = newActiveVertex,
-//            queue = newQueue.toMutableList(),
-//            processedVertices = newProcessedVertices.toMutableSet(),
         )
     }
 
@@ -319,6 +323,7 @@ class BreadthFirstSearchGraph(
                             ),
                         )
                     }
+                    visitedNeighbours.add(neighbour)
                 }
                 activeNeighbour = null
                 saveStep("Megvizsgáltuk a csúcs összes szomszédját")
@@ -327,6 +332,7 @@ class BreadthFirstSearchGraph(
 
                 val activeVertexBefore = activeVertex
                 activeVertex = null
+                visitedNeighbours.clear()
 
                 saveStep("Befejezzük ${withArticle(activeVertexBefore?.name ?: "")} vizsgálatát")
             }
