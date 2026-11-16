@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.BipartiteGraphMatrix
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayModeSwitch
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphMatrix
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.AugmentingLegend
@@ -70,7 +70,7 @@ fun AugmentingAlgorithmRunningScreen(
                             onTap = viewModel::onTap,
                             modifier = Modifier.fillMaxWidth().fillMaxHeight(.5f),
                         )
-                        GraphMatrix(
+                        BipartiteGraphMatrix(
                             graphicalGraph = graphicalGraph,
                             class1Ids = class1Ids,
                             class2Ids = class2Ids,
@@ -87,7 +87,7 @@ fun AugmentingAlgorithmRunningScreen(
                     }
 
                     GraphDisplayMode.MATRIX -> {
-                        GraphMatrix(
+                        BipartiteGraphMatrix(
                             graphicalGraph = graphicalGraph,
                             class1Ids = class1Ids,
                             class2Ids = class2Ids,

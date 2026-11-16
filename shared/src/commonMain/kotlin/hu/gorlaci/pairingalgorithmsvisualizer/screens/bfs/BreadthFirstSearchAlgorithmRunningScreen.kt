@@ -14,8 +14,10 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel.DisplayMode
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.BipartiteEdgeCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.CrossableText
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.TextCell
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.VertexCell
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.GraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.icons.graph_7
@@ -172,7 +174,39 @@ fun BreadthFirstSearchScreenContent(
                 }
 
                 DisplayMode.Matrix -> {
-                    TODO()
+                    val graphicalVertices = graphicalGraph.graphicalVertices.sortedBy { it.name }
+
+                    Column(modifier = Modifier.padding(start = 50.dp, top = 50.dp).weight(1f)) {
+                        Row {
+                            Spacer(modifier = Modifier.width(40.dp))
+                            for (graphicalVertex in graphicalVertices) {
+                                VertexCell(vertex = graphicalVertex, modifier = Modifier.width(40.dp))
+                            }
+                        }
+
+                        graphicalVertices.forEach { rowVertex ->
+                            Row {
+                                VertexCell(vertex = rowVertex, modifier = Modifier.width(40.dp))
+                                for (columnVertex in graphicalVertices) {
+                                    val edge = graphicalGraph.graphicalEdges.find {
+                                        (
+                                            it.startGraphicalVertex == rowVertex &&
+                                                it.endGraphicalVertex == columnVertex
+                                            ) ||
+                                            (
+                                                !isDirected &&
+                                                    it.startGraphicalVertex == columnVertex &&
+                                                    it.endGraphicalVertex == rowVertex
+                                                )
+                                    }
+                                    BipartiteEdgeCell(
+                                        edge = edge,
+                                        modifier = Modifier.width(40.dp),
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
             }
 

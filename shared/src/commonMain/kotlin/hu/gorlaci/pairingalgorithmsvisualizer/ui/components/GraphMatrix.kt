@@ -26,7 +26,7 @@ import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
-fun GraphMatrix(
+fun BipartiteGraphMatrix(
     graphicalGraph: GraphicalGraph,
     class1Ids: Collection<String>,
     class2Ids: Collection<String>,
@@ -59,7 +59,7 @@ fun GraphMatrix(
                                     it.endGraphicalVertex == rowVertex
                                 )
                     }
-                    EdgeCell(
+                    BipartiteEdgeCell(
                         edge = edge,
                         modifier = if (rowVertex.highlight.elementAtOrNull(0) == DARK_GREEN ||
                             columnVertex.highlight.elementAtOrNull(0) == DARK_GREEN
@@ -126,7 +126,7 @@ fun HeartCell(
 }
 
 @Composable
-fun EdgeCell(
+fun BipartiteEdgeCell(
     edge: GraphicalEdge?,
     modifier: Modifier = Modifier,
 ) {
@@ -223,7 +223,7 @@ fun UnselectedHeartCell() {
 fun RowExample() {
     Row {
         VertexCell(vertex = GraphicalVertex(name = "A"), modifier = Modifier.width(40.dp))
-        EdgeCell(
+        BipartiteEdgeCell(
             edge = GraphicalEdge(
                 startGraphicalVertex = GraphicalVertex(),
                 endGraphicalVertex = GraphicalVertex(),
