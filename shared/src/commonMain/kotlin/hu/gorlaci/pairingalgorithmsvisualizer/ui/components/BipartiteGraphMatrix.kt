@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.input.rememberTextFieldState
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
@@ -17,9 +15,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.DARK_GREEN
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.icons.favorite
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalEdge
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.model.GraphicalVertex
@@ -108,7 +106,7 @@ fun HeartCell(
         EmptyCell(modifier = Modifier.fillMaxWidth())
 
         Icon(
-            imageVector = Icons.Default.Favorite,
+            imageVector = favorite,
             contentDescription = null,
             tint = Color.Red,
             modifier = Modifier.size(16.dp),
@@ -116,7 +114,7 @@ fun HeartCell(
 
         if (selected) {
             Icon(
-                imageVector = Icons.Default.Favorite,
+                imageVector = favorite,
                 contentDescription = null,
                 tint = Color.Yellow,
                 modifier = Modifier.size(10.dp),
@@ -198,39 +196,4 @@ fun TextFieldCell(
         },
         enabled = enabled,
     )
-}
-
-@Preview
-@Composable
-fun SelectedHeartCell() {
-    HeartCell(
-        selected = true,
-        modifier = Modifier.size(30.dp),
-    )
-}
-
-@Preview
-@Composable
-fun UnselectedHeartCell() {
-    HeartCell(
-        selected = false,
-        modifier = Modifier.size(30.dp),
-    )
-}
-
-@Preview
-@Composable
-fun RowExample() {
-    Row {
-        VertexCell(vertex = GraphicalVertex(name = "A"), modifier = Modifier.width(40.dp))
-        BipartiteEdgeCell(
-            edge = GraphicalEdge(
-                startGraphicalVertex = GraphicalVertex(),
-                endGraphicalVertex = GraphicalVertex(),
-            ),
-            modifier = Modifier.width(40.dp),
-        )
-        HeartCell(selected = true, modifier = Modifier.width(40.dp))
-        HeartCell(selected = false, modifier = Modifier.width(40.dp))
-    }
 }

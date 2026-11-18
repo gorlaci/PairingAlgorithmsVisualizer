@@ -2,9 +2,6 @@ package hu.gorlaci.pairingalgorithmsvisualizer.ui.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -14,6 +11,8 @@ import androidx.compose.ui.unit.dp
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Edge
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Graph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.Vertex
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.icons.add
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.icons.arrow_drop_down
 import org.jetbrains.compose.resources.stringResource
 import pairingalgorithmsvisualizer.shared.generated.resources.Res
 import pairingalgorithmsvisualizer.shared.generated.resources.new_graph_button
@@ -39,7 +38,7 @@ fun GraphSelectionDropdown(
                 IconButton(
                     onClick = { graphSelectionExpanded.value = !graphSelectionExpanded.value },
                 ) {
-                    Icon(Icons.Default.ArrowDropDown, null)
+                    Icon(arrow_drop_down, null)
                 }
             },
         )
@@ -56,7 +55,7 @@ fun GraphSelectionDropdown(
                 },
                 leadingIcon = {
                     Icon(
-                        imageVector = Icons.Default.Add,
+                        imageVector = add,
                         contentDescription = stringResource(Res.string.new_graph_button),
                     )
                 },

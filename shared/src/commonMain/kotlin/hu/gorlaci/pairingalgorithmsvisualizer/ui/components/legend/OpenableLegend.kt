@@ -4,8 +4,6 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowDropDown
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -15,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.icons.arrow_drop_down
 
 @Composable
 fun OpenableLegend(
@@ -33,7 +32,7 @@ fun OpenableLegend(
             IconButton(
                 onClick = { legendExpanded.value = !legendExpanded.value },
             ) {
-                Icon(Icons.Default.ArrowDropDown, null)
+                Icon(arrow_drop_down, null)
             }
         }
 

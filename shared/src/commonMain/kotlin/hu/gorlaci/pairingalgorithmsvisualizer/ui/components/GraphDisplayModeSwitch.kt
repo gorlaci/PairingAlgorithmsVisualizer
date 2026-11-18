@@ -2,8 +2,6 @@ package hu.gorlaci.pairingalgorithmsvisualizer.ui.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.GridOn
 import androidx.compose.material3.Icon
 import androidx.compose.material3.SegmentedButton
 import androidx.compose.material3.SegmentedButtonDefaults
@@ -12,9 +10,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import org.jetbrains.compose.resources.painterResource
-import pairingalgorithmsvisualizer.shared.generated.resources.Res
-import pairingalgorithmsvisualizer.shared.generated.resources.graph_7_24px
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.icons.graph_7
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.icons.grid_on
 
 @Composable
 fun GraphDisplayModeSwitch(
@@ -37,12 +34,12 @@ fun GraphDisplayModeSwitch(
                 label = {
                     Row {
                         Icon(
-                            painterResource(Res.drawable.graph_7_24px),
+                            graph_7,
                             contentDescription = null,
                             modifier = Modifier.size(36.dp),
                         )
                         Icon(
-                            Icons.Default.GridOn,
+                            grid_on,
                             contentDescription = null,
                             modifier = Modifier.size(36.dp),
                         )
@@ -59,7 +56,7 @@ fun GraphDisplayModeSwitch(
                 onClick = { onModeChange(GraphDisplayMode.GRAPHICAL) },
                 label = {
                     Icon(
-                        painterResource(Res.drawable.graph_7_24px),
+                        graph_7,
                         contentDescription = null,
                         modifier = Modifier.size(36.dp),
                     )
@@ -75,7 +72,7 @@ fun GraphDisplayModeSwitch(
                 onClick = { onModeChange(GraphDisplayMode.MATRIX) },
                 label = {
                     Icon(
-                        Icons.Default.GridOn,
+                        grid_on,
                         contentDescription = null,
                         modifier = Modifier.size(36.dp),
                     )

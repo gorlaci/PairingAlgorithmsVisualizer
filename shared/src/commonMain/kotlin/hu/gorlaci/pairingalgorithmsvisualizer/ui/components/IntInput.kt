@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Remove
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -17,19 +14,20 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.icons.add
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.icons.remove
 import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun IntInput(
     value: Int,
     onValueChange: (String) -> Unit,
+    modifier: Modifier = Modifier,
     onMinus: () -> Unit = { onValueChange((value - 1).toString()) },
     onPlus: () -> Unit = { onValueChange((value + 1).toString()) },
     minusEnabled: Boolean = true,
     plusEnabled: Boolean = true,
-    modifier: Modifier = Modifier,
 ) {
     val textFieldState = rememberTextFieldState(initialText = value.toString())
 
@@ -54,7 +52,7 @@ fun IntInput(
                 enabled = minusEnabled,
             ) {
                 Icon(
-                    Icons.Default.Remove,
+                    remove,
                     contentDescription = null,
                 )
             }
@@ -72,16 +70,10 @@ fun IntInput(
                 enabled = plusEnabled,
             ) {
                 Icon(
-                    Icons.Default.Add,
+                    add,
                     contentDescription = null,
                 )
             }
         }
     }
-}
-
-@Preview
-@Composable
-fun IntInputPreview() {
-    IntInput(value = 123, onValueChange = {})
 }
