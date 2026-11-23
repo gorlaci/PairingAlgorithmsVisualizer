@@ -16,6 +16,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import hu.gorlaci.pairingalgorithmsvisualizer.util.isTouchDevice
 
 data class MainMenuItem(
     val algorithmName: String,
@@ -30,6 +31,8 @@ fun MainMenuAlgorithmCard(
     modifier: Modifier = Modifier,
 ) {
     var hovered by remember { mutableStateOf(false) }
+
+    val touchDevice = isTouchDevice()
 
     Card(
         elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
@@ -67,7 +70,7 @@ fun MainMenuAlgorithmCard(
                     .align(Alignment.BottomCenter),
             ) {
                 AnimatedVisibility(
-                    visible = hovered,
+                    visible = touchDevice || hovered,
                     enter = fadeIn(),
                     exit = fadeOut(),
                     modifier = Modifier.fillMaxSize(),
@@ -87,61 +90,6 @@ fun MainMenuAlgorithmCard(
                             Button(onClick = menuItem.onQuiz) {
                                 Text(text = "Kvíz")
                             }
-                        }
-                    }
-                }
-            }
-            Text(
-                text = menuItem.algorithmName,
-                textAlign = TextAlign.Center,
-                color = MaterialTheme.colorScheme.onPrimary,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.primary),
-            )
-        }
-    }
-}
-
-@Composable
-fun MainMenuMobileAlgorithmCard(
-    menuItem: MainMenuItem,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        elevation = CardDefaults.cardElevation(defaultElevation = 8.dp),
-        modifier = modifier,
-    ) {
-        Box(modifier = Modifier.fillMaxSize()) {
-            Image(
-                bitmap = menuItem.algorithmImage,
-                contentDescription = menuItem.algorithmName,
-                contentScale = ContentScale.Crop,
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .fillMaxSize(),
-            )
-
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .align(Alignment.BottomCenter),
-            ) {
-                Column(
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(MaterialTheme.colorScheme.secondary.copy(alpha = 0.5f)),
-                ) {
-                    Button(onClick = menuItem.onRunAlgorithm) {
-                        Text(text = "Algoritmus futtatása")
-                    }
-
-                    if (menuItem.onQuiz != null) {
-                        Button(onClick = menuItem.onQuiz) {
-                            Text(text = "Kvíz")
                         }
                     }
                 }

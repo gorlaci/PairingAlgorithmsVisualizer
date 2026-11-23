@@ -13,9 +13,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.collectLatest
+import org.jetbrains.compose.resources.stringResource
+import pairingalgorithmsvisualizer.shared.generated.resources.Res
+import pairingalgorithmsvisualizer.shared.generated.resources.next_button
+import pairingalgorithmsvisualizer.shared.generated.resources.previous_button
 
 @Composable
 fun StepSelector(
@@ -49,7 +52,7 @@ fun StepSelector(
             onClick = onPrevious,
             enabled = previousEnabled,
         ) {
-            Text("Vissza")
+            Text(stringResource(Res.string.previous_button))
         }
 
         Card(
@@ -75,17 +78,7 @@ fun StepSelector(
             onClick = onNext,
             enabled = nextEnabled,
         ) {
-            Text("Következő")
+            Text(stringResource(Res.string.next_button))
         }
     }
-}
-
-@Preview
-@Composable
-fun StepSelectorPreview() {
-    StepSelector(
-        value = 125,
-        maxValue = 125,
-        onValueChange = { },
-    )
 }

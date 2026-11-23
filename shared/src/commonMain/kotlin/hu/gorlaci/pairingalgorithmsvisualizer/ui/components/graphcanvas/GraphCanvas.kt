@@ -177,12 +177,8 @@ fun UndirectedGraphCanvas(
 ) {
     GraphCanvasBase(
         graphicalGraph = graphicalGraph,
-        drawVertex = { vertex, canvasCenter, textMeasurer ->
-            drawVertex(vertex, canvasCenter, textMeasurer)
-        },
-        drawEdge = { edge, canvasCenter ->
-            drawUndirectedEdge(edge, canvasCenter)
-        },
+        drawVertex = DrawScope::drawVertex,
+        drawEdge = DrawScope::drawUndirectedEdge,
         modifier = modifier,
         onTap = onTap,
         onDragStart = onDragStart,
@@ -202,12 +198,8 @@ fun DirectedGraphCanvas(
 ) {
     GraphCanvasBase(
         graphicalGraph = graphicalGraph,
-        drawVertex = { vertex, centerOffset, textMeasurer ->
-            drawVertex(vertex, centerOffset, textMeasurer)
-        },
-        drawEdge = { edge, canvasCenter ->
-            drawDirectedEdge(edge, canvasCenter)
-        },
+        drawVertex = DrawScope::drawVertex,
+        drawEdge = DrawScope::drawDirectedEdge,
         modifier = modifier,
         onTap = onTap,
         onDragStart = onDragStart,

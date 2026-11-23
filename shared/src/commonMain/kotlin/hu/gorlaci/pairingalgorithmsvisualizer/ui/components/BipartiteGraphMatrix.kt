@@ -38,14 +38,14 @@ fun BipartiteGraphMatrix(
             Row {
                 Spacer(modifier = Modifier.width(40.dp))
                 for (vertex in class1) {
-                    VertexCell(vertex = vertex, modifier = Modifier.width(40.dp))
+                    GraphicalVertexCell(vertex = vertex, modifier = Modifier.width(40.dp))
                 }
             }
         }
         items(class2.size) { index ->
             val rowVertex = class2[index]
             Row {
-                VertexCell(vertex = rowVertex, modifier = Modifier.width(40.dp))
+                GraphicalVertexCell(vertex = rowVertex, modifier = Modifier.width(40.dp))
                 for (columnVertex in class1) {
                     val edge = graphicalGraph.graphicalEdges.find {
                         (
@@ -143,7 +143,7 @@ fun BipartiteEdgeCell(
 }
 
 @Composable
-fun VertexCell(
+fun GraphicalVertexCell(
     vertex: GraphicalVertex,
     modifier: Modifier = Modifier,
 ) {

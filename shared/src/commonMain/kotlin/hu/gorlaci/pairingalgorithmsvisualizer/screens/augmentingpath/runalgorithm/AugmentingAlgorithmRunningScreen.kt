@@ -7,10 +7,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.augmentingpath.runalgorithm.AugmentingAlgorithmRunningViewModel.DisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.BipartiteGraphMatrix
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayMode
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayModeSwitch
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.augmenting.AugmentingDisplayModeSwitch
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.UndirectedGraphCanvas
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.AugmentingLegend
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.legend.OpenableLegend
@@ -50,7 +50,7 @@ fun AugmentingAlgorithmRunningScreen(
             }
         },
         controls = {
-            GraphDisplayModeSwitch(
+            AugmentingDisplayModeSwitch(
                 selectedMode = displayMode,
                 onModeChange = viewModel::changeDisplayMode,
                 modifier = Modifier.padding(10.dp),
@@ -64,7 +64,7 @@ fun AugmentingAlgorithmRunningScreen(
                 modifier = Modifier.fillMaxWidth(.5f).fillMaxHeight(),
             ) {
                 when (displayMode) {
-                    GraphDisplayMode.BOTH -> {
+                    DisplayMode.BOTH -> {
                         UndirectedGraphCanvas(
                             graphicalGraph = graphicalGraph,
                             onTap = viewModel::onTap,
@@ -78,7 +78,7 @@ fun AugmentingAlgorithmRunningScreen(
                         )
                     }
 
-                    GraphDisplayMode.GRAPHICAL -> {
+                    DisplayMode.GRAPHICAL -> {
                         UndirectedGraphCanvas(
                             graphicalGraph = graphicalGraph,
                             onTap = viewModel::onTap,
@@ -86,7 +86,7 @@ fun AugmentingAlgorithmRunningScreen(
                         )
                     }
 
-                    GraphDisplayMode.MATRIX -> {
+                    DisplayMode.MATRIX -> {
                         BipartiteGraphMatrix(
                             graphicalGraph = graphicalGraph,
                             class1Ids = class1Ids,

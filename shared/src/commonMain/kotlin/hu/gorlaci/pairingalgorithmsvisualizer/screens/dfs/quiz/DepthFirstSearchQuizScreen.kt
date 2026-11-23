@@ -54,9 +54,9 @@ fun DepthFirstSearchQuizScreen(
 
             SimpleStepSelector(
                 onNext = viewModel::onNext,
-                onBack = viewModel::onBack,
+                onPrevious = viewModel::onBack,
                 nextEnabled = nextEnabled,
-                backEnabled = backEnabled,
+                previousEnabled = backEnabled,
             )
         },
         description = {

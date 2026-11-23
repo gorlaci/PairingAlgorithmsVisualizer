@@ -12,8 +12,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MainMenuAlgorithmCard
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MainMenuItem
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.MainMenuMobileAlgorithmCard
-import hu.gorlaci.pairingalgorithmsvisualizer.util.isTouchDevice
 
 @Composable
 fun MainMenuScreen(menuItems: List<MainMenuItem>) {
@@ -22,21 +20,12 @@ fun MainMenuScreen(menuItems: List<MainMenuItem>) {
             columns = GridCells.Adaptive(minSize = 250.dp),
         ) {
             items(menuItems) { menuItem ->
-                if (!isTouchDevice()) {
-                    MainMenuAlgorithmCard(
-                        menuItem = menuItem,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(250.dp),
-                    )
-                } else {
-                    MainMenuMobileAlgorithmCard(
-                        menuItem = menuItem,
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(200.dp),
-                    )
-                }
+                MainMenuAlgorithmCard(
+                    menuItem = menuItem,
+                    modifier = Modifier
+                        .padding(16.dp)
+                        .size(250.dp),
+                )
             }
         }
     }

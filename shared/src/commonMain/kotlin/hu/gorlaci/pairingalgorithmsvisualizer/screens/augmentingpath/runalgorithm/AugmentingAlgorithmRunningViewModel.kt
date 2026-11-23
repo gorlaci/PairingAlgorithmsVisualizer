@@ -8,7 +8,6 @@ import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPat
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.AugmentingPathVertex
 import hu.gorlaci.pairingalgorithmsvisualizer.model.augmentingpath.toAugmentingPathGraph
 import hu.gorlaci.pairingalgorithmsvisualizer.model.quiz.StepType
-import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.GraphDisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.PairingAlgorithmRunningViewModel
 
 class AugmentingAlgorithmRunningViewModel(
@@ -82,9 +81,15 @@ class AugmentingAlgorithmRunningViewModel(
         graphicalGraph.value = steps.value[0]
     }
 
-    val graphDisplayMode = mutableStateOf(GraphDisplayMode.BOTH)
+    enum class DisplayMode {
+        BOTH,
+        GRAPHICAL,
+        MATRIX,
+    }
 
-    fun changeDisplayMode(newValue: GraphDisplayMode) {
+    val graphDisplayMode = mutableStateOf(DisplayMode.BOTH)
+
+    fun changeDisplayMode(newValue: DisplayMode) {
         graphDisplayMode.value = newValue
     }
 }

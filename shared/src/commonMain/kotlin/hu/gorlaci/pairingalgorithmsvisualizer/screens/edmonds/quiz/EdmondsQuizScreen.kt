@@ -189,7 +189,7 @@ fun EdmondsQuizScreen(
                         onClick = { viewModel.onBack() },
                         enabled = backEnabled,
                     ) {
-                        Text(stringResource(Res.string.back_button))
+                        Text(stringResource(Res.string.previous_button))
                     }
 
                     Button(
