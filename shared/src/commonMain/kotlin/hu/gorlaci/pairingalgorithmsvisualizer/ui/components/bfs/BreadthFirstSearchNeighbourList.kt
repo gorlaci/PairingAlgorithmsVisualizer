@@ -1,10 +1,12 @@
 package hu.gorlaci.pairingalgorithmsvisualizer.ui.components.bfs
 
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -14,13 +16,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_ORANGE
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.LIGHT_YELLOW
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.CrossableText
 
 @Composable
 fun BreadthFirstSearchNeighbourList(
     viewModel: BreadthFirstSearchAlgorithmRunningViewModel,
     modifier: Modifier = Modifier,
-){
+) {
     val currentGraph by viewModel.currentGraph
 
     val vertices = currentGraph.vertices
@@ -38,6 +42,11 @@ fun BreadthFirstSearchNeighbourList(
                     Text(
                         text = vertex.name + ": ",
                         fontSize = 20.sp,
+                        modifier = if (currentGraph.activeVertex == vertex) {
+                            Modifier.background(color = LIGHT_ORANGE, shape = RoundedCornerShape(4.dp))
+                        } else {
+                            Modifier
+                        },
                     )
                     vertex.neighbours.sortedBy { it.name }.forEachIndexed { index, neighbour ->
                         CrossableText(
@@ -47,6 +56,13 @@ fun BreadthFirstSearchNeighbourList(
                                     (vertex == activeVertex && neighbour in visitedNeighbours),
                             backwardSlash = false,
                             fontSize = 20.sp,
+                            modifier = if (currentGraph.activeVertex == vertex &&
+                                neighbour == currentGraph.activeNeighbour
+                            ) {
+                                Modifier.background(color = LIGHT_YELLOW, shape = RoundedCornerShape(4.dp))
+                            } else {
+                                Modifier
+                            },
                         )
                         if (index != vertex.neighbours.size - 1) {
                             Text(

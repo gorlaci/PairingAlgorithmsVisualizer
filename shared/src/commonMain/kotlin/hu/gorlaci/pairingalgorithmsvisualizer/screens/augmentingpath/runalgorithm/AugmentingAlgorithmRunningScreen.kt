@@ -51,8 +51,7 @@ fun AugmentingAlgorithmRunningScreen(
         },
         controls = {
             AugmentingDisplayModeSwitch(
-                selectedMode = displayMode,
-                onModeChange = viewModel::changeDisplayMode,
+                viewModel = viewModel,
                 modifier = Modifier.padding(10.dp),
             )
         },

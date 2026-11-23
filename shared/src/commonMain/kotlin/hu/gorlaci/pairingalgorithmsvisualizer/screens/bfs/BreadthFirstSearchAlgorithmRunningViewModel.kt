@@ -79,7 +79,10 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
     override fun onRun() {
         val graph = selectedGraph.value
 
-        graph.runAlgorithm(selectedVertex)
+        when (dataStructure.value) {
+            DataStructure.List -> graph.runListAlgorithm(selectedVertex)
+            DataStructure.Matrix -> graph.runMatrixAlgorithm(selectedVertex)
+        }
 
         showDistances.value = selectedVertex != null
 
@@ -112,14 +115,25 @@ open class BreadthFirstSearchAlgorithmRunningViewModel(
     }
 
     enum class DisplayMode {
+        Both,
         Visual,
-        NeighbourList,
-        Matrix,
+        DataStructure,
     }
 
-    val displayMode = mutableStateOf(DisplayMode.Visual)
+    val displayMode = mutableStateOf(DisplayMode.Both)
 
     fun onDisplayModeChanged(newDisplayMode: DisplayMode) {
         displayMode.value = newDisplayMode
+    }
+
+    enum class DataStructure {
+        List,
+        Matrix,
+    }
+
+    val dataStructure = mutableStateOf(DataStructure.List)
+
+    fun onDataStructureChanged(newDataStructure: DataStructure) {
+        dataStructure.value = newDataStructure
     }
 }

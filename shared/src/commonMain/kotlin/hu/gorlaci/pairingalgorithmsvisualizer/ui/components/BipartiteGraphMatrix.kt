@@ -90,6 +90,26 @@ fun TextCell(
 }
 
 @Composable
+fun CrossableTextCell(
+    text: String,
+    forwardSlash: Boolean,
+    backwardSlash: Boolean,
+    modifier: Modifier = Modifier,
+    fontWeight: FontWeight = FontWeight.Normal,
+    color: Color = Color.Black,
+) {
+    CrossableText(
+        text = text,
+        forwardSlash = forwardSlash,
+        backwardSlash = backwardSlash,
+        modifier = modifier.border(1.dp, Color.Black).widthIn(max = 30.dp),
+        fontWeight = fontWeight,
+        color = color,
+        textAlign = TextAlign.Center,
+    )
+}
+
+@Composable
 fun EmptyCell(modifier: Modifier = Modifier) {
     TextCell(text = " ", modifier = modifier)
 }

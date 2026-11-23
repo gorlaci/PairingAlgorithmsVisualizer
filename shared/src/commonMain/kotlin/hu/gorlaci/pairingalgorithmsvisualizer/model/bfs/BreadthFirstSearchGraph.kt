@@ -229,10 +229,10 @@ class BreadthFirstSearchGraph(
     private var startingVertex: BreadthFirstSearchVertex? = null
 
     override fun runAlgorithm() {
-        runAlgorithm(null)
+        runListAlgorithm(null)
     }
 
-    fun runAlgorithm(startingVertex: BreadthFirstSearchVertex? = null) {
+    fun runListAlgorithm(startingVertex: BreadthFirstSearchVertex? = null) {
         this.startingVertex = startingVertex
 
         saveStep()
@@ -327,6 +327,131 @@ class BreadthFirstSearchGraph(
                 }
                 activeNeighbour = null
                 saveStep("Megvizsgáltuk a csúcs összes szomszédját")
+
+                processedVertices.add(vertex)
+
+                val activeVertexBefore = activeVertex
+                activeVertex = null
+                visitedNeighbours.clear()
+
+                saveStep("Befejezzük ${withArticle(activeVertexBefore?.name ?: "")} vizsgálatát")
+            }
+        }
+
+        saveStep("Feldolgoztuk az összes csúcsot, a bejárás véget ért")
+        saveStep()
+        saveTreeCoordinates()
+    }
+
+    fun runMatrixAlgorithm(startingVertex: BreadthFirstSearchVertex? = null) {
+        this.startingVertex = startingVertex
+
+        saveStep()
+
+        if (startingVertex != null) {
+            startingVertex.distance = 0
+            startingVertex.row = 0
+            queue.add(startingVertex)
+            addToTreeGrid(startingVertex)
+            saveStep("Induljunk el ${withArticle(startingVertex.name)} csúcsból")
+        }
+
+        while (processedVertices.size < vertices.size) {
+            if (queue.isEmpty()) {
+                activeVertex =
+                    vertices.filter { it !in processedVertices }.minByOrNull { it.name }!!
+                activeVertex?.let {
+                    it.row = 0
+                    addToTreeGrid(it)
+                }
+                saveStep(
+                    BreadthFirstSearchStepType.Nothing(
+                        description =
+                            "A vizsgálandó csúcsok listája üres, járjuk be a komponenst ${withArticle(
+                                activeVertex?.name ?: "",
+                            )} csúcsból",
+                    ),
+                )
+            } else {
+                activeVertex = queue.removeFirst()
+                val description = "A listában a következő csúcs: ${activeVertex?.name}, ez válik aktívvá"
+                if (queue.isNotEmpty()) {
+                    saveStep(
+                        BreadthFirstSearchStepType.SelectedVertex(
+                            description = description,
+                            vertex = activeVertex!!,
+                        ),
+                    )
+                } else {
+                    saveStep(description)
+                }
+            }
+            activeVertex?.let { vertex ->
+                saveStep("Haladjunk végig a csúcsokon")
+                vertices.forEach { potentialNeighbour ->
+                    activeNeighbour = potentialNeighbour
+
+                    visitedNeighbours.add(potentialNeighbour)
+                    if (potentialNeighbour !in vertex.neighbours) {
+                        saveStep(
+                            BreadthFirstSearchStepType.Nothing(
+                                "A ${potentialNeighbour.name} csúcs nem szomszédja a ${vertex.name} csúcsnak",
+                            ),
+                        )
+                    } else {
+                        saveStep(
+                            BreadthFirstSearchStepType.SelectedNeighbour(
+                                description =
+                                    "Vizsgáljuk meg ${withArticle(
+                                        vertex.name,
+                                    )} csúcs ${potentialNeighbour.name} szomszédját",
+                                vertex = vertex,
+                                neighbour = potentialNeighbour,
+                            ),
+                        )
+                        if (potentialNeighbour !in processedVertices && potentialNeighbour !in queue) {
+                            potentialNeighbour.row = vertex.row + 1
+                            queue.add(potentialNeighbour)
+                            addToTreeGrid(potentialNeighbour)
+                            saveStep(
+                                BreadthFirstSearchStepType.NeighbourEvaluated(
+                                    description =
+                                        "${withCapitalArticle(
+                                            potentialNeighbour.name,
+                                        )} csúcsot még nem vizsgáltuk, hozzáadjuk a vizsgálandó csúcsokhoz",
+                                    vertex = vertex,
+                                    neighbour = potentialNeighbour,
+                                    neighbourStatus = NeighbourStatus.ADDED,
+                                ),
+                            )
+                            potentialNeighbour.distance = vertex.distance?.plus(1)
+                            potentialNeighbour.parent = vertex
+                            saveStep(
+                                BreadthFirstSearchStepType.FillTable(
+                                    description = "Kitöltjük a táblázatot ${withArticle(
+                                        potentialNeighbour.name,
+                                    )} csúcs adataival",
+                                    vertex = vertex,
+                                    neighbour = potentialNeighbour,
+                                ),
+                            )
+                        } else {
+                            saveStep(
+                                BreadthFirstSearchStepType.NeighbourEvaluated(
+                                    description =
+                                        "${withCapitalArticle(
+                                            potentialNeighbour.name,
+                                        )} csúcsot már vizsgáltuk, vagy szerepel a listában, kihagyjuk",
+                                    vertex = vertex,
+                                    neighbour = potentialNeighbour,
+                                    neighbourStatus = NeighbourStatus.SKIPPED,
+                                ),
+                            )
+                        }
+                    }
+                }
+                activeNeighbour = null
+                saveStep("Megvizsgáltuk az összes csúcsot")
 
                 processedVertices.add(vertex)
 

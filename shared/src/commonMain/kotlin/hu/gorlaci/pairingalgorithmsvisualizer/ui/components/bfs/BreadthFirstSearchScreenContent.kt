@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel
+import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel.DataStructure
 import hu.gorlaci.pairingalgorithmsvisualizer.screens.bfs.BreadthFirstSearchAlgorithmRunningViewModel.DisplayMode
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.CrossableText
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.graphcanvas.GraphCanvas
@@ -22,6 +23,7 @@ fun BreadthFirstSearchScreenContent(
     val inSetup by viewModel.inSetup
     val isDirected by viewModel.isDirected
     val displayMode by viewModel.displayMode
+    val dataStructure by viewModel.dataStructure
 
     val currentGraph by viewModel.currentGraph
 
@@ -33,6 +35,20 @@ fun BreadthFirstSearchScreenContent(
         Column(
             modifier = Modifier.fillMaxSize().weight(1f),
         ) {
+            val dataStructureDisplay: @Composable () -> Unit = {
+                when (dataStructure) {
+                    DataStructure.List -> BreadthFirstSearchNeighbourList(
+                        viewModel = viewModel,
+                        modifier = Modifier.fillMaxSize().weight(1f).padding(start = 50.dp, top = 50.dp),
+                    )
+
+                    DataStructure.Matrix -> BreadthFirstSearchMatrix(
+                        viewModel = viewModel,
+                        modifier = Modifier.fillMaxSize().weight(1f).padding(start = 50.dp, top = 50.dp),
+                    )
+                }
+            }
+
             when (displayMode) {
                 DisplayMode.Visual -> {
                     GraphCanvas(
@@ -43,18 +59,19 @@ fun BreadthFirstSearchScreenContent(
                     )
                 }
 
-                DisplayMode.NeighbourList -> {
-                    BreadthFirstSearchNeighbourList(
-                        viewModel = viewModel,
-                        modifier = Modifier.fillMaxSize().weight(1f).padding(start = 50.dp, top = 50.dp),
-                    )
+                DisplayMode.DataStructure -> {
+                    dataStructureDisplay()
                 }
 
-                DisplayMode.Matrix -> {
-                    BreadthFirstSearchMatrix(
-                        viewModel = viewModel,
-                        modifier = Modifier.padding(start = 50.dp, top = 50.dp).weight(1f),
+                DisplayMode.Both -> {
+                    GraphCanvas(
+                        graphicalGraph = graphicalGraph,
+                        directed = isDirected,
+                        modifier = Modifier.fillMaxHeight(.5f).fillMaxWidth().weight(1f),
+                        onTap = viewModel::onTap,
                     )
+
+                    dataStructureDisplay()
                 }
             }
 

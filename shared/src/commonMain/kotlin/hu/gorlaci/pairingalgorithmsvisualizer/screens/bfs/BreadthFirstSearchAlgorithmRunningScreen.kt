@@ -4,11 +4,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import hu.gorlaci.pairingalgorithmsvisualizer.data.GraphStorage
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.algorithmrunningscreen.AlgorithmRunningScreen
+import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.bfs.BreadthFirstSearchDataStructureSwitch
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.bfs.BreadthFirstSearchDisplayModeSwitch
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.bfs.BreadthFirstSearchScreenContent
 import hu.gorlaci.pairingalgorithmsvisualizer.ui.components.bfs.BreadthFirstSearchVertexTable
@@ -25,6 +27,8 @@ fun BreadthFirstSearchAlgorithmRunningScreen(
     onNewGraph: () -> Unit,
 ) {
     val viewModel = viewModel { BreadthFirstSearchAlgorithmRunningViewModel(graphStorage) }
+
+    val inSetup by viewModel.inSetup
 
     AlgorithmRunningScreen(
         viewModel = viewModel,
@@ -43,10 +47,17 @@ fun BreadthFirstSearchAlgorithmRunningScreen(
             }
         },
         controls = {
-            BreadthFirstSearchDisplayModeSwitch(
-                viewModel = viewModel,
-                modifier = Modifier.padding(10.dp),
-            )
+            if (inSetup) {
+                BreadthFirstSearchDataStructureSwitch(
+                    viewModel = viewModel,
+                    modifier = Modifier.padding(10.dp),
+                )
+            } else {
+                BreadthFirstSearchDisplayModeSwitch(
+                    viewModel = viewModel,
+                    modifier = Modifier.padding(10.dp),
+                )
+            }
         },
     ) {
         BreadthFirstSearchScreenContent(
